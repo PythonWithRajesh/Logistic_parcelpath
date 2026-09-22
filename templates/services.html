@@ -1,0 +1,523 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Services - ParcelPath Logistics
+{% endblock %}
+
+{% block content %}
+<style>
+  /* =====================================================
+     GLOBAL & VARIABLE STYLES
+  ===================================================== */
+  :root {
+    --primary-color: #0d6efd;
+    --primary-hover: #0b5ed7;
+    --dark-bg: #0f172a;
+    --card-bg: #ffffff;
+    --text-dark: #1e293b;
+    --text-muted: #64748b;
+  }
+
+  body {
+    margin: 0;
+    overflow-x: hidden;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: #f8fafc;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* =====================================================
+     HERO SECTION
+  ===================================================== */
+  .services-hero {
+    position: relative;
+    padding: clamp(60px, 10vh, 120px) 0 clamp(40px, 8vh, 90px);
+    color: #ffffff;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.90), rgba(30, 58, 138, 0.85)),
+                url("{% static 'images/delivery.jpg' %}") center/cover no-repeat;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(12px);
+    font-size: clamp(0.75rem, 2vw, 0.875rem);
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  .services-hero h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+  }
+
+  .services-hero p {
+    font-size: clamp(0.95rem, 2.5vw, 1.2rem);
+    line-height: 1.6;
+    color: #e2e8f0;
+    max-width: 680px;
+  }
+
+  .hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+  }
+
+  .hero-buttons .btn {
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    min-height: 48px; /* Mobile Touch Target */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+
+  /* =====================================================
+     SERVICES SECTION
+  ===================================================== */
+  .services-section {
+    padding: clamp(50px, 8vh, 100px) 0;
+  }
+
+  .section-header {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto clamp(30px, 5vh, 60px);
+    padding: 0 15px;
+  }
+
+  .section-subtitle {
+    text-transform: uppercase;
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 1.2px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .section-title {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 800;
+    color: var(--text-dark);
+    letter-spacing: -0.5px;
+  }
+
+  .section-description {
+    color: var(--text-muted);
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    margin-top: 10px;
+  }
+
+  .service-card {
+    background: var(--card-bg);
+    border-radius: 18px;
+    padding: 24px 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+  }
+
+  .service-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(13, 110, 253, 0.3);
+    box-shadow: 0 16px 30px -10px rgba(13, 110, 253, 0.12);
+  }
+
+  .service-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    background: rgba(13, 110, 253, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    margin-bottom: 18px;
+  }
+
+  .service-card h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+  }
+
+  .service-card p {
+    color: var(--text-muted);
+    font-size: 0.925rem;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+
+  .service-card .btn {
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-weight: 600;
+    width: 100%;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* =====================================================
+     STATISTICS SECTION
+  ===================================================== */
+  .statistics-section {
+    padding: clamp(40px, 6vh, 80px) 0;
+    background: var(--dark-bg);
+    color: #ffffff;
+  }
+
+  .stat-box {
+    text-align: center;
+    padding: 20px 15px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .stat-box h2 {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+
+  .stat-box p {
+    color: #94a3b8;
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    margin: 0;
+  }
+
+  /* =====================================================
+     MISSION & VISION SECTION
+  ===================================================== */
+  .mission-section {
+    padding: clamp(50px, 8vh, 100px) 0;
+    background: #ffffff;
+  }
+
+  .mission-box {
+    padding: clamp(20px, 4vw, 40px);
+    border-radius: 18px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    height: 100%;
+  }
+
+  .mission-box h2 {
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 12px;
+  }
+
+  .mission-box p {
+    color: var(--text-muted);
+    line-height: 1.6;
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  /* =====================================================
+     FOOTER
+  ===================================================== */
+  .services-footer {
+    padding: clamp(50px, 6vh, 80px) 0 25px;
+    background: var(--dark-bg);
+    color: #94a3b8;
+  }
+
+  .services-footer h4,
+  .services-footer h5 {
+    color: #ffffff;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  .services-footer ul {
+    padding: 0;
+    list-style: none;
+  }
+
+  .services-footer ul li {
+    margin-bottom: 10px;
+  }
+
+  .services-footer a {
+    color: #94a3b8;
+    text-decoration: none;
+  }
+
+  .social-icons a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    margin-right: 8px;
+    font-size: 1.1rem;
+  }
+
+  /* =====================================================
+     MOBILE OPTIMIZATIONS (Max Width 767px)
+  ===================================================== */
+  @media (max-width: 767px) {
+    .services-hero {
+      text-align: center;
+    }
+
+    .hero-badge {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-buttons {
+      flex-direction: column;
+    }
+
+    .hero-buttons .btn {
+      width: 100%;
+    }
+
+    .services-footer {
+      text-align: center;
+    }
+
+    .social-icons {
+      justify-content: center;
+      display: flex;
+      margin-top: 15px;
+    }
+  }
+</style>
+
+<!-- HERO SECTION -->
+<section class="services-hero">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-8">
+        <span class="hero-badge">⚡ FAST • SECURE • RELIABLE LOGISTICS</span>
+        <h1>Smart Logistics Solutions for Modern India</h1>
+        <p>Book packages, track shipments in real-time, and get your parcels delivered safely across 500+ cities with ParcelPath.</p>
+        
+        <div class="hero-buttons">
+          <a href="{% url 'book_parcel' %}" class="btn btn-primary">Book a Parcel</a>
+          <a href="{% url 'track_parcel' %}" class="btn btn-outline-light">Track Order</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES SECTION -->
+<section class="services-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-subtitle">What We Offer</span>
+      <h2 class="section-title">Designed for Fast & Easy Logistics</h2>
+      <p class="section-description">Choose from our full range of delivery services tailored for individuals and businesses.</p>
+    </div>
+
+    <div class="row g-3 g-md-4">
+      <!-- CARD 1 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="service-card">
+          <div>
+            <div class="service-icon-wrapper">📦</div>
+            <h3>Parcel Booking</h3>
+            <p>Schedule pickups online seamlessly. Input details, choose delivery speeds, and print instant labels.</p>
+          </div>
+          <a href="{% url 'book_parcel' %}" class="btn btn-outline-primary">Book Now</a>
+        </div>
+      </div>
+
+      <!-- CARD 2 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="service-card">
+          <div>
+            <div class="service-icon-wrapper">📍</div>
+            <h3>Live Tracking</h3>
+            <p>Monitor your package live from pickup to final drop-off using your unique Tracking ID.</p>
+          </div>
+          <a href="{% url 'track_parcel' %}" class="btn btn-outline-primary">Track Now</a>
+        </div>
+      </div>
+
+      <!-- CARD 3 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="service-card">
+          <div>
+            <div class="service-icon-wrapper">🚚</div>
+            <h3>Express Shipping</h3>
+            <p>Time-sensitive deliveries routed through express channels to reach destinations fast.</p>
+          </div>
+          <a href="{% url 'book_parcel' %}" class="btn btn-outline-primary">Get Started</a>
+        </div>
+      </div>
+
+      <!-- CARD 4 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="service-card">
+          <div>
+            <div class="service-icon-wrapper">🔒</div>
+            <h3>Secure Transit</h3>
+            <p>Tamper-proof packaging protocols and insurance coverage to safeguard high-value goods.</p>
+          </div>
+          <a href="{% url 'book_parcel' %}" class="btn btn-outline-primary">Ship Securely</a>
+        </div>
+      </div>
+
+      <!-- CARD 5 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="service-card">
+          <div>
+            <div class="service-icon-wrapper">📱</div>
+            <h3>Instant Notifications</h3>
+            <p>Receive real-time SMS and email alerts whenever your shipment hits a new milestone.</p>
+          </div>
+          <a href="{% url 'track_parcel' %}" class="btn btn-outline-primary">Check Status</a>
+        </div>
+      </div>
+
+      <!-- CARD 6 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="service-card">
+          <div>
+            <div class="service-icon-wrapper">🎧</div>
+            <h3>24/7 Support</h3>
+            <p>Got questions or need help? Our dedicated support team is ready to assist you anytime.</p>
+          </div>
+          <a href="{% url 'contact' %}" class="btn btn-outline-primary">Contact Us</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATISTICS SECTION -->
+<section class="statistics-section">
+  <div class="container">
+    <div class="row g-3 g-md-4">
+      <div class="col-6 col-lg-3">
+        <div class="stat-box">
+          <h2 class="text-primary">10K+</h2>
+          <p>Deliveries</p>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="stat-box">
+          <h2 class="text-success">500+</h2>
+          <p>Cities</p>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="stat-box">
+          <h2 class="text-warning">150+</h2>
+          <p>Vehicles</p>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="stat-box">
+          <h2 class="text-info">99%</h2>
+          <p>On-Time Rate</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MISSION & VISION SECTION -->
+<section class="mission-section">
+  <div class="container">
+    <div class="row g-3 g-md-4">
+      <div class="col-12 col-md-6">
+        <div class="mission-box">
+          <h2>🎯 Our Mission</h2>
+          <p>To redefine logistics through technology-driven tracking, transparent operations, and quick delivery networks that connect urban and rural areas seamlessly.</p>
+        </div>
+      </div>
+      <div class="col-12 col-md-6">
+        <div class="mission-box">
+          <h2>🚀 Our Vision</h2>
+          <p>To establish ParcelPath as India’s premier, most sustainable, and customer-centric parcel distribution network for personal and commercial needs.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="services-footer">
+  <div class="container">
+    <div class="row g-4 mb-4">
+      <div class="col-12 col-md-6 col-lg-4">
+        <h4>📦 ParcelPath</h4>
+        <p>A modern logistics platform building simple, secure, and smart delivery infrastructures across India.</p>
+      </div>
+
+      <div class="col-6 col-lg-2">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="{% url 'home' %}">Home</a></li>
+          <li><a href="{% url 'book_parcel' %}">Book Parcel</a></li>
+          <li><a href="{% url 'track_parcel' %}">Track Parcel</a></li>
+          <li><a href="{% url 'contact' %}">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <div class="col-6 col-lg-3">
+        <h5>Services</h5>
+        <ul>
+          <li><a href="#">Doorstep Pickup</a></li>
+          <li><a href="#">Inter-City Courier</a></li>
+          <li><a href="#">Express Delivery</a></li>
+          <li><a href="#">Bulk Logistics</a></li>
+        </ul>
+      </div>
+
+      <div class="col-12 col-md-6 col-lg-3">
+        <h5>Contact Info</h5>
+        <p class="mb-1">📍 Ahmedabad, Gujarat</p>
+        <p class="mb-1">📞 +91 72039 28160</p>
+        <p class="mb-3">✉ rajeshlagdhir07@gmail.com</p>
+
+        <div class="social-icons">
+          <a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+          <a href="https://x.com" target="_blank"><i class="fab fa-x-twitter"></i></a>
+          <a href="https://www.linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <hr style="border-color: rgba(255, 255, 255, 0.1);" />
+
+    <div class="text-center pt-2">
+      <p class="m-0 small">© 2026 ParcelPath Logistics. All Rights Reserved.</p>
+    </div>
+  </div>
+</footer>
+{% endblock %}

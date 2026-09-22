@@ -1,0 +1,597 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Track Parcel
+{% endblock %}
+
+{% block content %}
+  <style>
+    /* ================================
+               GENERAL
+            ================================ */
+    body {
+      background: #f4f7fb;
+      overflow-x: hidden;
+    }
+    
+    /* ================================
+               HERO
+            ================================ */
+    .hero {
+      background: linear-gradient(135deg, #0d6efd, #00b4d8);
+      color: white;
+      padding: 60px 0;
+    }
+    
+    .hero h1 {
+      font-size: 2.4rem;
+    }
+    
+    .hero p {
+      font-size: 1.1rem;
+      margin-bottom: 0;
+    }
+    
+    /* ================================
+               TRACK CARD
+            ================================ */
+    .track-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+      margin-top: -50px;
+      margin-bottom: 40px;
+    }
+    
+    /* ================================
+               TRACK INPUT
+            ================================ */
+    .track-form .form-control {
+      border-radius: 12px 0 0 12px;
+    }
+    
+    .track-form .btn {
+      border-radius: 0 12px 12px 0;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    
+    /* ================================
+               INFO CARD
+            ================================ */
+    .info-card {
+      background: #f8f9fa;
+      border-radius: 15px;
+      padding: 20px;
+      height: 100%;
+    }
+    
+    .info-card h3 {
+      margin-bottom: 20px;
+    }
+    
+    .info-card p {
+      margin-bottom: 12px;
+      word-break: break-word;
+    }
+    
+    /* ================================
+               TIMELINE
+            ================================ */
+    .timeline {
+      border-left: 4px solid #0d6efd;
+      margin-left: 15px;
+      padding-top: 5px;
+    }
+    
+    .timeline .item {
+      position: relative;
+      margin-bottom: 25px;
+      padding-left: 25px;
+      font-weight: 500;
+    }
+    
+    .timeline .item:last-child {
+      margin-bottom: 0;
+    }
+    
+    .timeline .item:before {
+      content: '';
+      width: 16px;
+      height: 16px;
+      background: #0d6efd;
+      border-radius: 50%;
+      position: absolute;
+      left: -10px;
+      top: 3px;
+      border: 3px solid white;
+      box-shadow: 0 0 0 2px #0d6efd;
+    }
+    
+    /* ================================
+               PROGRESS
+            ================================ */
+    .progress {
+      border-radius: 15px;
+      overflow: hidden;
+    }
+    
+    .progress-bar {
+      font-weight: 600;
+    }
+    
+    /* ================================
+               FOOTER
+            ================================ */
+    footer {
+      margin-top: 60px;
+    }
+    
+    footer a {
+      transition: 0.3s;
+    }
+    
+    footer a:hover {
+      color: #ffc107 !important;
+    }
+    
+    footer p {
+      line-height: 1.6;
+    }
+    
+    /* ================================
+               TABLET
+            ================================ */
+    @media (max-width: 991px) {
+      .hero {
+        padding: 50px 20px;
+      }
+    
+      .hero h1 {
+        font-size: 2rem;
+      }
+    
+      .track-card {
+        margin-top: -35px;
+      }
+    
+      .info-card {
+        margin-bottom: 25px;
+      }
+    }
+    
+    /* ================================
+               MOBILE
+            ================================ */
+    @media (max-width: 767px) {
+      /* Hero */
+      .hero {
+        padding: 40px 15px;
+      }
+    
+      .hero h1 {
+        font-size: 1.7rem;
+        line-height: 1.3;
+      }
+    
+      .hero p {
+        font-size: 0.95rem;
+      }
+    
+      /* Main Card */
+      .track-card {
+        margin-top: -25px;
+        padding: 20px !important;
+        border-radius: 15px;
+      }
+    
+      /* Tracking Form */
+      .track-form .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+    
+      .track-form .form-control {
+        width: 100%;
+        border-radius: 10px !important;
+        font-size: 15px;
+        min-height: 50px;
+      }
+    
+      .track-form .btn {
+        width: 100%;
+        border-radius: 10px !important;
+        min-height: 50px;
+        font-size: 15px;
+      }
+    
+      /* Parcel Details */
+      .info-card {
+        padding: 18px;
+        border-radius: 12px;
+      }
+    
+      .info-card h3 {
+        font-size: 1.25rem;
+      }
+    
+      .info-card p {
+        font-size: 14px;
+        line-height: 1.6;
+      }
+    
+      /* Delivery Progress */
+      /* ટાઈમલાઈન કસ્ટમ CSS */
+    .timeline {
+      position: relative;
+      padding-left: 30px;
+      list-style: none;
+    }
+
+    /* વર્ટિકલ લાઈન (પાછળનો ગ્રે બાર) */
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      bottom: 10px;
+      left: 10px;
+      width: 4px;
+      background-color: #e0e0e0;
+    }
+
+    /* દરેક આઈટમ માટે નોર્મલ સ્ટેટ */
+    .timeline .item {
+      position: relative;
+      margin-bottom: 25px;
+      font-weight: 500;
+      color: #8c8c8c;
+      transition: all 0.3s ease;
+    }
+
+    /* નોર્મલ સર્કલ (ગોળ ટપકું) */
+    .timeline .item::before {
+      content: '';
+      position: absolute;
+      left: -26px;
+      top: 3px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background-color: #ffffff;
+      border: 3px solid #b0b0b0;
+      transition: all 0.3s ease;
+    }
+
+    /* પુરા થયેલા સ્ટેપ્સ (Completed) */
+    .timeline .item.completed {
+      color: #28a745;
+    }
+    .timeline .item.completed::before {
+      background-color: #28a745;
+      border-color: #28a745;
+    }
+
+    /* હાલ ચાલુ હોય તે સ્ટેપ (Active - Pulse Animation સાથે) */
+    .timeline .item.active {
+      color: #0d6efd; /* Primary Color */
+      font-weight: bold;
+    }
+    .timeline .item.active::before {
+      background-color: #0d6efd;
+      border-color: #8bb9fe;
+      box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.25);
+      animation: pulse 1.5s infinite;
+    }
+
+    /* પલ્સ એનિમેશન */
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0px rgba(13, 110, 253, 0.5); }
+      100% { box-shadow: 0 0 0 10px rgba(13, 110, 253, 0); }
+    }
+    
+      /* Footer */
+      footer {
+        margin-top: 35px;
+        text-align: center;
+      }
+    
+      footer .container {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+    
+      footer h4 {
+        font-size: 1.4rem;
+      }
+    
+      footer h5 {
+        font-size: 1.1rem;
+        margin-top: 10px;
+      }
+    
+      footer p,
+      footer li,
+      footer a {
+        font-size: 14px;
+      }
+    }
+    
+    /* ================================
+               SMALL MOBILE
+            ================================ */
+    @media (max-width: 400px) {
+      .hero h1 {
+        font-size: 1.45rem;
+      }
+    
+      .hero p {
+        font-size: 0.85rem;
+      }
+    
+      .track-card {
+        padding: 15px !important;
+      }
+    
+      .info-card {
+        padding: 15px;
+      }
+    
+      .timeline .item {
+        font-size: 13px;
+      }
+    
+      footer p {
+        font-size: 13px;
+      }
+    }
+  </style>
+
+  <!--    ================================
+     HERO
+================================    -->
+  <section class="hero text-center">
+    <div class="container">
+      <h1 class="fw-bold">📦 Track Your Shipment</h1>
+
+      <p>Track your parcel in real time</p>
+    </div>
+  </section>
+
+  <!--    ================================
+     TRACKING SECTION
+================================    -->
+  <div class="container">
+    <div class="track-card p-5">
+      <!-- Tracking Form -->
+      <form method="POST" class="track-form">
+        {% csrf_token %}
+
+        <div class="input-group input-group-lg">
+          <input type="text" value="{%if request.GET.tracking_id %}{{request.GET.tracking_id}}{%endif%}" name="tracking_id" class="form-control" placeholder="Enter Tracking ID (Example: PP123456)" required />
+
+          <button type="submit" class="btn btn-primary">🔍 Track Parcel</button>
+        </div>
+      </form>
+
+      {% if parcel %}
+        <hr class="my-5" />
+
+        <!--    ================================
+             PARCEL INFORMATION
+        =================================    -->
+        <div class="row g-4">
+          <!-- Parcel Details -->
+          <div class="col-lg-6">
+            <div class="info-card">
+              <h3 class="text-primary">📦 Parcel Details</h3>
+
+              <p>
+                <b>Tracking ID:</b>
+                {{ parcel.tracking_id }}
+              </p>
+
+              <p>
+                <b>Sender:</b>
+                {{ parcel.sender_name }}
+              </p>
+
+              <p>
+                <b>Receiver:</b>
+                {{ parcel.receiver_name }}
+              </p>
+
+              <p>
+                <b>Weight:</b>
+                {{ parcel.parcel_weight }} KG
+              </p>
+
+              <p>
+                <b>Type:</b>
+                {{ parcel.parcel_type }}
+              </p>
+
+              <p>
+                <b>Mobile:</b>
+                {{ parcel.mobile_number }}
+              </p>
+
+              <p>
+                <b>Price:</b>
+                <u>₹ {{ parcel.price }}</u>
+              </p>
+
+              <p class="mb-0">
+                <b>Status:</b>
+
+                <span class="badge bg-primary">{{ parcel.status }}</span>
+              </p>
+
+              <p class="mt-3 mb-0">
+                <b>Payment:</b>
+
+                {% if parcel.payment_status == 'Paid' %}
+                  <span class="badge bg-success">⏳ Pending</span>
+                {% else %}
+                  <span class="badge bg-warning text-dark">✅ Successful receved</span>
+                {% endif %}
+              </p>
+            </div>
+          </div>
+
+          <!--    ================================
+                 DELIVERY TIMELINE
+            =================================    -->
+          <div class="col-lg-6">
+            <h4 class="text-primary mb-4"> Delivery Progress</h4>
+
+            <div class="timeline">
+              <div class="item"> Parcel Booked</div>
+
+              <div class="item"> Picked Up</div>
+
+              <div class="item"> Sorting Center</div>
+
+              <div class="item"> Out For Delivery</div>
+
+              <div class="item"> Delivered</div>
+            </div>
+          </div>
+        </div>
+
+        <!--    ================================
+             PROGRESS BAR
+        =================================    -->
+        <div class="mt-5">
+          <h4 class="mb-3"> Delivery Progress</h4>
+
+          <div class="progress" style="height:30px;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" style="width:80%;">80%</div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!--    ================================
+     FOOTER
+================================    -->
+  <footer class="bg-dark text-light pt-5 pb-3">
+    <div class="container">
+      <div class="row">
+        <!-- Company -->
+        <div class="col-lg-4 col-md-6 mb-4">
+          <h4 class="fw-bold text-warning">ParcelPath</h4>
+
+          <p>ParcelPath is a smart logistics and parcel delivery platform that helps you book, track and manage shipments quickly, securely and efficiently.</p>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="col-lg-2 col-md-6 mb-4">
+          <h5 class="text-warning">Quick Links</h5>
+
+          <ul class="list-unstyled">
+            <li>
+              <a href="{% url 'home' %}" class="text-light text-decoration-none">Home</a>
+            </li>
+
+            <li>
+              <a href="{% url 'book_parcel' %}" class="text-light text-decoration-none">Book Parcel</a>
+            </li>
+
+            <li>
+              <a href="{% url 'track_parcel' %}" class="text-light text-decoration-none">Track Parcel</a>
+            </li>
+
+            <li>
+              <a href="{% url 'contact' %}" class="text-light text-decoration-none">Contact</a>
+            </li>
+
+            <li>
+              <a href="{% url 'services' %}" class="text-light text-decoration-none">Services</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Services -->
+        <div class="col-lg-3 col-md-6 mb-4">
+          <h5 class="text-warning">Our Services</h5>
+
+          <ul class="list-unstyled">
+            <li>✔ Parcel Booking</li>
+            <li>✔ Live Tracking</li>
+            <li>✔ Fast Delivery</li>
+            <li>✔ Secure Shipping</li>
+            <li>✔ Customer Support</li>
+            <li>✔ Services</li>
+          </ul>
+        </div>
+
+        <!-- Contact -->
+        <div class="col-lg-3 col-md-6 mb-4">
+          <h5 class="text-warning">Contact Us</h5>
+
+          <p>📍 Ahmedabad, Gujarat</p>
+
+          <p>📞 +91 72039 28160</p>
+
+          <p>
+            ✉
+            <a href="mailto:rajeshlagdhir07@gmail.com?subject=Parcel%20Inquiry" class="text-light text-decoration-none">rajesh lagdhir</a>
+          </p>
+
+          <!-- Social Media -->
+          <div class="mt-3">
+            <a href="https://www.facebook.com" target="_blank" class="text-light fs-4 me-3"><i class="fab fa-facebook"></i></a>
+
+            <a href="https://www.instagram.com" target="_blank" class="text-light fs-4 me-3"><i class="fab fa-instagram"></i></a>
+
+            <a href="https://x.com" target="_blank" class="text-light fs-4 me-3"><i class="fab fa-x-twitter"></i></a>
+
+            <a href="https://www.linkedin.com" target="_blank" class="text-light fs-4"><i class="fab fa-linkedin"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <hr class="border-secondary" />
+
+      <!-- Copyright -->
+      <div class="text-center">
+        <p class="mb-0">© 2026 ParcelPath Logistics. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+<script>
+  function updateDeliveryStatus(currentStep) {
+    const items = document.querySelectorAll('#deliveryTimeline .item');
+
+    items.forEach((item, index) => {
+      const stepNumber = index + 1;
+
+      // ક્લાસ દૂર કરો
+      item.classList.remove('completed', 'active');
+
+      if (stepNumber < currentStep) {
+        // પૂરા થઈ ગયેલા સ્ટેજ
+        item.classList.add('completed');
+      } else if (stepNumber === currentStep) {
+        // હાલમાં ચાલુ સ્ટેજ
+        item.classList.add('active');
+      }
+    });
+  }
+
+  // ઉદાહરણ: ધારો કે પાર્સલ અત્યારે "Sorting Center" (Step 3) પર છે:
+  updateDeliveryStatus(3);
+
+  // લાઈવ ટેસ્ટિંગ માટે: દર 3 સેકન્ડે સ્ટેટસ બદલવાનું ઉદાહરણ
+  /*
+  let current = 1;
+  setInterval(() => {
+    updateDeliveryStatus(current);
+    current = current > 5 ? 1 : current + 1;
+  }, 3000);
+  */
+</script>
+{% endblock %}

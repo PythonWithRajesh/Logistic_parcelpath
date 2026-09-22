@@ -1,0 +1,1288 @@
+{% extends 'custom_admin/main.html' %}
+
+{% block title %}
+Payment Management
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .payment-page {
+        padding: 10px 0 40px;
+    }
+
+    .page-title {
+        font-size: 28px;
+        font-weight: 800;
+        color: #172033;
+        margin-bottom: 5px;
+    }
+
+    .page-subtitle {
+        color: #7b8496;
+        margin-bottom: 0;
+    }
+
+    /* ================= STAT CARDS ================= */
+
+    .stat-card {
+        border: 0;
+        border-radius: 18px;
+        overflow: hidden;
+        background: #fff;
+        transition: all .25s ease;
+        height: 100%;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, .10) !important;
+    }
+
+    .stat-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 23px;
+    }
+
+    .icon-blue {
+        background: rgba(13, 110, 253, .12);
+        color: #0d6efd;
+    }
+
+    .icon-green {
+        background: rgba(25, 135, 84, .12);
+        color: #198754;
+    }
+
+    .icon-yellow {
+        background: rgba(255, 193, 7, .16);
+        color: #d99d00;
+    }
+
+    .icon-purple {
+        background: rgba(111, 66, 193, .12);
+        color: #6f42c1;
+    }
+
+    .stat-label {
+        color: #7b8496;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .stat-value {
+        font-size: 26px;
+        font-weight: 800;
+        color: #172033;
+    }
+
+    /* ================= MAIN CARD ================= */
+
+    .payment-card {
+        border: 0;
+        border-radius: 18px;
+        overflow: hidden;
+        background: #fff;
+    }
+
+    .payment-card-header {
+        padding: 20px;
+        border-bottom: 1px solid #edf0f5;
+        background: #fff;
+    }
+
+    .history-title {
+        font-size: 19px;
+        font-weight: 800;
+        color: #172033;
+        margin: 0;
+    }
+
+    .history-subtitle {
+        color: #8992a3;
+        font-size: 13px;
+        margin-top: 4px;
+    }
+
+    /* ================= SEARCH ================= */
+
+    .search-box {
+        position: relative;
+    }
+
+    .search-box i {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #8a94a6;
+    }
+
+    .search-input {
+        height: 44px;
+        padding-left: 40px;
+        border-radius: 11px;
+        border: 1px solid #e1e5ec;
+        font-size: 14px;
+    }
+
+    .search-input:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, .10);
+    }
+
+    .filter-select {
+        height: 44px;
+        border-radius: 11px;
+        border: 1px solid #e1e5ec;
+        font-size: 14px;
+    }
+
+    /* ================= TABLE ================= */
+
+    .table-wrapper {
+        overflow-x: auto;
+    }
+
+    .payment-table {
+        min-width: 1050px;
+        margin-bottom: 0;
+    }
+
+    .payment-table thead th {
+        background: #f7f9fc;
+        color: #687386;
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+        padding: 15px;
+        border-bottom: 1px solid #e9edf3;
+        white-space: nowrap;
+    }
+
+    .payment-table tbody td {
+        padding: 16px 15px;
+        border-bottom: 1px solid #f0f2f6;
+        font-size: 14px;
+        color: #374151;
+    }
+
+    .payment-table tbody tr {
+        transition: background .2s ease;
+    }
+
+    .payment-table tbody tr:hover {
+        background: #f9fbff;
+    }
+
+    .payment-id {
+        font-weight: 800;
+        color: #0d6efd;
+    }
+
+    .tracking-id {
+        font-weight: 700;
+        color: #172033;
+        font-family: monospace;
+    }
+
+    .customer-name {
+        font-weight: 700;
+        color: #172033;
+    }
+
+    .customer-mobile {
+        display: block;
+        color: #929aaa;
+        font-size: 12px;
+        margin-top: 3px;
+    }
+
+    .amount {
+        font-weight: 800;
+        color: #172033;
+        white-space: nowrap;
+    }
+
+    /* ================= BADGES ================= */
+
+    .status-badge {
+        padding: 6px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 800;
+        display: inline-block;
+    }
+
+    .status-paid {
+        background: rgba(25, 135, 84, .12);
+        color: #198754;
+    }
+
+    .status-pending {
+        background: rgba(255, 193, 7, .17);
+        color: #9a7000;
+    }
+
+    .status-failed {
+        background: rgba(220, 53, 69, .12);
+        color: #dc3545;
+    }
+
+    .status-cod {
+        background: rgba(13, 110, 253, .12);
+        color: #0d6efd;
+    }
+
+    .method-badge {
+        padding: 6px 10px;
+        border-radius: 8px;
+        background: #f1f4f8;
+        color: #4d5768;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    /* ================= ACTION BUTTONS ================= */
+
+    .action-btn {
+        width: 34px;
+        height: 34px;
+        border: 0;
+        border-radius: 9px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all .2s ease;
+    }
+
+    .view-btn {
+        background: rgba(13, 110, 253, .10);
+        color: #0d6efd;
+    }
+
+    .invoice-btn {
+        background: rgba(111, 66, 193, .10);
+        color: #6f42c1;
+    }
+
+    .action-btn:hover {
+        transform: translateY(-2px);
+    }
+
+    /* ================= EMPTY ================= */
+
+    .empty-state {
+        padding: 65px 20px !important;
+        text-align: center;
+    }
+
+    .empty-icon {
+        width: 75px;
+        height: 75px;
+        margin: 0 auto 15px;
+        border-radius: 50%;
+        background: #f1f4f8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        color: #8992a3;
+    }
+
+    .empty-title {
+        font-weight: 800;
+        color: #172033;
+        margin-bottom: 5px;
+    }
+
+    .empty-text {
+        color: #929aaa;
+        font-size: 14px;
+    }
+
+    /* ================= RESULT ================= */
+
+    .result-count {
+        color: #7b8496;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    /* ================= RESPONSIVE ================= */
+
+    @media (max-width: 767px) {
+
+        .payment-page {
+            padding-top: 5px;
+        }
+
+        .page-title {
+            font-size: 23px;
+        }
+
+        .header-buttons {
+            margin-top: 15px;
+        }
+
+        .stat-value {
+            font-size: 22px;
+        }
+
+        .payment-card-header {
+            padding: 15px;
+        }
+
+        .filter-row {
+            margin-top: 12px;
+        }
+    }
+</style>
+
+
+<div class="container-fluid payment-page">
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+
+        <div>
+            <h2 class="page-title">
+              Payment Management
+            </h2>
+
+            <p class="page-subtitle">
+                Monitor, search and manage all customer payments.
+            </p>
+        </div>
+
+        <div class="header-buttons">
+
+            <button
+                type="button"
+                class="btn btn-success px-4"
+                onclick="exportPayments()">
+
+                <i class="fas fa-file-export me-2"></i>
+                Export Report
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= STATISTICS ================= -->
+
+    <div class="row g-3 mb-4">
+
+        <!-- Total -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card stat-card shadow-sm">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <div class="stat-label">
+                                TOTAL PAYMENTS
+                            </div>
+
+                            <div class="stat-value">
+                                {{ total_payments|default:0 }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Successful -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card stat-card shadow-sm">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <div class="stat-label">
+                                SUCCESSFUL
+                            </div>
+
+                            <div class="stat-value text-success">
+                                {{ successful_payments|default:0 }}
+                            </div>
+
+                        </div>
+
+                        
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Pending -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card stat-card shadow-sm">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <div class="stat-label">
+                                PENDING
+                            </div>
+
+                            <div class="stat-value text-warning">
+                                {{ pending_payments|default:0 }}
+                            </div>
+
+                        </div>
+
+                      
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Revenue -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card stat-card shadow-sm">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <div class="stat-label">
+                                TOTAL REVENUE
+                            </div>
+
+                            <div class="stat-value">
+                                ₹ {{ total_revenue|default:0|floatformat:2 }}
+                            </div>
+
+                        </div>
+
+                    
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= PAYMENT HISTORY ================= -->
+
+    <div class="card payment-card shadow-sm">
+
+        <!-- Header -->
+
+        <div class="payment-card-header">
+
+            <div class="row align-items-center g-3">
+
+                <div class="col-lg-4">
+
+                    <h5 class="history-title">
+                        Payment History
+                    </h5>
+
+                    <div class="history-subtitle">
+                        View all transaction records
+                    </div>
+
+                </div>
+
+
+                <!-- Search -->
+
+                <div class="col-lg-4">
+
+                    <div class="search-box">
+
+                        <i class="fas fa-search"></i>
+
+                        <input
+                            type="text"
+                            id="paymentSearch"
+                            class="form-control search-input"
+                            placeholder="Search payment, customer, tracking..."
+                            autocomplete="off">
+
+                    </div>
+
+                </div>
+
+
+                <!-- Filter -->
+
+                <div class="col-lg-2">
+
+                    <select
+                        id="statusFilter"
+                        class="form-select filter-select">
+
+                        <option value="all">
+                            All Status
+                        </option>
+
+                        <option value="paid">
+                            Paid
+                        </option>
+
+                        <option value="pending">
+                            Pending
+                        </option>
+
+                        <option value="failed">
+                            Failed
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="col-lg-2">
+
+                    <select
+                        id="methodFilter"
+                        class="form-select filter-select">
+
+                        <option value="all">
+                            All Methods
+                        </option>
+
+                        <option value="razorpay">
+                            Razorpay
+                        </option>
+
+                        <option value="cod">
+                            COD
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Table -->
+
+        <div class="card-body p-0">
+
+            <div class="table-wrapper">
+
+                <table class="table payment-table align-middle">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Payment ID</th>
+
+                            <th>Tracking ID</th>
+
+                            <th>Customer</th>
+
+                            <th>Amount</th>
+
+                            <th>Method</th>
+
+                            <th>Status</th>
+
+                            <th>Date</th>
+
+                            <th class="text-center">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="paymentTable">
+
+                    {% for p in payments %}
+
+                        <tr
+                            data-status="{{ p.payment_status|default:'paid'|lower }}"
+                            data-method="{{ p.payment_method|default:'razorpay'|lower }}">
+
+                            <!-- Payment ID -->
+
+                            <td>
+
+                                <span class="payment-id">
+
+                                    PAY{{ p.id|stringformat:"06d" }}
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- Tracking -->
+
+                            <td>
+
+                                <span class="tracking-id">
+
+                                    {{ p.tracking_id|default:"N/A" }}
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- Customer -->
+
+                            <td>
+
+                                <span class="customer-name">
+
+                                    {{ p.sender_name|default:"Unknown Customer" }}
+
+                                </span>
+
+                                {% if p.mobile_number %}
+
+                                    <span class="customer-mobile">
+
+                                        {{ p.mobile_number }}
+
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- Amount -->
+
+                            <td>
+
+                                <span class="amount">
+
+                                    ₹ {{ p.price|default:0|floatformat:2 }}
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- Method -->
+
+                            <td>
+
+                                {% if p.payment_method %}
+
+                                    <span class="method-badge">
+
+                                        {% if p.payment_method|lower == "razorpay" %}
+
+                                            <i class="fas fa-bolt me-1"></i>
+
+                                        {% elif p.payment_method|lower == "cod" %}
+
+                                            <i class="fas fa-money-bill-wave me-1"></i>
+
+                                        {% endif %}
+
+                                        {{ p.payment_method|upper }}
+
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="method-badge">
+                                        N/A
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- Status -->
+
+                            <td>
+
+                                {% with status=p.payment_status|default:"paid"|lower %}
+
+                                    {% if status == "paid" or status == "success" or status == "successful" %}
+
+                                        <span class="status-badge status-paid">
+
+                                            <i class="fas fa-check-circle me-1"></i>
+                                            Paid
+
+                                        </span>
+
+                                    {% elif status == "pending" %}
+
+                                        <span class="status-badge status-pending">
+
+                                            <i class="fas fa-clock me-1"></i>
+                                            Pending
+
+                                        </span>
+
+                                    {% elif status == "failed" %}
+
+                                        <span class="status-badge status-failed">
+
+                                            <i class="fas fa-times-circle me-1"></i>
+                                            Failed
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="status-badge status-cod">
+
+                                            {{ p.payment_status|default:"Paid" }}
+
+                                        </span>
+
+                                    {% endif %}
+
+                                {% endwith %}
+
+                            </td>
+
+
+                            <!-- Date -->
+
+                            <td>
+
+                                {% if p.booking_date %}
+
+                                    <div class="fw-semibold">
+
+                                        {{ p.booking_date|date:"d M Y" }}
+
+                                    </div>
+
+                                    <small class="text-muted">
+
+                                        {{ p.booking_date|date:"h:i A" }}
+
+                                    </small>
+
+                                {% else %}
+
+                                    <span class="text-muted">
+                                        N/A
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- Action -->
+
+                            <td class="text-center">
+
+                                <div class="d-flex justify-content-center gap-2">
+
+                                    <button
+                                        type="button"
+                                        class="action-btn view-btn"
+                                        title="View Payment"
+                                        onclick="viewPayment(
+                                            '{{ p.id }}',
+                                            '{{ p.tracking_id|default:"N/A" }}',
+                                            '{{ p.sender_name|default:"Unknown" }}',
+                                            '{{ p.price|default:0 }}',
+                                            '{{ p.payment_method|default:"N/A" }}',
+                                            '{{ p.payment_status|default:"Paid" }}'
+                                        )">
+
+                                        <i class="fas fa-eye"></i>
+
+                                    </button>
+
+
+                                    {% if p.tracking_id %}
+
+                                    <a
+                                        href="{% url 'download_payment_receipt' p.tracking_id %}"
+                                        class="action-btn invoice-btn"
+                                        title="Download Invoice">
+
+                                        <i class="fas fa-file-invoice"></i>
+
+                                    </a>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    {% empty %}
+
+                        <tr>
+
+                            <td colspan="8" class="empty-state">
+
+                                <div class="empty-icon">
+
+                                    <i class="fas fa-receipt"></i>
+
+                                </div>
+
+                                <h5 class="empty-title">
+                                    No Payments Found
+                                </h5>
+
+                                <p class="empty-text">
+                                    There are no payment records available yet.
+                                </p>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- Footer -->
+
+        <div class="card-footer bg-white border-0 px-4 py-3">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <span class="result-count" id="resultCount">
+
+                    Showing {{ payments|length }} payment{{ payments|length|pluralize }}
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= PAYMENT MODAL ================= -->
+
+<div
+    class="modal fade"
+    id="paymentModal"
+    tabindex="-1"
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content border-0 shadow-lg">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title fw-bold">
+                    💳 Payment Details
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row g-3">
+
+                    <div class="col-6">
+
+                        <small class="text-muted">
+                            Payment ID
+                        </small>
+
+                        <div
+                            class="fw-bold"
+                            id="modalPaymentId">
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-6">
+
+                        <small class="text-muted">
+                            Tracking ID
+                        </small>
+
+                        <div
+                            class="fw-bold"
+                            id="modalTrackingId">
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-12">
+
+                        <small class="text-muted">
+                            Customer
+                        </small>
+
+                        <div
+                            class="fw-bold"
+                            id="modalCustomer">
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-6">
+
+                        <small class="text-muted">
+                            Amount
+                        </small>
+
+                        <div
+                            class="fw-bold text-success"
+                            id="modalAmount">
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-6">
+
+                        <small class="text-muted">
+                            Method
+                        </small>
+
+                        <div
+                            class="fw-bold"
+                            id="modalMethod">
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-12">
+
+                        <small class="text-muted">
+                            Status
+                        </small>
+
+                        <div
+                            class="fw-bold"
+                            id="modalStatus">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+
+                    Close
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const searchInput = document.getElementById("paymentSearch");
+    const statusFilter = document.getElementById("statusFilter");
+    const methodFilter = document.getElementById("methodFilter");
+    const table = document.getElementById("paymentTable");
+    const resultCount = document.getElementById("resultCount");
+
+    function filterPayments() {
+
+        const searchValue =
+            searchInput.value.toLowerCase().trim();
+
+        const statusValue =
+            statusFilter.value.toLowerCase();
+
+        const methodValue =
+            methodFilter.value.toLowerCase();
+
+        const rows =
+            table.querySelectorAll("tr[data-status]");
+
+        let visibleCount = 0;
+
+        rows.forEach(function (row) {
+
+            const rowText =
+                row.innerText.toLowerCase();
+
+            const rowStatus =
+                row.dataset.status.toLowerCase();
+
+            const rowMethod =
+                row.dataset.method.toLowerCase();
+
+            const searchMatch =
+                rowText.includes(searchValue);
+
+            const statusMatch =
+                statusValue === "all" ||
+                rowStatus === statusValue;
+
+            const methodMatch =
+                methodValue === "all" ||
+                rowMethod === methodValue;
+
+            if (
+                searchMatch &&
+                statusMatch &&
+                methodMatch
+            ) {
+
+                row.style.display = "";
+                visibleCount++;
+
+            } else {
+
+                row.style.display = "none";
+
+            }
+
+        });
+
+        resultCount.innerText =
+            `Showing ${visibleCount} payment${visibleCount === 1 ? "" : "s"}`;
+
+    }
+
+
+    searchInput.addEventListener(
+        "input",
+        filterPayments
+    );
+
+    statusFilter.addEventListener(
+        "change",
+        filterPayments
+    );
+
+    methodFilter.addEventListener(
+        "change",
+        filterPayments
+    );
+
+});
+
+
+/* ================= VIEW PAYMENT ================= */
+
+function viewPayment(
+    id,
+    tracking,
+    customer,
+    amount,
+    method,
+    status
+) {
+
+    document.getElementById("modalPaymentId").innerText =
+        "PAY" + String(id).padStart(6, "0");
+
+    document.getElementById("modalTrackingId").innerText =
+        tracking;
+
+    document.getElementById("modalCustomer").innerText =
+        customer;
+
+    document.getElementById("modalAmount").innerText =
+        "₹ " + parseFloat(amount || 0).toFixed(2);
+
+    document.getElementById("modalMethod").innerText =
+        method.toUpperCase();
+
+    document.getElementById("modalStatus").innerText =
+        status;
+
+    const modal =
+        new bootstrap.Modal(
+            document.getElementById("paymentModal")
+        );
+
+    modal.show();
+
+}
+
+
+/* ================= EXPORT ================= */
+
+function exportPayments() {
+
+    const rows =
+        document.querySelectorAll(
+            "#paymentTable tr[data-status]"
+        );
+
+    if (!rows.length) {
+
+        alert("No payment data available to export.");
+
+        return;
+
+    }
+
+    let csv =
+        "Payment ID,Tracking ID,Customer,Amount,Method,Status,Date\n";
+
+    rows.forEach(function (row) {
+
+        if (row.style.display === "none") {
+            return;
+        }
+
+        const cells =
+            row.querySelectorAll("td");
+
+        if (cells.length < 7) {
+            return;
+        }
+
+        const paymentId =
+            cells[0].innerText.trim();
+
+        const tracking =
+            cells[1].innerText.trim();
+
+        const customer =
+            cells[2].innerText.trim();
+
+        const amount =
+            cells[3].innerText.trim();
+
+        const method =
+            cells[4].innerText.trim();
+
+        const status =
+            cells[5].innerText.trim();
+
+        const date =
+            cells[6].innerText.trim();
+
+        csv +=
+            `"${paymentId}","${tracking}","${customer}","${amount}","${method}","${status}","${date}"\n`;
+
+    });
+
+
+    const blob =
+        new Blob(
+            [csv],
+            {
+                type: "text/csv;charset=utf-8;"
+            }
+        );
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const link =
+        document.createElement("a");
+
+    link.href = url;
+
+    link.download =
+        "parcelpath_payment_report.csv";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+
+}
+
+</script>
+
+{% endblock %}

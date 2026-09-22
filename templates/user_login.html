@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <div class="container-fluid">
+    <div class="row min-vh-100">
+      <!-- LEFT SIDE IMAGE -->
+      <div class="col-md-6 d-none d-md-block p-0">
+        <div style="
+                background: url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1470&auto=format&fit=crop')center/cover no-repeat;
+                background-size:cover;
+                background-position:center;
+                height:100vh;"></div>
+      </div>
+
+      <!-- RIGHT SIDE LOGIN FORM -->
+      <div class="col-md-6 d-flex align-items-center justify-content-center bg-light">
+        <div class="card shadow-lg border-0 rounded-4 p-5" style="width:100%; max-width:450px;">
+          <div class="text-center mb-4">
+            <h1 class="fw-bold">parcelpath</h1>
+
+            <p class="text-muted">Login to continue</p>
+          </div>
+
+          {% if error %}
+            <div class="alert alert-danger">{{ error }}</div>
+          {% endif %}
+
+          <form method="POST">
+            {% csrf_token %}
+
+            <!-- USERNAME -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Username</label>
+
+              <input type="text" name="username" class="form-control form-control-lg rounded-3" placeholder="Enter username" />
+            </div>
+
+            <!-- PASSWORD -->
+            <div class="mb-4">
+              <label class="form-label fw-semibold">Password</label>
+
+              <div class="position-relative">
+                <input type="password" name="password" id="password" class="form-control form-control-lg rounded-3 pe-5" placeholder="Enter password" />
+
+                <span class="position-absolute top-50 end-0 translate-middle-y me-3" onclick="togglePassword()" style="cursor: pointer;"><i class="bi bi-eye" id="eyeIcon"></i></span>
+              </div>
+            </div>
+
+            <!-- BUTTON -->
+            <button type="submit" class="btn btn-dark btn-lg w-100 rounded-3">Login</button>
+          </form>
+
+          <!-- FOOTER -->
+          <div class="text-center mt-4">
+            <p class="text-center mb-0">
+              Don't have an account?
+              <a href="{% url 'register' %}" class="login-link">Register</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function togglePassword() {
+      const password = document.getElementById('password')
+      const eyeIcon = document.getElementById('eyeIcon')
+    
+      if (password.type === 'password') {
+        password.type = 'text'
+        eyeIcon.classList.remove('bi-eye')
+        eyeIcon.classList.add('bi-eye-slash')
+      } else {
+        password.type = 'password'
+        eyeIcon.classList.remove('bi-eye-slash')
+        eyeIcon.classList.add('bi-eye')
+      }
+    }
+  </script>
+{% endblock %}

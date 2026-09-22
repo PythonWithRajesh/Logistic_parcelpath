@@ -1,0 +1,149 @@
+{% extends 'custom_admin/main.html' %} 
+
+{% block title %} {{ page_title }}
+{%endblock %}
+
+{% block content %}
+
+<style>
+  .contact-form-page {
+    padding: 25px;
+  }
+
+  .form-card {
+    border: none;
+    border-radius: 18px;
+    overflow: hidden;
+  }
+
+  .form-label {
+    font-weight: 600;
+    color: #263248;
+  }
+
+  .form-control,
+  .form-select {
+    border-radius: 10px;
+    padding: 11px 14px;
+  }
+
+  textarea.form-control {
+    min-height: 160px;
+    resize: vertical;
+  }
+</style>
+
+<div class="contact-form-page">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold">{{ page_title }}</h2>
+
+      <p class="text-muted mb-0">Create or update customer contact message</p>
+    </div>
+
+    <a href="{% url 'cs_contact' %}" class="btn btn-outline-secondary">
+      <i class="fas fa-arrow-left me-2"></i>
+      Back
+    </a>
+  </div>
+
+  <div class="card form-card shadow-sm">
+    <div class="card-header bg-dark text-white">
+      <h5 class="mb-0">
+        <i class="fas fa-envelope me-2"></i>
+        Message Information
+      </h5>
+    </div>
+
+    <div class="card-body p-4">
+      <form method="POST">
+        {% csrf_token %}
+
+        <div class="row g-4">
+          <!-- Name -->
+
+          <div class="col-md-6">
+            <label class="form-label"> Customer Name * </label>
+
+            <input
+              type="text"
+              name="name"
+              class="form-control"
+              value="{{ contact.name|default:'' }}"
+              placeholder="Enter customer name"
+              required
+            />
+          </div>
+
+          <!-- Email -->
+
+          <div class="col-md-6">
+            <label class="form-label"> Email * </label>
+
+            <input
+              type="email"
+              name="email"
+              class="form-control"
+              value="{{ contact.email|default:'' }}"
+              placeholder="customer@example.com"
+              required
+            />
+          </div>
+
+          <!-- Mobile -->
+
+          <div class="col-md-6">
+            <label class="form-label"> Mobile Number * </label>
+
+            <input
+              type="text"
+              name="mobile"
+              class="form-control"
+              value="{{ contact.mobile|default:'' }}"
+              placeholder="Enter mobile number"
+              required
+            />
+          </div>
+
+          <!-- Message -->
+
+          <div class="col-12">
+            <label class="form-label"> Message * </label>
+
+            <textarea
+              name="message"
+              class="form-control"
+              placeholder="Enter customer message..."
+              required
+            >
+{{ contact.message|default:'' }}</textarea
+            >
+          </div>
+
+          <!-- Buttons -->
+
+          <div class="col-12">
+            <hr />
+
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary px-4">
+                <i class="fas fa-save me-2"></i>
+
+                {{ button_text }}
+              </button>
+
+              <a
+                href="{% url 'cs_contact' %}"
+                class="btn btn-outline-secondary px-4"
+              >
+                Cancel
+              </a>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

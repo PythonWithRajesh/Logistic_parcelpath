@@ -1,0 +1,1145 @@
+{% extends 'custom_admin/main.html' %} 
+
+{% block title %} Reports & Analytics {%endblock %} 
+
+{% block content %}
+
+<style>
+  /* =========================================================
+   PARCELPATH REPORTS & ANALYTICS
+========================================================= */
+
+  .reports-page {
+    min-height: calc(100vh - 70px);
+    padding: 28px;
+    background: #f6f8fc;
+  }
+
+  /* =========================================================
+   HEADER
+========================================================= */
+
+  .reports-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+
+  .reports-title-area {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .reports-title-icon {
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 15px;
+
+    background: #eaf2ff;
+    color: #0d6efd;
+
+    font-size: 23px;
+  }
+
+  .reports-title {
+    margin: 0;
+
+    color: #172033;
+
+    font-size: 28px;
+    font-weight: 800;
+
+    letter-spacing: -0.4px;
+  }
+
+  .reports-subtitle {
+    margin: 5px 0 0;
+
+    color: #8a93a3;
+
+    font-size: 13px;
+  }
+
+  .download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    border: none;
+    border-radius: 11px;
+
+    padding: 11px 18px;
+
+    background: #172033;
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    box-shadow: 0 6px 18px rgba(23, 32, 51, 0.15);
+
+    transition: all 0.2s ease;
+  }
+
+  .download-btn:hover {
+    color: #ffffff;
+    transform: translateY(-2px);
+
+    box-shadow: 0 10px 24px rgba(23, 32, 51, 0.2);
+  }
+
+  /* =========================================================
+   KPI CARDS
+========================================================= */
+
+  .kpi-card {
+    position: relative;
+
+    height: 100%;
+
+    border: none;
+    border-radius: 18px;
+
+    background: #ffffff;
+
+    box-shadow: 0 5px 22px rgba(20, 34, 60, 0.055);
+
+    overflow: hidden;
+
+    transition: all 0.25s ease;
+  }
+
+  .kpi-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow: 0 12px 30px rgba(20, 34, 60, 0.1);
+  }
+
+  .kpi-card::after {
+    content: "";
+
+    position: absolute;
+
+    width: 90px;
+    height: 90px;
+
+    right: -30px;
+    bottom: -35px;
+
+    border-radius: 50%;
+
+    background: rgba(13, 110, 253, 0.045);
+  }
+
+  .kpi-body {
+    padding: 20px;
+  }
+
+  .kpi-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .kpi-label {
+    color: #8a93a3;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    margin-bottom: 8px;
+  }
+
+  .kpi-value {
+    color: #172033;
+
+    font-size: 28px;
+    line-height: 1;
+
+    font-weight: 800;
+  }
+
+  .kpi-icon {
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 13px;
+
+    font-size: 20px;
+  }
+
+  .kpi-footer {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    margin-top: 18px;
+    padding-top: 13px;
+
+    border-top: 1px solid #eef1f5;
+
+    color: #929aaa;
+
+    font-size: 11px;
+  }
+
+  .kpi-blue .kpi-icon {
+    background: #eaf2ff;
+    color: #0d6efd;
+  }
+
+  .kpi-green .kpi-icon {
+    background: #eaf8f1;
+    color: #198754;
+  }
+
+  .kpi-orange .kpi-icon {
+    background: #fff6df;
+    color: #d99a00;
+  }
+
+  .kpi-purple .kpi-icon {
+    background: #f1eaff;
+    color: #6f42c1;
+  }
+
+  /* =========================================================
+   ANALYTICS PANELS
+========================================================= */
+
+  .analytics-panel {
+    height: 100%;
+
+    border: none;
+    border-radius: 18px;
+
+    background: #ffffff;
+
+    box-shadow: 0 5px 22px rgba(20, 34, 60, 0.055);
+
+    overflow: hidden;
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 20px 22px 12px;
+  }
+
+  .panel-title {
+    margin: 0;
+
+    color: #172033;
+
+    font-size: 16px;
+    font-weight: 800;
+  }
+
+  .panel-subtitle {
+    margin-top: 4px;
+
+    color: #929aaa;
+
+    font-size: 11px;
+  }
+
+  .panel-body {
+    padding: 15px 22px 22px;
+  }
+
+  /* =========================================================
+   STATUS OVERVIEW
+========================================================= */
+
+  .status-item {
+    margin-bottom: 22px;
+  }
+
+  .status-item:last-child {
+    margin-bottom: 5px;
+  }
+
+  .status-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 8px;
+  }
+
+  .status-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    color: #4d5665;
+
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .status-dot {
+    width: 9px;
+    height: 9px;
+
+    border-radius: 50%;
+  }
+
+  .status-number {
+    color: #172033;
+
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .status-progress {
+    height: 8px;
+
+    border-radius: 20px;
+
+    background: #edf0f5;
+
+    overflow: hidden;
+  }
+
+  .status-progress-bar {
+    height: 100%;
+
+    border-radius: 20px;
+
+    transition: width 0.8s ease;
+  }
+
+  .delivered-bar {
+    background: #198754;
+  }
+
+  .transit-bar {
+    background: #f5b400;
+  }
+
+  .cancelled-bar {
+    background: #dc3545;
+  }
+
+  /* =========================================================
+   BUSINESS INSIGHT
+========================================================= */
+
+  .insight-box {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+
+    padding: 14px;
+
+    margin-bottom: 12px;
+
+    border: 1px solid #edf0f5;
+    border-radius: 13px;
+
+    background: #fafbfc;
+  }
+
+  .insight-icon {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #eef4ff;
+    color: #0d6efd;
+
+    flex-shrink: 0;
+  }
+
+  .insight-title {
+    color: #384152;
+
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .insight-value {
+    margin-top: 3px;
+
+    color: #172033;
+
+    font-size: 16px;
+    font-weight: 800;
+  }
+
+  .insight-text {
+    color: #929aaa;
+
+    font-size: 10px;
+  }
+
+  /* =========================================================
+   REPORT TABLE
+========================================================= */
+
+  .report-table-panel {
+    border: none;
+    border-radius: 18px;
+
+    background: #ffffff;
+
+    box-shadow: 0 5px 22px rgba(20, 34, 60, 0.055);
+
+    overflow: hidden;
+  }
+
+  .table-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 20px 22px;
+
+    border-bottom: 1px solid #eef1f5;
+  }
+
+  .table-title {
+    margin: 0;
+
+    color: #172033;
+
+    font-size: 16px;
+    font-weight: 800;
+  }
+
+  .table-subtitle {
+    margin-top: 4px;
+
+    color: #929aaa;
+
+    font-size: 11px;
+  }
+
+  .report-search {
+    width: 230px;
+
+    position: relative;
+  }
+
+  .report-search input {
+    width: 100%;
+
+    height: 38px;
+
+    padding: 0 12px 0 37px;
+
+    border: 1px solid #e6e9ef;
+
+    border-radius: 10px;
+
+    outline: none;
+
+    color: #384152;
+
+    font-size: 12px;
+
+    background: #fafbfc;
+
+    transition: all 0.2s ease;
+  }
+
+  .report-search input:focus {
+    background: #ffffff;
+
+    border-color: #b9d1ff;
+
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.08);
+  }
+
+  .report-search-icon {
+    position: absolute;
+
+    left: 13px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #929aaa;
+
+    font-size: 13px;
+  }
+
+  .table-container {
+    padding: 0 10px 10px;
+  }
+
+  .report-table {
+    width: 100%;
+
+    margin: 0;
+
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .report-table thead th {
+    padding: 14px 12px;
+
+    border-bottom: 1px solid #eef1f5;
+
+    color: #929aaa;
+
+    background: #fafbfc;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.4px;
+
+    white-space: nowrap;
+  }
+
+  .report-table tbody td {
+    padding: 15px 12px;
+
+    border-bottom: 1px solid #f0f2f6;
+
+    color: #4d5665;
+
+    font-size: 12px;
+
+    vertical-align: middle;
+  }
+
+  .report-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .report-table tbody tr {
+    transition: all 0.15s ease;
+  }
+
+  .report-table tbody tr:hover {
+    background: #fafcff;
+  }
+
+  /* TRACKING */
+
+  .tracking-id {
+    color: #0d6efd;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.2px;
+  }
+
+  /* CUSTOMER */
+
+  .customer-name {
+    color: #273142;
+
+    font-weight: 700;
+  }
+
+  .customer-label {
+    color: #929aaa;
+
+    font-size: 10px;
+
+    margin-top: 2px;
+  }
+
+  /* DESTINATION */
+
+  .destination {
+    max-width: 180px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+  }
+
+  /* PRICE */
+
+  .amount {
+    color: #172033;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+  }
+
+  /* STATUS BADGE */
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+  }
+
+  .status-badge::before {
+    content: "";
+
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+  }
+
+  .status-delivered {
+    background: #eaf8f1;
+    color: #198754;
+  }
+
+  .status-delivered::before {
+    background: #198754;
+  }
+
+  .status-transit {
+    background: #fff6df;
+    color: #a87900;
+  }
+
+  .status-transit::before {
+    background: #f5b400;
+  }
+
+  .status-default {
+    background: #eef4ff;
+    color: #0d6efd;
+  }
+
+  .status-default::before {
+    background: #0d6efd;
+  }
+
+  /* EMPTY */
+
+  .empty-state {
+    padding: 55px 20px !important;
+
+    text-align: center;
+
+    color: #929aaa !important;
+  }
+
+  .empty-icon {
+    width: 55px;
+    height: 55px;
+
+    margin: 0 auto 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 15px;
+
+    background: #f1f3f7;
+
+    font-size: 22px;
+  }
+
+  /* =========================================================
+   RESPONSIVE
+========================================================= */
+
+  @media (max-width: 991px) {
+    .reports-page {
+      padding: 20px;
+    }
+
+    .reports-header {
+      align-items: flex-start;
+    }
+
+    .destination {
+      max-width: 130px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .reports-page {
+      padding: 14px;
+    }
+
+    .reports-header {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .reports-title {
+      font-size: 23px;
+    }
+
+    .download-btn {
+      justify-content: center;
+      width: 100%;
+    }
+
+    .table-toolbar {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .report-search {
+      width: 100%;
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    .report-table {
+      min-width: 850px;
+    }
+  }
+</style>
+
+<div class="reports-page">
+  <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+  <div class="reports-header">
+    <div class="reports-title-area">
+      <div class="reports-title-icon">📊</div>
+
+      <div>
+        <h1 class="reports-title">Reports & Analytics</h1>
+
+        <p class="reports-subtitle">
+          Monitor shipment activity and business performance
+        </p>
+      </div>
+    </div>
+
+    <button type="button" class="download-btn" onclick="window.print()">
+      📥 Download Report
+    </button>
+  </div>
+
+  <!-- =====================================================
+         KPI CARDS
+    ====================================================== -->
+
+  <div class="row g-3 mb-4">
+    <!-- TOTAL -->
+
+    <div class="col-xl-3 col-md-6">
+      <div class="kpi-card kpi-blue">
+        <div class="kpi-body">
+          <div class="kpi-top">
+            <div>
+              <div class="kpi-label">TOTAL PARCELS</div>
+
+              <div class="kpi-value">{{ total_parcels|default:0 }}</div>
+            </div>
+          </div>
+
+          <div class="kpi-footer">All shipments in system</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DELIVERED -->
+
+    <div class="col-xl-3 col-md-6">
+      <div class="kpi-card kpi-green">
+        <div class="kpi-body">
+          <div class="kpi-top">
+            <div>
+              <div class="kpi-label">DELIVERED</div>
+
+              <div class="kpi-value">{{ delivered|default:0 }}</div>
+            </div>
+          </div>
+
+          <div class="kpi-footer">Successfully completed</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRANSIT -->
+
+    <div class="col-xl-3 col-md-6">
+      <div class="kpi-card kpi-orange">
+        <div class="kpi-body">
+          <div class="kpi-top">
+            <div>
+              <div class="kpi-label">IN TRANSIT</div>
+
+              <div class="kpi-value">{{ transit|default:0 }}</div>
+            </div>
+          </div>
+
+          <div class="kpi-footer">Shipments currently moving</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REVENUE -->
+
+    <div class="col-xl-3 col-md-6">
+      <div class="kpi-card kpi-purple">
+        <div class="kpi-body">
+          <div class="kpi-top">
+            <div>
+              <div class="kpi-label">TOTAL REVENUE</div>
+
+              <div class="kpi-value">₹ {{ revenue|default:0 }}</div>
+            </div>
+          </div>
+
+          <div class="kpi-footer">Shipment revenue generated</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================
+         ANALYTICS
+    ====================================================== -->
+
+  <div class="row g-3 mb-4">
+    <!-- STATUS -->
+
+    <div class="col-lg-7">
+      <div class="analytics-panel">
+        <div class="panel-header">
+          <div>
+            <h3 class="panel-title">Shipment Status Overview</h3>
+
+            <div class="panel-subtitle">
+              Current distribution of your shipments
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-body">
+          <!-- DELIVERED -->
+
+          <div class="status-item">
+            <div class="status-top">
+              <div class="status-label">
+                <span class="status-dot" style="background: #198754"></span>
+
+                Delivered
+              </div>
+
+              <div class="status-number">{{ delivered|default:0 }}</div>
+            </div>
+
+            <div class="status-progress">
+              <div
+                class="status-progress-bar delivered-bar"
+                style="
+                                    width:
+                                    {% if total_parcels %}
+                                        {% widthratio delivered total_parcels 100 %}
+                                    {% else %}
+                                        0
+                                    {% endif %}%;
+                                "
+              ></div>
+            </div>
+          </div>
+
+          <!-- TRANSIT -->
+
+          <div class="status-item">
+            <div class="status-top">
+              <div class="status-label">
+                <span class="status-dot" style="background: #f5b400"></span>
+
+                In Transit
+              </div>
+
+              <div class="status-number">{{ transit|default:0 }}</div>
+            </div>
+
+            <div class="status-progress">
+              <div
+                class="status-progress-bar transit-bar"
+                style="
+                                    width:
+                                    {% if total_parcels %}
+                                        {% widthratio transit total_parcels 100 %}
+                                    {% else %}
+                                        0
+                                    {% endif %}%;
+                                "
+              ></div>
+            </div>
+          </div>
+
+          <!-- CANCELLED -->
+
+          <div class="status-item">
+            <div class="status-top">
+              <div class="status-label">
+                <span class="status-dot" style="background: #dc3545"></span>
+
+                Cancelled
+              </div>
+
+              <div class="status-number">{{ cancelled|default:0 }}</div>
+            </div>
+
+            <div class="status-progress">
+              <div
+                class="status-progress-bar cancelled-bar"
+                style="
+                                    width:
+                                    {% if total_parcels %}
+                                        {% widthratio cancelled total_parcels 100 %}
+                                    {% else %}
+                                        0
+                                    {% endif %}%;
+                                "
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUSINESS SUMMARY -->
+
+    <div class="col-lg-5">
+      <div class="analytics-panel">
+        <div class="panel-header">
+          <div>
+            <h3 class="panel-title">Business Summary</h3>
+
+            <div class="panel-subtitle">Key operational indicators</div>
+          </div>
+        </div>
+
+        <div class="panel-body">
+          <div class="insight-box">
+            <div class="insight-icon">📦</div>
+
+            <div>
+              <div class="insight-title">Total Shipments</div>
+
+              <div class="insight-value">{{ total_parcels|default:0 }}</div>
+
+              <div class="insight-text">Registered in ParcelPath</div>
+            </div>
+          </div>
+
+          <div class="insight-box">
+            <div class="insight-icon">✓</div>
+
+            <div>
+              <div class="insight-title">Delivered Shipments</div>
+
+              <div class="insight-value">{{ delivered|default:0 }}</div>
+
+              <div class="insight-text">Successfully completed</div>
+            </div>
+          </div>
+
+          <div class="insight-box">
+            <div class="insight-icon">₹</div>
+
+            <div>
+              <div class="insight-title">Revenue Generated</div>
+
+              <div class="insight-value">₹ {{ revenue|default:0 }}</div>
+
+              <div class="insight-text">From recorded shipments</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================
+         RECENT SHIPMENT REPORT
+    ====================================================== -->
+
+  <div class="report-table-panel">
+    <!-- TABLE HEADER -->
+
+    <div class="table-toolbar">
+      <div>
+        <h3 class="table-title">Recent Shipment Report</h3>
+
+        <div class="table-subtitle">
+          Latest shipment records and delivery information
+        </div>
+      </div>
+
+      <div class="report-search">
+        <span class="report-search-icon"> 🔎 </span>
+
+        <input
+          type="text"
+          id="shipmentSearch"
+          placeholder="Search shipment..."
+        />
+      </div>
+    </div>
+
+    <!-- TABLE -->
+
+    <div class="table-container">
+      <table class="report-table">
+        <thead>
+          <tr>
+            <th>Tracking ID</th>
+
+            <th>Customer</th>
+
+            <th>Destination</th>
+
+            <th>Weight</th>
+
+            <th>Amount</th>
+
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody id="shipmentTableBody">
+          {% for p in parcels %}
+
+          <tr class="shipment-row">
+            <!-- TRACKING -->
+
+            <td>
+              <span class="tracking-id"> {{ p.tracking_id }} </span>
+            </td>
+
+            <!-- CUSTOMER -->
+
+            <td>
+              <div class="customer-name">{{ p.sender_name }}</div>
+
+              <div class="customer-label">Sender</div>
+            </td>
+
+            <!-- DESTINATION -->
+
+            <td>
+              <div class="destination" title="{{ p.delivery_address }}">
+                {{ p.delivery_address }}
+              </div>
+            </td>
+
+            <!-- WEIGHT -->
+
+            <td>{{ p.parcel_weight }} KG</td>
+
+            <!-- AMOUNT -->
+
+            <td>
+              <span class="amount"> ₹ {{ p.price }} </span>
+            </td>
+
+            <!-- STATUS -->
+
+            <td>
+              {% if p.status == "Delivered" %}
+
+              <span class="status-badge status-delivered"> Delivered </span>
+
+              {% elif p.status == "In Transit" %}
+
+              <span class="status-badge status-transit"> In Transit </span>
+
+              {% else %}
+
+              <span class="status-badge status-default"> {{ p.status }} </span>
+
+              {% endif %}
+            </td>
+          </tr>
+
+          {% empty %}
+
+          <tr>
+            <td colspan="6" class="empty-state">
+              <div class="empty-icon">📦</div>
+
+              No shipment reports available.
+            </td>
+          </tr>
+
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     SEARCH SCRIPT
+========================================================= -->
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("shipmentSearch");
+
+    const rows = document.querySelectorAll(".shipment-row");
+
+    if (!searchInput) {
+      return;
+    }
+
+    searchInput.addEventListener("input", function () {
+      const search = this.value.toLowerCase().trim();
+
+      rows.forEach(function (row) {
+        const text = row.textContent.toLowerCase();
+
+        if (text.includes(search)) {
+          row.style.display = "";
+        } else {
+          row.style.display = "none";
+        }
+      });
+    });
+  });
+</script>
+
+{% endblock %}

@@ -1,0 +1,967 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>
+      {% block title %}
+        Logistics System
+      {% endblock %}
+    </title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+
+    <style>
+      .main-navbar {
+        width: 100%;
+      
+        background: #ffffff;
+      
+        padding: 11px 0;
+      
+        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+      
+        position: sticky;
+      
+        top: 0;
+      
+        z-index: 9999;
+      }
+      
+      .main-navbar .container {
+        max-width: 100%;
+      
+        padding-left: 28px;
+      
+        padding-right: 28px;
+      }
+      
+      .navbar-brand {
+        display: flex;
+      
+        align-items: center;
+      
+        gap: 9px;
+      
+        color: #111827 !important;
+      
+        font-size: 26px;
+      
+        font-weight: 800;
+      
+        letter-spacing: -0.5px;
+      
+        white-space: nowrap;
+      
+        text-decoration: none;
+      
+        margin-right: 25px;
+      
+        transition: all 0.25s ease;
+      }
+      
+      .navbar-brand i {
+        color: #2563eb;
+      
+        font-size: 27px;
+      }
+      
+      .navbar-brand:hover {
+        color: #2563eb !important;
+      
+        transform: translateY(-1px);
+      }
+      
+      .navbar-nav {
+        display: flex;
+      
+        align-items: center;
+      
+        justify-content: flex-end;
+      
+        gap: 5px;
+      
+        margin-left: auto;
+      }
+      
+      .navbar-nav .nav-item {
+        display: flex;
+      
+        align-items: center;
+      }
+      
+      .navbar-nav .nav-link {
+        display: flex;
+      
+        align-items: center;
+      
+        justify-content: center;
+      
+        gap: 7px;
+      
+        color: #374151 !important;
+      
+        font-size: 14.5px;
+      
+        font-weight: 600;
+      
+        padding: 9px 12px !important;
+      
+        border-radius: 8px;
+      
+        white-space: nowrap;
+      
+        text-decoration: none;
+      
+        transition: all 0.25s ease;
+      }
+      
+      .navbar-nav .nav-link i {
+        font-size: 14px;
+      
+        color: #6b7280;
+      
+        transition: 0.25s;
+      }
+      
+      .navbar-nav .nav-link:hover {
+        color: #2563eb !important;
+      
+        background: #eff6ff;
+      
+        transform: translateY(-1px);
+      }
+      
+      .navbar-nav .nav-link:hover i {
+        color: #2563eb;
+      }
+      
+      * ================= PROFILE DROPDOWN STYLES ================= */ .user-dropdown-toggle {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #f3f4f6;
+        border: 1px solid #e5e7eb;
+        padding: 6px 14px;
+        border-radius: 30px;
+        color: #374151 !important;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+      
+      .user-dropdown-toggle:hover,
+      .user-dropdown-toggle:focus {
+        background: #eff6ff;
+        border-color: #bfdbfe;
+        color: #2563eb !important;
+      }
+      
+      .user-dropdown-toggle i.avatar-icon {
+        font-size: 20px;
+        color: #2563eb;
+      }
+      
+      .user-dropdown-menu {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+        padding: 8px;
+        min-width: 220px;
+        margin-top: 10px !important;
+      }
+      
+      .user-dropdown-menu .dropdown-header-custom {
+        padding: 10px 12px;
+        border-bottom: 1px solid #f3f4f6;
+        margin-bottom: 6px;
+      }
+      
+      .user-dropdown-menu .dropdown-header-custom .user-name {
+        font-weight: 700;
+        color: #111827;
+        font-size: 14.5px;
+        margin: 0;
+      }
+      
+      .user-dropdown-menu .dropdown-header-custom .user-role {
+        font-size: 12px;
+        color: #6b7280;
+        margin: 0;
+      }
+      
+      .user-dropdown-menu .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 12px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #374151;
+        transition: all 0.2s ease;
+      }
+      
+      .user-dropdown-menu .dropdown-item i {
+        font-size: 16px;
+        color: #6b7280;
+        width: 18px;
+        text-align: center;
+      }
+      
+      .user-dropdown-menu .dropdown-item:hover {
+        background: #eff6ff;
+        color: #2563eb;
+      }
+      
+      .user-dropdown-menu .dropdown-item:hover i {
+        color: #2563eb;
+      }
+      
+      .user-dropdown-menu .dropdown-item.logout-item {
+        color: #ef4444;
+      }
+      
+      .user-dropdown-menu .dropdown-item.logout-item i {
+        color: #ef4444;
+      }
+      
+      .user-dropdown-menu .dropdown-item.logout-item:hover {
+        background: #fef2f2;
+        color: #dc2626;
+      }
+      
+      .user-dropdown-menu .dropdown-item.logout-item:hover i {
+        color: #dc2626;
+      }
+      
+      .navbar-toggler {
+        border: none !important;
+        background: #f3f4f6;
+        padding: 8px 11px;
+        border-radius: 8px;
+        color: #374151;
+        font-size: 18px;
+      }
+      
+      .navbar-toggler:focus {
+        box-shadow: none !important;
+      }
+      
+      @media (max-width: 991px) {
+        .navbar-collapse {
+          margin-top: 12px;
+          padding-top: 10px;
+          border-top: 1px solid #eeeeee;
+        }
+      
+        .navbar-nav {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
+          gap: 6px;
+        }
+      
+        .navbar-nav .nav-link {
+          width: 100%;
+          justify-content: flex-start;
+          padding: 11px 14px !important;
+        }
+      
+        .user-dropdown-toggle {
+          width: 100%;
+          justify-content: space-between;
+          border-radius: 8px;
+          padding: 10px 14px;
+        }
+      
+        .user-dropdown-menu {
+          width: 100%;
+          box-shadow: none;
+          border: 1px solid #e5e7eb;
+        }
+      }
+      
+      .navbar-toggler {
+        border: none !important;
+      
+        background: #f3f4f6;
+      
+        padding: 8px 11px;
+      
+        border-radius: 8px;
+      
+        color: #374151;
+      
+        font-size: 18px;
+      }
+      
+      .navbar-toggler:focus {
+        box-shadow: none !important;
+      }
+      
+      @media (max-width: 1250px) {
+        .main-navbar .container {
+          padding-left: 18px;
+      
+          padding-right: 18px;
+        }
+      
+        .navbar-brand {
+          font-size: 23px;
+      
+          margin-right: 12px;
+        }
+      
+        .navbar-brand i {
+          font-size: 24px;
+        }
+      
+        .navbar-nav {
+          gap: 2px;
+        }
+      
+        .navbar-nav .nav-link {
+          font-size: 13.5px;
+      
+          padding: 8px 9px !important;
+        }
+      
+        .login-btn,
+        .register-btn,
+        .logout-btn {
+          padding-left: 11px !important;
+      
+          padding-right: 11px !important;
+        }
+      }
+      
+      @media (max-width: 991px) {
+        .main-navbar .container {
+          padding-left: 18px;
+      
+          padding-right: 18px;
+        }
+      
+        .navbar-brand {
+          font-size: 23px;
+      
+          margin-right: 0;
+        }
+      
+        .navbar-toggler {
+          margin-left: auto;
+        }
+      
+        .navbar-collapse {
+          margin-top: 12px;
+      
+          padding-top: 10px;
+      
+          border-top: 1px solid #eeeeee;
+        }
+      
+        .navbar-nav {
+          width: 100%;
+      
+          display: flex;
+      
+          flex-direction: column;
+      
+          align-items: stretch;
+      
+          gap: 4px;
+      
+          margin-left: 0;
+        }
+      
+        .navbar-nav .nav-item {
+          width: 100%;
+        }
+      
+        .navbar-nav .nav-link {
+          width: 100%;
+      
+          justify-content: flex-start;
+      
+          padding: 11px 14px !important;
+      
+          font-size: 15px;
+        }
+      
+        .username-box {
+          width: 100%;
+      
+          justify-content: flex-start;
+      
+          height: 43px;
+      
+          margin: 3px 0;
+        }
+      
+        .login-btn,
+        .register-btn,
+        .logout-btn {
+          width: 100%;
+      
+          justify-content: center !important;
+      
+          margin: 3px 0 !important;
+        }
+      
+        .profile-item {
+          width: 100%;
+      
+          border-left: none;
+      
+          border-top: 1px solid #e5e7eb;
+      
+          padding: 10px 0 0;
+      
+          margin: 5px 0 0;
+      
+          justify-content: center;
+        }
+      
+        .profile-button {
+          width: 46px !important;
+      
+          height: 46px !important;
+      
+          min-width: 46px !important;
+      
+          max-width: 46px !important;
+        }
+      }
+      
+      @media (max-width: 450px) {
+        .main-navbar {
+          padding: 9px 0;
+        }
+      
+        .main-navbar .container {
+          padding-left: 12px;
+      
+          padding-right: 12px;
+        }
+      
+        .navbar-brand {
+          font-size: 20px;
+        }
+      
+        .navbar-brand i {
+          font-size: 21px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg main-navbar">
+      <div class="container">
+        <a class="navbar-brand" href="{% url 'home' %}">
+          <i class="fa-solid fa-truck-fast"></i>
+
+          <span>ParcelPath</span>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><i class="fa-solid fa-bars"></i></button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'home' %}"><span>Home</span></a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'book_parcel' %}"><span>Book Parcel</span></a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'track_parcel' %}"><span>Track Parcel</span></a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'services' %}"><span>Services</span></a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'contact' %}"><span>Contact</span></a>
+            </li>
+
+            <!-- Profile Account Dropdown -->
+            <li class="nav-item dropdown ms-lg-2 mt-2 mt-lg-0">
+              <a class="nav-link user-dropdown-toggle dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-circle-user avatar-icon"></i>
+                <span>
+                  {% if request.user.is_authenticated %}
+                    {{ request.user.username }}
+                  {% else %}
+                    Account
+                  {% endif %}
+                </span>
+              </a>
+
+              <ul class="dropdown-menu dropdown-menu-end user-dropdown-menu" aria-labelledby="accountDropdown">
+                {% if request.user.is_authenticated %}
+                  <li class="dropdown-header-custom">
+                    <p class="user-name">{{ request.user.username }}</p>
+                    <p class="user-role">Logged In User</p>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="{% url 'profile' %}"><i class="fa-solid fa-user"></i> My Profile</a>
+                  </li>
+                  <li>
+                    <hr class="dropdown-divider my-1" />
+                  </li>
+                  <li>
+                    <a class="dropdown-item logout-item" href="{% url 'logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+                  </li>
+                {% else %}
+                  <li>
+                    <a class="dropdown-item" href="{% url 'user_login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="{% url 'register' %}"><i class="fa-solid fa-user-plus"></i> Register</a>
+                  </li>
+                {% endif %}
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!--           =====================================================
+     TOP MESSAGE / NOTIFICATION
+=====================================================           -->
+
+    {% if messages %}
+      <div class="top-messages">
+        {% for message in messages %}
+          <div class="top-message
+                {% if message.tags == 'success' %}
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+                    message-success
+
+
+
+
+
+
+
+
+
+
+            {% elif message.tags == 'error' %}
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+                    message-error
+
+
+
+
+
+
+
+
+
+
+            {% elif message.tags == 'warning' %}
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+                    message-warning
+
+
+
+
+
+
+
+
+
+
+            {% else %}
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+                    message-info
+
+
+
+
+
+
+
+
+
+
+            {% endif %}"
+            id="message-{{ forloop.counter }}">
+            <!-- Icon -->
+            <div class="message-icon">
+              {% if message.tags == 'success' %}
+                <i class="fa-solid fa-circle-check"></i>
+              {% elif message.tags == 'error' %}
+                <i class="fa-solid fa-circle-xmark"></i>
+              {% elif message.tags == 'warning' %}
+                <i class="fa-solid fa-triangle-exclamation"></i>
+              {% else %}
+                <i class="fa-solid fa-circle-info"></i>
+              {% endif %}
+            </div>
+
+            <!-- Message Text -->
+            <div class="message-text">
+              {% if message.tags == 'success' %}
+                <strong>Success</strong>
+              {% elif message.tags == 'error' %}
+                <strong>Error</strong>
+              {% elif message.tags == 'warning' %}
+                <strong>Warning</strong>
+              {% else %}
+                <strong>Information</strong>
+              {% endif %}
+
+              <span>{{ message }}</span>
+            </div>
+
+            <!-- Close Button -->
+            <button type="button" class="message-close" onclick="closeMessage('message-{{ forloop.counter }}')"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <style>
+      /* =====================================================
+                                                   MESSAGE CONTAINER
+                                                ===================================================== */
+      
+      .top-messages {
+        position: fixed;
+      
+        top: 75px;
+      
+        right: 25px;
+      
+        width: 370px;
+      
+        max-width: calc(100% - 30px);
+      
+        z-index: 99999;
+      
+        display: flex;
+      
+        flex-direction: column;
+      
+        gap: 12px;
+      }
+      
+      /* =====================================================
+                                                   MESSAGE BOX
+                                                ===================================================== */
+      
+      .top-message {
+        min-height: 70px;
+      
+        display: flex;
+      
+        align-items: center;
+      
+        gap: 12px;
+      
+        padding: 13px 14px;
+      
+        background: #ffffff;
+      
+        border-radius: 12px;
+      
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      
+        border-left: 5px solid;
+      
+        animation: messageSlide 0.45s ease;
+      }
+      
+      /* =====================================================
+                                                   SUCCESS
+                                                ===================================================== */
+      
+      .message-success {
+        border-left-color: #22c55e;
+      }
+      
+      .message-success .message-icon {
+        color: #22c55e;
+      }
+      
+      /* =====================================================
+                                                   ERROR
+                                                ===================================================== */
+      
+      .message-error {
+        border-left-color: #ef4444;
+      }
+      
+      .message-error .message-icon {
+        color: #ef4444;
+      }
+      
+      /* =====================================================
+                                                   WARNING
+                                                ===================================================== */
+      
+      .message-warning {
+        border-left-color: #f59e0b;
+      }
+      
+      .message-warning .message-icon {
+        color: #f59e0b;
+      }
+      
+      /* =====================================================
+                                                   INFO
+                                                ===================================================== */
+      
+      .message-info {
+        border-left-color: #2563eb;
+      }
+      
+      .message-info .message-icon {
+        color: #2563eb;
+      }
+      
+      /* =====================================================
+                                                   ICON
+                                                ===================================================== */
+      
+      .message-icon {
+        width: 38px;
+      
+        height: 38px;
+      
+        min-width: 38px;
+      
+        display: flex;
+      
+        align-items: center;
+      
+        justify-content: center;
+      
+        font-size: 25px;
+      }
+      
+      /* =====================================================
+                                                   TEXT
+                                                ===================================================== */
+      
+      .message-text {
+        flex: 1;
+      
+        display: flex;
+      
+        flex-direction: column;
+      
+        gap: 2px;
+      
+        color: #374151;
+      
+        font-size: 14px;
+      
+        line-height: 1.4;
+      }
+      
+      .message-text strong {
+        font-size: 14px;
+      
+        color: #111827;
+      }
+      
+      .message-text span {
+        color: #6b7280;
+      
+        font-size: 13.5px;
+      }
+      
+      /* =====================================================
+                                                   CLOSE BUTTON
+                                                ===================================================== */
+      
+      .message-close {
+        width: 30px;
+      
+        height: 30px;
+      
+        min-width: 30px;
+      
+        border: none;
+      
+        background: transparent;
+      
+        color: #9ca3af;
+      
+        border-radius: 7px;
+      
+        display: flex;
+      
+        align-items: center;
+      
+        justify-content: center;
+      
+        cursor: pointer;
+      
+        transition: 0.2s;
+      }
+      
+      .message-close:hover {
+        background: #f3f4f6;
+      
+        color: #111827;
+      }
+      
+      /* =====================================================
+                                                   SLIDE ANIMATION
+                                                ===================================================== */
+      
+      @keyframes messageSlide {
+        from {
+          opacity: 0;
+      
+          transform: translateX(100px) translateY(-10px);
+        }
+      
+        to {
+          opacity: 1;
+      
+          transform: translateX(0) translateY(0);
+        }
+      }
+      
+      /* =====================================================
+                                                   CLOSE ANIMATION
+                                                ===================================================== */
+      
+      .message-hide {
+        animation: messageHide 0.3s ease forwards;
+      }
+      
+      @keyframes messageHide {
+        from {
+          opacity: 1;
+      
+          transform: translateX(0);
+        }
+      
+        to {
+          opacity: 0;
+      
+          transform: translateX(100px);
+        }
+      }
+      
+      /* =====================================================
+                                                   MOBILE
+                                                ===================================================== */
+      
+      @media (max-width: 576px) {
+        .top-messages {
+          top: 70px;
+      
+          right: 10px;
+      
+          left: 10px;
+      
+          width: auto;
+      
+          max-width: none;
+        }
+      }
+    </style>
+
+    <script>
+      /* =====================================================
+                                                   CLOSE MESSAGE
+                                                ===================================================== */
+      
+      function closeMessage(id) {
+        const message = document.getElementById(id)
+      
+        if (!message) {
+          return
+        }
+      
+        message.classList.add('message-hide')
+      
+        setTimeout(function () {
+          message.remove()
+        }, 300)
+      }
+      
+      /* =====================================================
+                                                   AUTO HIDE
+                                                   4 SECONDS
+                                                ===================================================== */
+      
+      document.addEventListener('DOMContentLoaded', function () {
+        const messages = document.querySelectorAll('.top-message')
+      
+        messages.forEach(function (message) {
+          setTimeout(function () {
+            message.classList.add('message-hide')
+      
+            setTimeout(function () {
+              message.remove()
+            }, 300)
+          }, 4000)
+        })
+      })
+    </script>
+
+    {% block content %}
+
+    {% endblock %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

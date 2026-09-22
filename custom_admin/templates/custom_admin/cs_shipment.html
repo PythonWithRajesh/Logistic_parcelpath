@@ -1,0 +1,1058 @@
+{% extends 'custom_admin/main.html' %} {% block title %} Shipment Management
+{%endblock %} {% block content %}
+
+<style>
+  /* =========================================
+       SHIPMENT MANAGEMENT
+    ========================================= */
+
+  .shipment-page {
+    padding: 5px 0 30px;
+  }
+
+  .page-header {
+    background: linear-gradient(135deg, #0d6efd, #174ea6);
+    color: #fff;
+    border-radius: 18px;
+    padding: 25px;
+    margin-bottom: 22px;
+    box-shadow: 0 8px 25px rgba(13, 110, 253, 0.18);
+  }
+
+  .page-header h2 {
+    font-size: 27px;
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
+
+  .page-header p {
+    margin: 0;
+    opacity: 0.85;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .header-actions .btn {
+    border-radius: 10px;
+    font-weight: 600;
+    padding: 10px 17px;
+  }
+
+  /* =========================================
+       STAT CARDS
+    ========================================= */
+
+  .stat-card {
+    background: #fff;
+    border: 1px solid #edf0f5;
+    border-radius: 16px;
+    padding: 18px;
+    height: 100%;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+    transition: 0.25s ease;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  }
+
+  .stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 21px;
+    margin-bottom: 12px;
+  }
+
+  .icon-blue {
+    background: #e8f1ff;
+    color: #0d6efd;
+  }
+
+  .icon-green {
+    background: #e8f8ef;
+    color: #198754;
+  }
+
+  .icon-orange {
+    background: #fff3df;
+    color: #fd7e14;
+  }
+
+  .icon-purple {
+    background: #f1eaff;
+    color: #6f42c1;
+  }
+
+  .stat-title {
+    color: #7b8494;
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+
+  .stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #202633;
+  }
+
+  /* =========================================
+       FILTER AREA
+    ========================================= */
+
+  .management-card {
+    background: #fff;
+    border: 1px solid #edf0f5;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 5px 22px rgba(0, 0, 0, 0.05);
+  }
+
+  .management-header {
+    padding: 19px 22px;
+    border-bottom: 1px solid #edf0f5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+
+  .management-header h5 {
+    margin: 0;
+    font-weight: 700;
+    color: #202633;
+  }
+
+  .filter-area {
+    padding: 18px 22px;
+    background: #fafbfc;
+    border-bottom: 1px solid #edf0f5;
+  }
+
+  .search-box {
+    position: relative;
+  }
+
+  .search-box i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #8a93a2;
+  }
+
+  .search-box input {
+    padding-left: 42px;
+    height: 45px;
+    border-radius: 10px;
+    border: 1px solid #dfe3e8;
+  }
+
+  .search-box input:focus {
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+    border-color: #0d6efd;
+  }
+
+  .status-filter {
+    height: 45px;
+    border-radius: 10px;
+    border: 1px solid #dfe3e8;
+  }
+
+  /* =========================================
+       DESKTOP TABLE
+    ========================================= */
+
+  .table-wrapper {
+    padding: 0 22px 22px;
+  }
+
+  .shipment-table {
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .shipment-table thead th {
+    background: #f7f9fc;
+    color: #697386;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding: 15px 12px;
+    border-bottom: 1px solid #e8ebef;
+  }
+
+  .shipment-table tbody td {
+    padding: 16px 12px;
+    color: #3f4754;
+    border-bottom: 1px solid #f0f2f5;
+  }
+
+  .shipment-table tbody tr {
+    transition: 0.2s ease;
+  }
+
+  .shipment-table tbody tr:hover {
+    background: #f9fbff;
+  }
+
+  .tracking-id {
+    display: inline-flex;
+    align-items: center;
+    background: #edf4ff;
+    color: #0d6efd;
+    padding: 6px 9px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .person-name {
+    font-weight: 600;
+    color: #242a35;
+  }
+
+  .hub-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    color: #555f70;
+  }
+
+  /* =========================================
+       STATUS BADGES
+    ========================================= */
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .status-badge::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .status-delivered {
+    background: #e9f8ef;
+    color: #198754;
+  }
+
+  .status-transit {
+    background: #fff4df;
+    color: #d97706;
+  }
+
+  .status-out {
+    background: #e6f7fb;
+    color: #087990;
+  }
+
+  .status-booked {
+    background: #edf0f4;
+    color: #596273;
+  }
+
+  .status-default {
+    background: #f0f1f3;
+    color: #596273;
+  }
+
+  /* =========================================
+       ACTION BUTTONS
+    ========================================= */
+
+  .action-buttons {
+    display: flex;
+    gap: 6px;
+  }
+
+  .action-btn {
+    width: 35px;
+    height: 35px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9px;
+    border: 0;
+    text-decoration: none;
+    transition: 0.2s ease;
+  }
+
+  .view-btn {
+    background: #e8f1ff;
+    color: #0d6efd;
+  }
+
+  .view-btn:hover {
+    background: #0d6efd;
+    color: #fff;
+  }
+
+  .update-btn {
+    background: #fff3df;
+    color: #fd7e14;
+  }
+
+  .update-btn:hover {
+    background: #fd7e14;
+    color: #fff;
+  }
+
+  /* =========================================
+       MOBILE CARDS
+    ========================================= */
+
+  .mobile-shipments {
+    display: none;
+    padding: 15px;
+  }
+
+  .shipment-mobile-card {
+    border: 1px solid #e9edf2;
+    border-radius: 15px;
+    padding: 16px;
+    margin-bottom: 13px;
+    background: #fff;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+  }
+
+  .mobile-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .mobile-id {
+    color: #7b8494;
+    font-size: 11px;
+    margin-bottom: 4px;
+  }
+
+  .mobile-tracking {
+    font-weight: 700;
+    color: #0d6efd;
+    font-size: 14px;
+  }
+
+  .mobile-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 13px 0;
+    border-top: 1px solid #f0f2f5;
+    border-bottom: 1px solid #f0f2f5;
+  }
+
+  .info-label {
+    color: #8a93a2;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 3px;
+  }
+
+  .info-value {
+    color: #303744;
+    font-size: 13px;
+    font-weight: 600;
+    word-break: break-word;
+  }
+
+  .mobile-card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .mobile-actions {
+    display: flex;
+    gap: 7px;
+  }
+
+  .mobile-actions .action-btn {
+    width: 38px;
+    height: 38px;
+  }
+
+  /* =========================================
+       EMPTY STATE
+    ========================================= */
+
+  .empty-state {
+    text-align: center;
+    padding: 55px 20px;
+  }
+
+  .empty-icon {
+    width: 70px;
+    height: 70px;
+    background: #f0f4f8;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto auto 15px;
+    color: #8a93a2;
+    font-size: 27px;
+  }
+
+  .empty-state h5 {
+    font-weight: 700;
+    color: #343a40;
+  }
+
+  .empty-state p {
+    color: #8a93a2;
+    margin: 0;
+  }
+
+  /* =========================================
+       RESPONSIVE
+    ========================================= */
+
+  @media (max-width: 991px) {
+    .page-header {
+      padding: 20px;
+    }
+
+    .page-header h2 {
+      font-size: 23px;
+    }
+
+    .table-wrapper {
+      padding: 0 15px 15px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .shipment-page {
+      padding: 0 0 20px;
+    }
+
+    .page-header {
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .page-header .d-flex {
+      display: block !important;
+    }
+
+    .page-header h2 {
+      font-size: 21px;
+    }
+
+    .page-header p {
+      font-size: 13px;
+    }
+
+    .header-actions {
+      margin-top: 15px;
+    }
+
+    .header-actions .btn {
+      width: 100%;
+    }
+
+    .stat-card {
+      padding: 15px;
+    }
+
+    .stat-icon {
+      width: 42px;
+      height: 42px;
+      font-size: 18px;
+    }
+
+    .stat-value {
+      font-size: 21px;
+    }
+
+    .management-card {
+      border-radius: 14px;
+    }
+
+    .management-header {
+      padding: 16px;
+    }
+
+    .management-header h5 {
+      font-size: 16px;
+    }
+
+    .filter-area {
+      padding: 14px;
+    }
+
+    .table-wrapper {
+      display: none;
+    }
+
+    .mobile-shipments {
+      display: block;
+    }
+
+    .search-box {
+      margin-bottom: 10px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .mobile-info {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .mobile-card-top {
+      flex-direction: column;
+    }
+
+    .mobile-card-bottom {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .mobile-actions {
+      width: 100%;
+    }
+
+    .mobile-actions .action-btn {
+      flex: 1;
+    }
+  }
+</style>
+
+<div class="container-fluid shipment-page">
+  <!-- =========================================
+         PAGE HEADER
+    ========================================== -->
+
+  <div class="page-header">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <h2>
+          Shipment Management
+        </h2>
+
+        <p>Manage, monitor and track all ParcelPath shipments</p>
+      </div>
+
+      <div class="header-actions">
+        <a href="{% url 'cs_parcel' %}" class="btn btn-light">
+          View Parcels
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================
+         STATISTICS
+    ========================================== -->
+
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-xl-3">
+      <div class="stat-card">
+        <div class="stat-icon icon-blue">
+          <i class="fas fa-boxes-stacked"></i>
+        </div>
+
+        <div class="stat-title">Total Shipments</div>
+
+        <div class="stat-value">{{ parcels|length }}</div>
+      </div>
+    </div>
+
+    <div class="col-6 col-xl-3">
+      <div class="stat-card">
+        <div class="stat-icon icon-green">
+          <i class="fas fa-circle-check"></i>
+        </div>
+
+        <div class="stat-title">Delivered</div>
+
+        <div class="stat-value" id="deliveredCount">0</div>
+      </div>
+    </div>
+
+    <div class="col-6 col-xl-3">
+      <div class="stat-card">
+        <div class="stat-icon icon-orange">
+          <i class="fas fa-truck-fast"></i>
+        </div>
+
+        <div class="stat-title">In Transit</div>
+
+        <div class="stat-value" id="transitCount">0</div>
+      </div>
+    </div>
+
+    <div class="col-6 col-xl-3">
+      <div class="stat-card">
+        <div class="stat-icon icon-purple">
+          <i class="fas fa-location-dot"></i>
+        </div>
+
+        <div class="stat-title">Active Shipments</div>
+
+        <div class="stat-value" id="activeCount">0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================
+         MANAGEMENT CARD
+    ========================================== -->
+
+  <div class="management-card">
+    <!-- CARD HEADER -->
+
+    <div class="management-header">
+      <div>
+        <h5>
+          <i class="fas fa-list-check me-2 text-primary"></i>
+          Shipment List
+        </h5>
+
+        <small class="text-muted"> View and manage shipment status </small>
+      </div>
+    </div>
+
+    <!-- =====================================
+             SEARCH & FILTER
+        ====================================== -->
+
+    <div class="filter-area">
+      <div class="row g-2">
+        <div class="col-md-8">
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+
+            <input
+              type="text"
+              id="shipmentSearch"
+              class="form-control"
+              placeholder="Search tracking ID, sender, receiver or mobile..."
+            />
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <select id="statusFilter" class="form-select status-filter">
+            <option value="all">All Status</option>
+
+            <option value="Parcel Booked">Parcel Booked</option>
+
+            <option value="In Transit">In Transit</option>
+
+            <option value="Out for Delivery">Out for Delivery</option>
+
+            <option value="Delivered">Delivered</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================
+             DESKTOP TABLE
+        ====================================== -->
+
+    <div class="table-wrapper">
+      <div class="table-responsive">
+        <table class="table shipment-table align-middle">
+          <thead>
+            <tr>
+              <th>ID</th>
+
+              <th>Tracking ID</th>
+
+              <th>Sender</th>
+
+              <th>Receiver</th>
+
+              <th>Current Hub</th>
+
+              <th>Status</th>
+
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody id="shipmentTableBody">
+            {% for parcel in parcels %}
+
+            <tr
+              class="shipment-row"
+              data-status="{{ parcel.status }}"
+              data-search="
+                                {{ parcel.tracking_id }}
+                                {{ parcel.sender_name }}
+                                {{ parcel.receiver_name }}
+                                {{ parcel.mobile_number }}
+                            "
+            >
+              <td>
+                <strong> #{{ parcel.id }} </strong>
+              </td>
+
+              <td>
+                <span class="tracking-id">
+                  <i class="fas fa-barcode me-1"></i>
+
+                  {{ parcel.tracking_id }}
+                </span>
+              </td>
+
+              <td>
+                <span class="person-name"> {{ parcel.sender_name }} </span>
+              </td>
+
+              <td>
+                <span class="person-name"> {{ parcel.receiver_name }} </span>
+              </td>
+
+              <td>
+                <span class="hub-name">
+                  <i class="fas fa-location-dot text-danger"></i>
+
+                  Ahmedabad Hub
+                </span>
+              </td>
+
+              <td>
+                {% if parcel.status == 'Delivered' %}
+
+                <span class="status-badge status-delivered"> Delivered </span>
+
+                {% elif parcel.status == 'In Transit' %}
+
+                <span class="status-badge status-transit"> In Transit </span>
+
+                {% elif parcel.status == 'Out for Delivery' %}
+
+                <span class="status-badge status-out"> Out for Delivery </span>
+
+                {% elif parcel.status == 'Parcel Booked' %}
+
+                <span class="status-badge status-booked"> Parcel Booked </span>
+
+                {% else %}
+
+                <span class="status-badge status-default">
+                  {{ parcel.status }}
+                </span>
+
+                {% endif %}
+              </td>
+
+              <td>
+                <div class="action-buttons">
+                  <a
+                    href="{% url 'track_parcel' %}?tracking_id={{ parcel.tracking_id }}"
+                    class="action-btn view-btn"
+                    title="View Shipment"
+                  >
+                    <i class="fas fa-eye"></i>
+                  </a>
+
+                  <a
+                    href="{% url 'track_parcel' %}?tracking_id={{ parcel.tracking_id }}"
+                    class="action-btn update-btn"
+                    title="Update Shipment"
+                  >
+                    <i class="fas fa-pen"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+
+            {% empty %}
+
+            <tr>
+              <td colspan="7">
+                <div class="empty-state">
+                  <div class="empty-icon">
+                    <i class="fas fa-truck"></i>
+                  </div>
+
+                  <h5>No Shipments Found</h5>
+
+                  <p>There are currently no shipments available.</p>
+                </div>
+              </td>
+            </tr>
+
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- =====================================
+             MOBILE CARDS
+        ====================================== -->
+
+    <div class="mobile-shipments" id="mobileShipments">
+      {% for parcel in parcels %}
+
+      <div
+        class="shipment-mobile-card mobile-shipment-item"
+        data-status="{{ parcel.status }}"
+        data-search="
+                    {{ parcel.tracking_id }}
+                    {{ parcel.sender_name }}
+                    {{ parcel.receiver_name }}
+                    {{ parcel.mobile_number }}
+                "
+      >
+        <div class="mobile-card-top">
+          <div>
+            <div class="mobile-id">Shipment #{{ parcel.id }}</div>
+
+            <div class="mobile-tracking">
+              <i class="fas fa-barcode me-1"></i>
+
+              {{ parcel.tracking_id }}
+            </div>
+          </div>
+
+          <div>
+            {% if parcel.status == 'Delivered' %}
+
+            <span class="status-badge status-delivered"> Delivered </span>
+
+            {% elif parcel.status == 'In Transit' %}
+
+            <span class="status-badge status-transit"> In Transit </span>
+
+            {% elif parcel.status == 'Out for Delivery' %}
+
+            <span class="status-badge status-out"> Out for Delivery </span>
+
+            {% elif parcel.status == 'Parcel Booked' %}
+
+            <span class="status-badge status-booked"> Parcel Booked </span>
+
+            {% else %}
+
+            <span class="status-badge status-default">
+              {{ parcel.status }}
+            </span>
+
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="mobile-info">
+          <div>
+            <div class="info-label">Sender</div>
+
+            <div class="info-value">{{ parcel.sender_name }}</div>
+          </div>
+
+          <div>
+            <div class="info-label">Receiver</div>
+
+            <div class="info-value">{{ parcel.receiver_name }}</div>
+          </div>
+
+          <div>
+            <div class="info-label">Current Hub</div>
+
+            <div class="info-value">
+              <i class="fas fa-location-dot text-danger"></i>
+              Ahmedabad Hub
+            </div>
+          </div>
+
+          <div>
+            <div class="info-label">Mobile</div>
+
+            <div class="info-value">{{ parcel.mobile_number }}</div>
+          </div>
+        </div>
+
+        <div class="mobile-card-bottom">
+          <div>
+            <small class="text-muted"> Shipment Status </small>
+          </div>
+
+          <div class="mobile-actions">
+            <a
+              href="{% url 'track_parcel' %}"
+              class="action-btn view-btn"
+              title="View"
+            >
+              <i class="fas fa-eye"></i>
+            </a>
+
+            <a
+              href="{% url 'track_parcel' %}"
+              class="action-btn update-btn"
+              title="Update"
+            >
+              <i class="fas fa-pen"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {% empty %}
+
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="fas fa-truck"></i>
+        </div>
+
+        <h5>No Shipments Found</h5>
+
+        <p>There are currently no shipments available.</p>
+      </div>
+
+      {% endfor %}
+    </div>
+
+    <!-- FILTER EMPTY MESSAGE -->
+
+    <div id="filterEmpty" class="empty-state" style="display: none">
+      <div class="empty-icon">
+        <i class="fas fa-search"></i>
+      </div>
+
+      <h5>No Matching Shipments</h5>
+
+      <p>Try changing your search or status filter.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("shipmentSearch");
+
+    const statusFilter = document.getElementById("statusFilter");
+
+    const tableRows = document.querySelectorAll(".shipment-row");
+
+    const mobileCards = document.querySelectorAll(".mobile-shipment-item");
+
+    const filterEmpty = document.getElementById("filterEmpty");
+
+    /* =========================================
+       STATISTICS
+    ========================================= */
+
+    let delivered = 0;
+    let transit = 0;
+    let active = 0;
+
+    tableRows.forEach(function (row) {
+      const status = row.dataset.status.trim().toLowerCase();
+
+      if (status === "delivered") {
+        delivered++;
+      }
+
+      if (status === "in transit") {
+        transit++;
+      }
+
+      if (status !== "delivered" && status !== "parcel booked") {
+        active++;
+      }
+    });
+
+    document.getElementById("deliveredCount").textContent = delivered;
+
+    document.getElementById("transitCount").textContent = transit;
+
+    document.getElementById("activeCount").textContent = active;
+
+    /* =========================================
+       FILTER FUNCTION
+    ========================================= */
+
+    function filterShipments() {
+      const search = searchInput.value.toLowerCase().trim();
+
+      const selectedStatus = statusFilter.value.toLowerCase();
+
+      let visibleCount = 0;
+
+      /* Desktop */
+
+      tableRows.forEach(function (row) {
+        const rowSearch = row.dataset.search.toLowerCase();
+
+        const rowStatus = row.dataset.status.toLowerCase();
+
+        const searchMatch = rowSearch.includes(search);
+
+        const statusMatch =
+          selectedStatus === "all" || rowStatus === selectedStatus;
+
+        if (searchMatch && statusMatch) {
+          row.style.display = "";
+          visibleCount++;
+        } else {
+          row.style.display = "none";
+        }
+      });
+
+      /* Mobile */
+
+      mobileCards.forEach(function (card) {
+        const cardSearch = card.dataset.search.toLowerCase();
+
+        const cardStatus = card.dataset.status.toLowerCase();
+
+        const searchMatch = cardSearch.includes(search);
+
+        const statusMatch =
+          selectedStatus === "all" || cardStatus === selectedStatus;
+
+        if (searchMatch && statusMatch) {
+          card.style.display = "";
+        } else {
+          card.style.display = "none";
+        }
+      });
+
+      /* Empty result */
+
+      if (visibleCount === 0 && tableRows.length > 0) {
+        filterEmpty.style.display = "block";
+      } else {
+        filterEmpty.style.display = "none";
+      }
+    }
+
+    searchInput.addEventListener("input", filterShipments);
+
+    statusFilter.addEventListener("change", filterShipments);
+  });
+</script>
+
+{% endblock %}
