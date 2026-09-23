@@ -1,0 +1,990 @@
+{% extends 'base.html' %} {% load static %} {% block title %} Parcel Details -
+ParcelPath {% endblock %} {% block content %}
+<style>
+  /* =====================================================
+                               PAGE
+                            ===================================================== */
+
+  .parcel-page {
+    min-height: calc(100vh - 75px);
+    background: #f5f7fb;
+    padding: 45px 15px 60px;
+  }
+
+  .parcel-wrapper {
+    max-width: 1100px;
+    margin: auto;
+  }
+
+  /* =====================================================
+                               MAIN CARD
+                            ===================================================== */
+
+  .parcel-main-card {
+    background: #ffffff;
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid #e8ecf3;
+    box-shadow: 0 15px 45px rgba(15, 23, 42, 0.1);
+  }
+
+  /* =====================================================
+                               HEADER
+                            ===================================================== */
+
+  .parcel-header {
+    position: relative;
+    background: linear-gradient(135deg, #0d6efd, #2563eb, #06b6d4);
+    color: #ffffff;
+    padding: 38px 40px;
+    overflow: hidden;
+  }
+
+  .parcel-header::before {
+    content: "";
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    right: -70px;
+    top: -90px;
+  }
+
+  .parcel-header::after {
+    content: "";
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    left: -50px;
+    bottom: -80px;
+  }
+
+  .header-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  .header-icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 27px;
+    margin-bottom: 18px;
+  }
+
+  .parcel-header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    margin: 0 0 8px;
+  }
+
+  .parcel-header p {
+    margin: 0;
+    font-size: 15px;
+    opacity: 0.9;
+  }
+
+  /* =====================================================
+                               BODY
+                            ===================================================== */
+
+  .parcel-body {
+    padding: 35px;
+  }
+
+  /* =====================================================
+                               SECTION TITLE
+                            ===================================================== */
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .section-title .section-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: #eff6ff;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .section-title h3 {
+    font-size: 19px;
+    font-weight: 750;
+    color: #111827;
+    margin: 0;
+  }
+
+  /* =====================================================
+                               INFO CARDS
+                            ===================================================== */
+
+  .info-card {
+    background: #f8fafc;
+    border: 1px solid #edf0f5;
+    border-radius: 15px;
+    padding: 17px 18px;
+    margin-bottom: 14px;
+    transition: all 0.25s ease;
+  }
+
+  .info-card:hover {
+    background: #ffffff;
+    border-color: #dbeafe;
+    transform: translateY(-2px);
+    box-shadow: 0 7px 20px rgba(15, 23, 42, 0.06);
+  }
+
+  .info-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 7px;
+  }
+
+  .info-label i {
+    color: #2563eb;
+  }
+
+  .info-value {
+    color: #111827;
+    font-size: 17px;
+    font-weight: 700;
+    word-break: break-word;
+  }
+
+  /* =====================================================
+                               TRACKING ID
+                            ===================================================== */
+
+  .tracking-card {
+    background: linear-gradient(135deg, #eff6ff, #f0f9ff);
+    border: 1px solid #bfdbfe;
+    border-radius: 17px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .tracking-label {
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 8px;
+  }
+
+  .tracking-id {
+    color: #1d4ed8;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    word-break: break-all;
+  }
+
+  .tracking-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .tracking-id {
+    font-size: 1.2rem;
+    font-weight: 700;
+    word-break: break-all;
+  }
+
+  .copy-btn {
+    border: none;
+    background: #0d6efd;
+    color: white;
+    padding: 9px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: 0.3s;
+  }
+
+  .copy-btn:hover {
+    background: #0b5ed7;
+    transform: translateY(-1px);
+  }
+
+  .copy-btn i {
+    margin-right: 4px;
+  }
+
+  @media (max-width: 576px) {
+    .tracking-row {
+      align-items: stretch;
+    }
+
+    .tracking-id {
+      font-size: 1rem;
+    }
+
+    .copy-btn {
+      padding: 8px 10px;
+    }
+
+    .copy-btn span {
+      display: none;
+    }
+
+    .copy-btn i {
+      margin: 0;
+    }
+  }
+
+  /* =====================================================
+                               STATUS
+                            ===================================================== */
+
+  .status-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 17px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+  }
+
+  .status-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .status-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #dcfce7;
+    color: #16a34a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .status-title {
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .status-value {
+    color: #15803d;
+    font-size: 17px;
+    font-weight: 800;
+    margin-top: 2px;
+  }
+
+  .status-dot {
+    width: 10px;
+    height: 10px;
+    background: #22c55e;
+    border-radius: 50%;
+    box-shadow: 0 0 0 5px #dcfce7;
+  }
+
+  /* =====================================================
+                               RIGHT SIDE
+                            ===================================================== */
+
+  .right-panel {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* =====================================================
+                               QR CARD
+                            ===================================================== */
+
+  .qr-card {
+    background: #ffffff;
+    border: 1px solid #e8ecf3;
+    border-radius: 18px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 7px 22px rgba(15, 23, 42, 0.05);
+  }
+
+  .qr-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    background: #eff6ff;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+    font-size: 19px;
+  }
+
+  .qr-card h4 {
+    font-size: 18px;
+    font-weight: 750;
+    margin-bottom: 6px;
+  }
+
+  .qr-card p {
+    color: #64748b;
+    font-size: 13px;
+    margin-bottom: 18px;
+  }
+
+  .qr-image-wrapper {
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 16px;
+    padding: 18px;
+    display: inline-block;
+  }
+
+  .qr-image-wrapper img {
+    width: 190px;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+  }
+
+  /* =====================================================
+                               PRICE CARD
+                            ===================================================== */
+
+  .price-card {
+    margin-top: 18px;
+    background: linear-gradient(135deg, #fff7ed, #fffbeb);
+    border: 1px solid #fed7aa;
+    border-radius: 18px;
+    padding: 20px;
+  }
+
+  .price-label {
+    color: #78716c;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .price-value {
+    color: #ea580c;
+    font-size: 30px;
+    font-weight: 850;
+    margin-top: 5px;
+  }
+
+  /* =====================================================
+                               DIVIDER
+                            ===================================================== */
+
+  .section-divider {
+    border: 0;
+    border-top: 1px solid #e5e7eb;
+    margin: 32px 0;
+  }
+
+  /* =====================================================
+                               BUTTONS
+                            ===================================================== */
+
+  .action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .action-buttons .btn {
+    min-width: 160px;
+    border-radius: 11px;
+    padding: 11px 20px;
+    font-weight: 650;
+    border: none;
+    transition: all 0.25s ease;
+  }
+
+  .action-buttons .btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .btn-home {
+    background: #111827;
+    color: white;
+  }
+
+  .btn-home:hover {
+    background: #1f2937;
+    color: white;
+  }
+
+  .btn-book {
+    background: #16a34a;
+    color: white;
+  }
+
+  .btn-book:hover {
+    background: #15803d;
+    color: white;
+  }
+
+  .btn-track {
+    background: #2563eb;
+    color: white;
+  }
+
+  .btn-track:hover {
+    background: #1d4ed8;
+    color: white;
+  }
+
+  /* =====================================================
+                               TABLET
+                            ===================================================== */
+
+  @media (max-width: 991px) {
+    .parcel-page {
+      padding: 30px 15px 45px;
+    }
+
+    .parcel-header {
+      padding: 32px 28px;
+    }
+
+    .parcel-body {
+      padding: 28px;
+    }
+
+    .parcel-header h1 {
+      font-size: 28px;
+    }
+  }
+
+  /* =====================================================
+                               MOBILE
+                            ===================================================== */
+
+  @media (max-width: 767px) {
+    .parcel-page {
+      padding: 20px 10px 35px;
+    }
+
+    .parcel-main-card {
+      border-radius: 18px;
+    }
+
+    .parcel-header {
+      padding: 28px 20px;
+    }
+
+    .header-icon {
+      width: 50px;
+      height: 50px;
+      font-size: 23px;
+      border-radius: 13px;
+      margin-bottom: 14px;
+    }
+
+    .parcel-header h1 {
+      font-size: 24px;
+    }
+
+    .parcel-header p {
+      font-size: 13px;
+    }
+
+    .parcel-body {
+      padding: 20px 16px;
+    }
+
+    .section-title h3 {
+      font-size: 17px;
+    }
+
+    .info-card {
+      padding: 15px;
+    }
+
+    .info-value {
+      font-size: 16px;
+    }
+
+    .tracking-card {
+      padding: 17px;
+    }
+
+    .tracking-id {
+      font-size: 20px;
+    }
+
+    .status-card {
+      padding: 16px;
+    }
+
+    .qr-card {
+      padding: 20px 15px;
+    }
+
+    .qr-image-wrapper {
+      padding: 14px;
+    }
+
+    .qr-image-wrapper img {
+      width: 175px;
+    }
+
+    .price-value {
+      font-size: 26px;
+    }
+
+    .action-buttons {
+      flex-direction: column;
+    }
+
+    .action-buttons .btn {
+      width: 100%;
+      min-width: 0;
+    }
+  }
+
+  /* =====================================================
+                               SMALL MOBILE
+                            ===================================================== */
+
+  @media (max-width: 400px) {
+    .parcel-header h1 {
+      font-size: 21px;
+    }
+
+    .parcel-header {
+      padding: 24px 16px;
+    }
+
+    .parcel-body {
+      padding: 17px 12px;
+    }
+
+    .tracking-id {
+      font-size: 18px;
+    }
+
+    .info-value {
+      font-size: 15px;
+    }
+
+    .qr-image-wrapper img {
+      width: 160px;
+    }
+  }
+
+  .tracking-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .tracking-id {
+    font-size: 1.2rem;
+    font-weight: 700;
+    word-break: break-all;
+  }
+
+  .copy-btn {
+    border: none;
+    background: #0d6efd;
+    color: white;
+    padding: 9px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: 0.3s;
+  }
+
+  .copy-btn:hover {
+    background: #0b5ed7;
+    transform: translateY(-1px);
+  }
+
+  .copy-btn i {
+    margin-right: 4px;
+  }
+
+  @media (max-width: 576px) {
+    .tracking-row {
+      align-items: stretch;
+    }
+
+    .tracking-id {
+      font-size: 1rem;
+    }
+
+    .copy-btn {
+      padding: 8px 10px;
+    }
+
+    .copy-btn span {
+      display: none;
+    }
+
+    .copy-btn i {
+      margin: 0;
+    }
+  }
+</style>
+
+<div class="parcel-page">
+  <div class="parcel-wrapper">
+    <div class="parcel-main-card">
+      <!-- HEADER -->
+      <div class="parcel-header">
+        <div class="header-content">
+          <div class="header-icon">
+            <i class="fa-solid fa-box-open"></i>
+          </div>
+
+          <h1>Parcel Details</h1>
+
+          <p>Complete information about your shipment</p>
+        </div>
+      </div>
+
+      <!-- BODY -->
+      <div class="parcel-body">
+        <div class="row g-4">
+          <!-- LEFT SIDE -->
+          <div class="col-lg-7">
+            <div class="section-title">
+              <div class="section-icon">
+                <i class="fa-solid fa-circle-info"></i>
+              </div>
+
+              <h3>Shipment Information</h3>
+            </div>
+
+            <!-- TRACKING ID -->
+            <div class="tracking-card">
+              <div class="tracking-label">
+                <i class="fa-solid fa-barcode me-1"></i>
+                Tracking ID
+              </div>
+
+              <div class="tracking-row">
+                <div class="tracking-id" id="trackingId">
+                  {{ parcel.tracking_id }}
+                </div>
+
+                <button
+                  type="button"
+                  class="copy-btn"
+                  onclick="copyTrackingId()"
+                  title="Copy Tracking ID"
+                >
+                  <i class="fa-regular fa-copy"></i>
+                  <span id="copyText">Copy</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- SENDER -->
+            <div class="info-card">
+              <div class="info-label">
+                <i class="fa-solid fa-user"></i>
+                Sender
+              </div>
+
+              <div class="info-value">{{ parcel.sender_name }}</div>
+            </div>
+
+            <!-- RECEIVER -->
+            <div class="info-card">
+              <div class="info-label">
+                <i class="fa-solid fa-user-check"></i>
+                Receiver
+              </div>
+
+              <div class="info-value">{{ parcel.receiver_name }}</div>
+            </div>
+
+            <!-- MOBILE -->
+            <div class="info-card">
+              <div class="info-label">
+                <i class="fa-solid fa-phone"></i>
+                Mobile Number
+              </div>
+
+              <div class="info-value">{{ parcel.mobile_number }}</div>
+            </div>
+
+            <!-- STATUS -->
+            <div class="status-card">
+              <div class="status-left">
+                <div class="status-icon">
+                  <i class="fa-solid fa-truck-fast"></i>
+                </div>
+
+                <div>
+                  <div class="status-title">Current Status</div>
+
+                  <div class="status-value">{{ parcel.status }}</div>
+                </div>
+              </div>
+
+              <div class="status-dot"></div>
+            </div>
+          </div>
+
+          <!-- RIGHT SIDE -->
+          <div class="col-lg-5">
+            <div class="right-panel">
+              <!-- QR CODE -->
+              <div class="qr-card">
+                <div class="qr-icon">
+                  <i class="fa-solid fa-qrcode"></i>
+                </div>
+
+                <h4>Shipment QR Code</h4>
+
+                <p>Scan this QR code to quickly access your parcel details.</p>
+
+                {% if parcel.qr_code %}
+                <div class="qr-image-wrapper">
+                  <img src="{{ parcel.qr_code.url }}" alt="Parcel QR Code" />
+                </div>
+                {% else %}
+                <div class="py-4 text-muted">QR Code not available</div>
+                {% endif %}
+              </div>
+
+              <!-- PRICE -->
+              <div class="price-card">
+                <div class="price-label">
+                  <i class="fa-solid fa-indian-rupee-sign me-1"></i>
+                  Delivery Charge
+                </div>
+
+                <div class="price-value">₹{{ parcel.price }}</div>
+                <p class="mt-3 mb-0">
+                  <b>Payment:</b>
+
+                  {% if parcel.payment_status == 'Paid' %}
+                  <span class="badge bg-success">
+                    <i class="fas fa-check-circle me-1"></i>
+                    ✅Payment Successful
+                  </span>
+                  {% elif parcel.payment_status == 'Pending' %}
+                  <span class="badge bg-warning text-dark">
+                    <i class="fas fa-clock me-1"></i>
+                    ⏳Payment Pending
+                  </span>
+                  {% else %}
+                  <span class="badge bg-secondary"
+                    >{{ parcel.payment_status }}</span
+                  >
+                  {% endif %}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr class="section-divider" />
+
+        <!-- ACTION BUTTONS -->
+        <div class="action-buttons">
+          <a href="{% url 'home' %}" class="btn btn-home">
+            <i class="fa-solid fa-house me-2"></i>
+            Home
+          </a>
+
+          <a href="{% url 'book_parcel' %}" class="btn btn-book">
+            <i class="fa-solid fa-plus me-2"></i>
+            Book Parcel
+          </a>
+
+          <a href="{% url 'track_parcel' %}" class="btn btn-track">
+            <i class="fa-solid fa-location-dot me-2"></i>
+            Track Parcel
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--          ================================
+     FOOTER
+================================          -->
+<footer class="bg-dark text-light pt-5 pb-3">
+  <div class="container">
+    <div class="row">
+      <!-- Company -->
+      <div class="col-lg-4 col-md-6 mb-4">
+        <h4 class="fw-bold text-warning">ParcelPath</h4>
+
+        <p>
+          ParcelPath is a smart logistics and parcel delivery platform that
+          helps you book, track and manage shipments quickly, securely and
+          efficiently.
+        </p>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="col-lg-2 col-md-6 mb-4">
+        <h5 class="text-warning">Quick Links</h5>
+
+        <ul class="list-unstyled">
+          <li>
+            <a href="{% url 'home' %}" class="text-light text-decoration-none"
+              >Home</a
+            >
+          </li>
+
+          <li>
+            <a
+              href="{% url 'book_parcel' %}"
+              class="text-light text-decoration-none"
+              >Book Parcel</a
+            >
+          </li>
+
+          <li>
+            <a
+              href="{% url 'track_parcel' %}"
+              class="text-light text-decoration-none"
+              >Track Parcel</a
+            >
+          </li>
+
+          <li>
+            <a
+              href="{% url 'contact' %}"
+              class="text-light text-decoration-none"
+              >Contact</a
+            >
+          </li>
+
+          <li>
+            <a
+              href="{% url 'services' %}"
+              class="text-light text-decoration-none"
+              >Services</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <!-- Services -->
+      <div class="col-lg-3 col-md-6 mb-4">
+        <h5 class="text-warning">Our Services</h5>
+
+        <ul class="list-unstyled">
+          <li>✔ Parcel Booking</li>
+          <li>✔ Live Tracking</li>
+          <li>✔ Fast Delivery</li>
+          <li>✔ Secure Shipping</li>
+          <li>✔ Customer Support</li>
+          <li>✔ Services</li>
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div class="col-lg-3 col-md-6 mb-4">
+        <h5 class="text-warning">Contact Us</h5>
+
+        <p>📍 Ahmedabad, Gujarat</p>
+
+        <p>📞 +91 72039 28160</p>
+
+        <p>
+          ✉
+          <a
+            href="mailto:rajeshlagdhir07@gmail.com?subject=Parcel%20Inquiry"
+            class="text-light text-decoration-none"
+            >rajesh lagdhir</a
+          >
+        </p>
+
+        <!-- Social Media -->
+        <div class="mt-3">
+          <a
+            href="https://www.facebook.com"
+            target="_blank"
+            class="text-light fs-4 me-3"
+            ><i class="fab fa-facebook"></i
+          ></a>
+
+          <a
+            href="https://www.instagram.com"
+            target="_blank"
+            class="text-light fs-4 me-3"
+            ><i class="fab fa-instagram"></i
+          ></a>
+
+          <a href="https://x.com" target="_blank" class="text-light fs-4 me-3"
+            ><i class="fab fa-x-twitter"></i
+          ></a>
+
+          <a
+            href="https://www.linkedin.com"
+            target="_blank"
+            class="text-light fs-4"
+            ><i class="fab fa-linkedin"></i
+          ></a>
+        </div>
+      </div>
+    </div>
+
+    <hr class="border-secondary" />
+
+    <!-- Copyright -->
+    <div class="text-center">
+      <p class="mb-0">© 2026 ParcelPath Logistics. All Rights Reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function copyTrackingId() {
+    const trackingId = document.getElementById("trackingId").innerText.trim();
+    const copyText = document.getElementById("copyText");
+
+    navigator.clipboard.writeText(trackingId).then(function () {
+      copyText.innerText = "Copied!";
+
+      setTimeout(function () {
+        copyText.innerText = "Copy";
+      }, 2000);
+    });
+  }
+</script>
+{% endblock %}

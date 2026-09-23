@@ -1,0 +1,327 @@
+{% extends "custom_admin/main.html" %} 
+
+{% block title %}Track Parcel{% endblock%} 
+
+{% block content %}
+
+<style>
+  .track-wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .track-header {
+    background: linear-gradient(135deg, #0d6efd, #084298);
+    color: white;
+    border-radius: 18px;
+    padding: 30px;
+    margin-bottom: 25px;
+  }
+
+  .track-header h2 {
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .track-search {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 20px;
+  }
+
+  .track-search form {
+    display: flex;
+    gap: 10px;
+  }
+
+  .track-search input {
+    flex: 1;
+    height: 52px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 0 16px;
+    font-size: 16px;
+    outline: none;
+  }
+
+  .track-search input:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+  }
+
+  .track-btn {
+    height: 52px;
+    padding: 0 28px;
+    border: none;
+    border-radius: 10px;
+    background: #0d6efd;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .track-btn:hover {
+    background: #084298;
+  }
+
+  .details-card {
+    background: white;
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+    margin-top: 25px;
+  }
+
+  .details-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+  }
+
+  .details-title h4 {
+    margin: 0;
+    font-weight: 700;
+  }
+
+  .tracking-badge {
+    background: #e7f1ff;
+    color: #0d6efd;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-weight: 700;
+  }
+
+  .detail-box {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 16px;
+    height: 100%;
+  }
+
+  .detail-label {
+    color: #777;
+    font-size: 13px;
+    margin-bottom: 5px;
+  }
+
+  .detail-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #222;
+    word-break: break-word;
+  }
+
+  .status-box {
+    background: #e8f7ee;
+    color: #198754;
+    border-radius: 12px;
+    padding: 18px;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .status-box small {
+    display: block;
+    color: #666;
+    margin-bottom: 5px;
+  }
+
+  .status-box strong {
+    font-size: 20px;
+  }
+
+  .error-box {
+    background: #fff0f0;
+    color: #dc3545;
+    border: 1px solid #ffcaca;
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 20px;
+    font-weight: 600;
+  }
+
+  @media (max-width: 600px) {
+    .track-header {
+      padding: 20px;
+    }
+
+    .track-search form {
+      flex-direction: column;
+    }
+
+    .track-btn {
+      width: 100%;
+    }
+
+    .details-title {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+  }
+</style>
+
+<div class="container-fluid py-4">
+  <div class="track-wrapper">
+    <!-- HEADER -->
+
+    <div class="track-header">
+      <h2>
+        <i class="fas fa-location-dot me-2"></i>
+        Track Parcel
+      </h2>
+
+      <p class="mb-0">
+        Enter a ParcelPath Tracking ID to view shipment details.
+      </p>
+
+      <!-- SEARCH -->
+
+      <div class="track-search">
+        <form method="GET" action="{% url 'cs_track' %}">
+          <input
+            type="text"
+            name="tracking_id"
+            placeholder="Enter Tracking ID e.g. PP12345678"
+            value="{{ tracking_id }}"
+            required
+          />
+
+          <button type="submit" class="track-btn">
+            <i class="fas fa-search me-2"></i>
+            Track Parcel
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ERROR -->
+
+    {% if error %}
+
+    <div class="error-box">
+      <i class="fas fa-circle-exclamation me-2"></i>
+
+      {{ error }}
+    </div>
+
+    {% endif %}
+
+    <!-- PARCEL DETAILS -->
+
+    {% if parcel %}
+
+    <div class="details-card">
+      <div class="details-title">
+        <h4>
+          <i class="fas fa-box me-2"></i>
+          Parcel Details
+        </h4>
+
+        <span class="tracking-badge"> {{ parcel.tracking_id }} </span>
+      </div>
+
+      <div class="row g-3">
+        <!-- SENDER -->
+
+        <div class="col-md-6">
+          <div class="detail-box">
+            <div class="detail-label">Sender Name</div>
+
+            <div class="detail-value">{{ parcel.sender_name }}</div>
+          </div>
+        </div>
+
+        <!-- RECEIVER -->
+
+        <div class="col-md-6">
+          <div class="detail-box">
+            <div class="detail-label">Receiver Name</div>
+
+            <div class="detail-value">{{ parcel.receiver_name }}</div>
+          </div>
+        </div>
+
+        <!-- MOBILE -->
+
+        <div class="col-md-6">
+          <div class="detail-box">
+            <div class="detail-label">Mobile Number</div>
+
+            <div class="detail-value">{{ parcel.mobile_number }}</div>
+          </div>
+        </div>
+
+        <!-- WEIGHT -->
+
+        <div class="col-md-6">
+          <div class="detail-box">
+            <div class="detail-label">Parcel Weight</div>
+
+            <div class="detail-value">{{ parcel.parcel_weight }}</div>
+          </div>
+        </div>
+
+        <!-- TYPE -->
+
+        <div class="col-md-6">
+          <div class="detail-box">
+            <div class="detail-label">Parcel Type</div>
+
+            <div class="detail-value">{{ parcel.parcel_type }}</div>
+          </div>
+        </div>
+
+        <!-- PRICE -->
+
+        <div class="col-md-6">
+          <div class="detail-box">
+            <div class="detail-label">Shipping Price</div>
+
+            <div class="detail-value">₹ {{ parcel.price }}</div>
+          </div>
+        </div>
+
+        <!-- PICKUP -->
+
+        <div class="col-md-6">
+          <div class="detail-box">
+            <div class="detail-label">Pickup Address</div>
+
+            <div class="detail-value">{{ parcel.pickup_address }}</div>
+          </div>
+        </div>
+
+        <!-- DELIVERY -->
+
+        <div class="col-md-6">
+          <div class="detail-box">
+            <div class="detail-label">Delivery Address</div>
+
+            <div class="detail-value">{{ parcel.delivery_address }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATUS -->
+
+      <div class="status-box">
+        <small> Current Parcel Status </small>
+
+        <strong>
+          <i class="fas fa-truck me-2"></i>
+
+          {{ parcel.status }}
+        </strong>
+      </div>
+    </div>
+
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,440 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Book Parcel
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .booking-section {
+        min-height: 90vh;
+        background: #0ad5f0;
+        padding: 50px 0;
+    }
+
+    .booking-card {
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .booking-card h1 {
+        font-weight: 700;
+        color: #8d15fd;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        padding: 12px;
+    }
+
+    .form-label {
+        font-weight: 600;
+    }
+
+    .book-btn {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        padding: 12px 40px;
+        border-radius: 30px;
+        font-weight: bold;
+    }
+
+    .book-btn:hover {
+        background: #32e91a;
+        color: white;
+    }
+
+    .price-box {
+        background: #f3fff6;
+        border: 2px solid #198754;
+        color: #198754;
+        font-weight: bold;
+    }
+
+    @media (max-width: 767px) {
+        .booking-section {
+            padding: 30px 15px;
+        }
+
+        .booking-card {
+            padding: 25px 18px;
+            border-radius: 15px;
+        }
+
+        .booking-card h1 {
+            font-size: 25px;
+        }
+
+        .book-btn {
+            width: 100%;
+        }
+    }
+</style>
+
+
+<section class="booking-section">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-12 col-md-8">
+
+                <div class="booking-card">
+
+                    <h1 class="text-center">
+                        Book Your Parcel
+                    </h1>
+
+                    <p class="text-center text-muted">
+                        <b>
+                            Fill the details below to send your parcel safely.
+                        </b>
+                    </p>
+
+
+                    <!-- BOOKING FORM -->
+
+                    <form
+                        method="post"
+                        action="{% url 'create_payment' %}"
+                        id="bookingForm"
+                    >
+
+                        {% csrf_token %}
+
+
+                        <!-- SENDER -->
+
+                        <div class="row mt-4">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Sender Name
+                                </label>
+
+                                <input type="text" name="sender_name"
+                                    class="form-control"
+                                    placeholder="Enter Sender Name"
+                                    required
+                                />
+
+                            </div>
+
+
+                            <!-- RECEIVER -->
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Receiver Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="receiver_name"
+                                    class="form-control"
+                                    placeholder="Enter Receiver Name"
+                                    required
+                                />
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- MOBILE + WEIGHT -->
+
+                        <div class="row mt-3">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Mobile Number
+                                </label>
+
+                                <input
+                                    type="tel"
+                                    name="mobile_number"
+                                    class="form-control"
+                                    placeholder="Enter 10 Digit Mobile Number"
+                                    minlength="10"
+                                    maxlength="10"
+                                    pattern="[0-9]{10}"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Parcel Weight (KG)
+                                </label>
+
+                                <input
+                                    type="number"
+                                    name="parcel_weight"
+                                    id="parcel_weight"
+                                    class="form-control"
+                                    placeholder="Enter Parcel Weight"
+                                    min="0.1"
+                                    step="0.1"
+                                    required
+                                />
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- PICKUP ADDRESS -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Pickup Address
+                            </label>
+
+                            <textarea
+                                name="pickup_address"
+                                class="form-control"
+                                rows="3"
+                                placeholder="Enter Pickup Address"
+                                required
+                            ></textarea>
+
+                        </div>
+
+
+                        <!-- DELIVERY ADDRESS -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Delivery Address
+                            </label>
+
+                            <textarea
+                                name="delivery_address"
+                                class="form-control"
+                                rows="3"
+                                placeholder="Enter Delivery Address"
+                                required
+                            ></textarea>
+
+                        </div>
+
+
+                        <!-- PARCEL TYPE -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Parcel Type
+                            </label>
+
+                            <select
+                                name="parcel_type"
+                                id="parcel_type"
+                                class="form-control"
+                                required
+                            >
+
+                                <option value="">
+                                    Select Parcel Type
+                                </option>
+
+                                <option value="Document">
+                                    Document
+                                </option>
+
+                                <option value="Electronics (Mobile, Laptop, Gadgets)">
+                                    Electronics (Mobile, Laptop, Gadgets)
+                                </option>
+
+                                <option value="Clothes">
+                                    Clothes
+                                </option>
+
+                                <option value="Food Items">
+                                    Food Items
+                                </option>
+
+                                <option value="Books">
+                                    Books
+                                </option>
+
+                                <option value="Medicines">
+                                    Medicines
+                                </option>
+
+                                <option value="Fragile Items (Glass, Ceramic)">
+                                    Fragile Items (Glass, Ceramic)
+                                </option>
+
+                                <option value="Furniture">
+                                    Furniture
+                                </option>
+
+                                <option value="Jewellery">
+                                    Jewellery
+                                </option>
+
+                                <option value="Industrial Equipment">
+                                    Industrial Equipment
+                                </option>
+
+                                <option value="Gifts">
+                                    Gifts
+                                </option>
+
+                                <option value="Other">
+                                    Other
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- PRICE -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Estimated Price
+                            </label>
+
+                            <!-- User display -->
+
+                            <input
+                                type="text"
+                                id="price"
+                                class="form-control price-box"
+                                placeholder="Price will be calculated"
+                                readonly
+                            />
+
+                            <!-- Backend price -->
+
+                            <input
+                                type="hidden"
+                                name="price"
+                                id="price_value"
+                                value=""
+                            />
+
+                        </div>
+
+
+                        <!-- PAY -->
+
+                        <div class="text-center mt-4">
+
+                            <button
+                                type="submit"
+                                class="btn book-btn"
+                                id="payButton"
+                            >
+                                💳 Pay Now
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- PRICE CALCULATION -->
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const weightInput = document.getElementById("parcel_weight");
+    const typeInput = document.getElementById("parcel_type");
+    const priceBox = document.getElementById("price");
+    const priceValue = document.getElementById("price_value");
+    const bookingForm = document.getElementById("bookingForm");
+
+    const rates = {
+        "Document": 30,
+        "Electronics (Mobile, Laptop, Gadgets)": 120,
+        "Clothes": 50,
+        "Food Items": 80,
+        "Books": 40,
+        "Medicines": 70,
+        "Fragile Items (Glass, Ceramic)": 150,
+        "Furniture": 400,
+        "Jewellery": 500,
+        "Industrial Equipment": 250,
+        "Gifts": 60,
+        "Other": 100
+    };
+
+    function calculatePrice() {
+
+        const weight = parseFloat(weightInput.value);
+        const parcelType = typeInput.value;
+
+        if (
+            !isNaN(weight) &&
+            weight > 0 &&
+            rates[parcelType] !== undefined
+        ) {
+
+            const total = weight * rates[parcelType];
+
+            priceBox.value = "₹ " + total.toFixed(2);
+
+            // IMPORTANT:
+            // Backend/Razorpay માટે numeric value
+            priceValue.value = total.toFixed(2);
+
+        } else {
+
+            priceBox.value = "";
+            priceValue.value = "";
+        }
+    }
+
+    weightInput.addEventListener("input", calculatePrice);
+    typeInput.addEventListener("change", calculatePrice);
+
+    /*
+     * Submit કરતા પહેલા price છે કે નહીં તે check
+     */
+    bookingForm.addEventListener("submit", function (event) {
+
+        calculatePrice();
+
+        if (!priceValue.value || parseFloat(priceValue.value) <= 0) {
+
+            event.preventDefault();
+
+            alert("Please select Parcel Type and enter Parcel Weight.");
+
+            return false;
+        }
+    });
+
+});
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,258 @@
+{% extends 'custom_admin/main.html' %} 
+
+{% block title %}View Contact
+Message{% endblock %}
+
+{% block content %}
+
+<style>
+  .message-page {
+    padding: 25px;
+  }
+
+  .message-card {
+    border: none;
+    border-radius: 18px;
+    overflow: hidden;
+  }
+
+  .customer-icon {
+    width: 70px;
+    height: 70px;
+    min-width: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e8f0ff;
+    color: #0d6efd;
+    font-size: 30px;
+    font-weight: 700;
+  }
+
+  .customer-name {
+    font-size: 22px;
+    font-weight: 700;
+    color: #172033;
+  }
+
+  .customer-subtitle {
+    color: #7b8494;
+    font-size: 14px;
+  }
+
+  .info-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #7b8494;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .info-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #172033;
+    word-break: break-word;
+  }
+
+  .info-value a {
+    color: #172033;
+  }
+
+  .info-value a:hover {
+    color: #0d6efd;
+  }
+
+  .message-content {
+    background: #f8f9fc;
+    border: 1px solid #edf0f5;
+    border-radius: 14px;
+    padding: 20px;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    color: #343b49;
+    min-height: 120px;
+    word-break: break-word;
+  }
+
+  .action-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  @media (max-width: 767px) {
+    .message-page {
+      padding: 15px;
+    }
+
+    .message-page .top-header {
+      flex-direction: column;
+      align-items: flex-start !important;
+      gap: 15px;
+    }
+
+    .message-page .top-actions {
+      width: 100%;
+      display: flex;
+    }
+
+    .message-page .top-actions a {
+      flex: 1;
+    }
+
+    .card-body {
+      padding: 20px !important;
+    }
+
+    .customer-icon {
+      width: 60px;
+      height: 60px;
+      min-width: 60px;
+      font-size: 25px;
+    }
+
+    .customer-name {
+      font-size: 19px;
+    }
+  }
+</style>
+
+<div class="message-page">
+  <!-- =========================
+       HEADER
+  ========================== -->
+
+  <div
+    class="top-header d-flex justify-content-between align-items-center mb-4"
+  >
+    <div>
+      <h2 class="fw-bold mb-1">Contact Message</h2>
+
+      <p class="text-muted mb-0">Message #{{ contact.id }}</p>
+    </div>
+
+    <div class="top-actions d-flex gap-2">
+      <a href="{% url 'cs_contact_edit' contact.id %}" class="btn btn-primary">
+        <i class="fas fa-edit me-2"></i>
+        Edit
+      </a>
+
+      <a href="{% url 'cs_contact' %}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left me-2"></i>
+        Back
+      </a>
+    </div>
+  </div>
+
+  <!-- =========================
+       MESSAGE CARD
+  ========================== -->
+
+  <div class="card message-card shadow-sm">
+    <div class="card-body p-4">
+      <!-- Customer Header -->
+
+      <div class="d-flex align-items-center">
+        <div class="customer-icon">{{ contact.name|first|upper }}</div>
+
+        <div class="ms-3">
+          <div class="customer-name">{{ contact.name }}</div>
+
+          <div class="customer-subtitle">Contact Message</div>
+        </div>
+      </div>
+
+      <hr class="my-4" />
+
+      <!-- =========================
+           CUSTOMER INFORMATION
+      ========================== -->
+
+      <div class="row g-4">
+        <!-- Email -->
+
+        <div class="col-md-4">
+          <div class="info-label">Email</div>
+
+          <div class="info-value mt-1">
+            <a href="mailto:{{ contact.email }}" class="text-decoration-none">
+              <i class="fas fa-envelope me-2 text-primary"></i>
+              {{ contact.email }}
+            </a>
+          </div>
+        </div>
+
+        <!-- Mobile -->
+
+        <div class="col-md-4">
+          <div class="info-label">Mobile</div>
+
+          <div class="info-value mt-1">
+            <a href="tel:{{ contact.mobile }}" class="text-decoration-none">
+              <i class="fas fa-phone me-2 text-success"></i>
+              {{ contact.mobile }}
+            </a>
+          </div>
+        </div>
+
+        <!-- Date -->
+
+        <div class="col-md-4">
+          <div class="info-label">Date</div>
+
+          <div class="info-value mt-1">
+            <i class="fas fa-calendar me-2 text-warning"></i>
+
+            {{ contact.date|date:"d M Y" }}
+          </div>
+        </div>
+      </div>
+
+      <!-- =========================
+           CUSTOMER MESSAGE
+      ========================== -->
+
+      <div class="mt-5">
+        <div class="info-label mb-2">Customer Message</div>
+
+        <div class="message-content">{{ contact.message }}</div>
+      </div>
+
+      <!-- =========================
+           ACTIONS
+      ========================== -->
+
+      <div class="mt-4 pt-3 border-top">
+        <div class="action-area">
+          <!-- Send Email -->
+
+          <a href="mailto:{{ contact.email }}" class="btn btn-outline-primary">
+            <i class="fas fa-envelope me-2"></i>
+            Send Email
+          </a>
+
+          <!-- Call -->
+
+          <a href="tel:{{ contact.mobile }}" class="btn btn-outline-dark">
+            <i class="fas fa-phone me-2"></i>
+            Call
+          </a>
+
+          <!-- Edit -->
+
+          <a
+            href="{% url 'cs_contact_edit' contact.id %}"
+            class="btn btn-outline-secondary"
+          >
+            <i class="fas fa-edit me-2"></i>
+            Edit Message
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

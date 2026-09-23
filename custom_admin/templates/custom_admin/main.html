@@ -1,0 +1,1044 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+
+    <title>
+      {% block title %}
+        ParcelPath Admin Panel
+      {% endblock %}
+    </title>
+
+    <!-- Google Font: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Icon libraries preserved for child template content compatibility -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+
+    <style>
+      /* =====================================================
+         ROOT VARIABLES & CLEAN TEXT-FIRST DESIGN
+      ===================================================== */
+      :root {
+        --sidebar-width: 250px;
+        --topbar-height: 64px;
+        --mobile-bottom-height: 58px;
+        --sidebar-bg: #0b1120;
+        --sidebar-card: #131d33;
+        --sidebar-border: rgba(255, 255, 255, 0.08);
+        --sidebar-text: #94a3b8;
+        --sidebar-text-hover: #ffffff;
+        --sidebar-active-bg: #2563eb;
+        --sidebar-active-text: #ffffff;
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --primary-light: #eff6ff;
+        --content-bg: #f8fafc;
+        --border-color: #e2e8f0;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --radius-sm: 6px;
+        --radius-md: 10px;
+        --radius-lg: 14px;
+        --radius-pill: 50px;
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 16px -2px rgba(15, 23, 42, 0.08);
+        --shadow-lg: 0 12px 30px -4px rgba(15, 23, 42, 0.14);
+        --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: var(--content-bg);
+        font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        color: var(--text-main);
+        overflow-x: hidden;
+      }
+
+      /* Clean Scrollbar */
+      .sidebar::-webkit-scrollbar {
+        width: 4px;
+      }
+      .sidebar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .sidebar::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.16);
+        border-radius: 4px;
+      }
+
+      /* =====================================================
+         CSS-ONLY HAMBURGER (NO ICON FONT)
+      ===================================================== */
+      .css-hamburger {
+        display: inline-flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 17px;
+        height: 12px;
+      }
+      .css-hamburger span {
+        display: block;
+        height: 2px;
+        width: 100%;
+        background-color: currentColor;
+        border-radius: 2px;
+      }
+
+      /* =====================================================
+         SIDEBAR (TEXT-ONLY, NO ICONS)
+      ===================================================== */
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: var(--sidebar-width);
+        height: 100vh;
+        background: var(--sidebar-bg);
+        color: var(--sidebar-text);
+        z-index: 1100;
+        overflow-y: auto;
+        overflow-x: hidden;
+        border-right: 1px solid var(--sidebar-border);
+        transition: transform var(--transition);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .sidebar-header {
+        height: var(--topbar-height);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 18px;
+        border-bottom: 1px solid var(--sidebar-border);
+        flex-shrink: 0;
+      }
+
+      .brand-title-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+      }
+
+      .brand-title {
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: #ffffff;
+        letter-spacing: -0.4px;
+        margin: 0;
+      }
+
+      .brand-pill {
+        font-size: 0.65rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        padding: 2px 7px;
+        border-radius: var(--radius-pill);
+        background: rgba(37, 99, 235, 0.2);
+        color: #60a5fa;
+        border: 1px solid rgba(96, 165, 250, 0.3);
+      }
+
+      .sidebar-close-btn {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        background: rgba(239, 68, 68, 0.15);
+        border: 1.5px solid rgba(239, 68, 68, 0.35);
+        color: #fca5a5;
+        font-size: 0.8rem;
+        font-weight: 700;
+        padding: 7px 13px;
+        border-radius: var(--radius-pill);
+        cursor: pointer;
+        line-height: 1;
+        transition: all 0.2s ease;
+        touch-action: manipulation;
+      }
+
+      .sidebar-close-btn:hover,
+      .sidebar-close-btn:active {
+        background: #ef4444;
+        border-color: #ef4444;
+        color: #ffffff;
+        box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
+        transform: scale(1.03);
+      }
+
+      .sidebar-close-btn .close-x-sym {
+        font-size: 0.95rem;
+        font-weight: 800;
+        line-height: 1;
+      }
+
+      .sidebar-close-btn .close-txt {
+        letter-spacing: 0.3px;
+      }
+
+      /* Sidebar Navigation */
+      .sidebar-nav {
+        padding: 14px 10px 30px;
+        flex-grow: 1;
+      }
+
+      .nav-category-title {
+        font-size: 0.68rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #64748b;
+        padding: 12px 10px 4px;
+        margin-top: 2px;
+      }
+
+      .sidebar a.nav-item-link {
+        color: var(--sidebar-text);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 12px;
+        margin-bottom: 3px;
+        border-radius: var(--radius-sm);
+        font-size: 0.9rem;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        min-height: 42px; /* Touch target */
+      }
+
+      .sidebar a.nav-item-link:hover {
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--sidebar-text-hover);
+        transform: translateX(2px);
+      }
+
+      /* Active State (Text-first, bold pill) */
+      .sidebar a.nav-item-link.active {
+        background: var(--sidebar-active-bg);
+        color: #ffffff;
+        font-weight: 700;
+      }
+
+      .sidebar a.nav-item-link .menu-tag {
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 2px 6px;
+        border-radius: var(--radius-pill);
+        background: rgba(255, 255, 255, 0.12);
+        color: #cbd5e1;
+      }
+
+      .sidebar a.nav-item-link.active .menu-tag {
+        background: rgba(255, 255, 255, 0.25);
+        color: #ffffff;
+      }
+
+      .sidebar a.nav-item-link.logout-btn-link {
+        color: #f87171;
+      }
+      .sidebar a.nav-item-link.logout-btn-link:hover {
+        background: rgba(239, 68, 68, 0.15);
+        color: #fca5a5;
+      }
+
+      /* Sidebar User Status */
+      .sidebar-footer-box {
+        padding: 12px 16px;
+        border-top: 1px solid var(--sidebar-border);
+        background: rgba(0, 0, 0, 0.25);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .sidebar-user-name {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #ffffff;
+        margin: 0;
+        max-width: 140px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .sidebar-status-pill {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: #34d399;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .sidebar-status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: #10b981;
+      }
+
+      /* =====================================================
+         TOPBAR (TEXT-ONLY, NO ICONS)
+      ===================================================== */
+      .topbar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: var(--sidebar-width);
+        height: var(--topbar-height);
+        background: #ffffff;
+        box-shadow: var(--shadow-sm);
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        z-index: 1000;
+        transition: left var(--transition);
+      }
+
+      .left-topbar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .btn-menu-toggle {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 13px;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border-color);
+        background: #f8fafc;
+        color: var(--text-main);
+        font-size: 0.85rem;
+        font-weight: 700;
+        cursor: pointer;
+        min-height: 40px;
+        transition: all 0.2s ease;
+      }
+
+      .btn-menu-toggle:hover {
+        background: #eff6ff;
+        border-color: #bfdbfe;
+        color: var(--primary);
+      }
+
+      /* Topbar Search */
+      .topbar-search-form {
+        display: flex;
+        align-items: center;
+        position: relative;
+        width: 310px;
+      }
+
+      .topbar-search-input {
+        width: 100%;
+        height: 38px;
+        border-radius: var(--radius-pill);
+        border: 1.5px solid var(--border-color);
+        background: #f8fafc;
+        padding: 0 75px 0 14px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--text-main);
+        transition: all 0.2s ease;
+      }
+
+      .topbar-search-input:focus {
+        outline: none;
+        background: #ffffff;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        width: 340px;
+      }
+
+      .search-submit-text-btn {
+        position: absolute;
+        right: 4px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: var(--primary);
+        color: #ffffff;
+        border: none;
+        border-radius: var(--radius-pill);
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 4px 10px;
+        cursor: pointer;
+      }
+
+      /* Right Topbar */
+      .right-topbar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .btn-topbar-link {
+        display: inline-flex;
+        align-items: center;
+        padding: 7px 12px;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border-color);
+        background: #f8fafc;
+        color: var(--text-main);
+        font-size: 0.82rem;
+        font-weight: 700;
+        text-decoration: none;
+        min-height: 38px;
+        transition: all 0.2s ease;
+      }
+
+      .btn-topbar-link:hover {
+        background: #eff6ff;
+        border-color: #bfdbfe;
+        color: var(--primary);
+      }
+
+      .btn-topbar-live {
+        background: #ecfdf5;
+        border-color: #a7f3d0;
+        color: #059669;
+      }
+
+      .btn-topbar-live:hover {
+        background: #059669;
+        color: #ffffff;
+      }
+
+      /* Profile Pill */
+      .profile-pill-toggle {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: var(--radius-pill);
+        border: 1px solid var(--border-color);
+        background: #f8fafc;
+        cursor: pointer;
+        min-height: 38px;
+      }
+
+      .profile-avatar-char {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: var(--primary);
+        color: #ffffff;
+        font-size: 0.75rem;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .profile-username-label {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--text-main);
+      }
+
+      .profile-caret {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+      }
+
+      /* Dropdown Menu */
+      .text-dropdown-menu {
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-lg);
+        padding: 8px;
+        min-width: 200px;
+        margin-top: 8px !important;
+      }
+
+      .text-dropdown-menu .dropdown-item {
+        padding: 8px 12px;
+        border-radius: var(--radius-sm);
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-main);
+      }
+
+      .text-dropdown-menu .dropdown-item:hover {
+        background: #eff6ff;
+        color: var(--primary);
+      }
+
+      /* =====================================================
+         MAIN CONTENT & FOOTER
+      ===================================================== */
+      .content {
+        margin-left: var(--sidebar-width);
+        padding: calc(var(--topbar-height) + 18px) 20px 30px;
+        min-height: calc(100vh - 54px);
+        transition: margin-left var(--transition);
+      }
+
+      .footer {
+        margin-left: var(--sidebar-width);
+        background: #ffffff;
+        padding: 16px 20px;
+        border-top: 1px solid var(--border-color);
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        transition: margin-left var(--transition);
+      }
+
+      .system-status-badge {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #059669;
+        background: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        padding: 3px 8px;
+        border-radius: var(--radius-pill);
+      }
+
+      /* =====================================================
+         MOBILE BOTTOM NAVIGATION (HIGH-CONVENIENCE APP BAR)
+      ===================================================== */
+      .mobile-bottom-nav {
+        display: none;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: var(--mobile-bottom-height);
+        background: #ffffff;
+        border-top: 1px solid var(--border-color);
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+        z-index: 1040;
+        justify-content: space-around;
+        align-items: center;
+        padding: 0 4px;
+      }
+
+      .mobile-bottom-link {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: var(--text-muted);
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 6px 12px;
+        border-radius: var(--radius-sm);
+        transition: all 0.2s ease;
+        flex: 1;
+        text-align: center;
+      }
+
+      .mobile-bottom-link.active {
+        color: var(--primary);
+        background: #eff6ff;
+      }
+
+      /* Mobile Drawer Overlay */
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.65);
+        backdrop-filter: blur(2px);
+        z-index: 1050;
+        opacity: 0;
+        transition: opacity var(--transition);
+      }
+
+      /* =====================================================
+         TOAST NOTIFICATIONS (CLEAN TEXT-ONLY)
+      ===================================================== */
+      .admin-toast-container {
+        position: fixed;
+        top: calc(var(--topbar-height) + 12px);
+        right: 18px;
+        z-index: 99999;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 360px;
+        max-width: calc(100vw - 28px);
+        pointer-events: none;
+      }
+
+      .admin-toast {
+        background: #ffffff;
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border-color);
+        border-left: 4px solid var(--primary);
+        padding: 12px 14px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+        pointer-events: auto;
+        animation: toastIn 0.3s ease;
+      }
+
+      @keyframes toastIn {
+        from { transform: translateY(-10px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+      }
+
+      .toast-success { border-left-color: #10b981; }
+      .toast-error { border-left-color: #ef4444; }
+      .toast-warning { border-left-color: #f59e0b; }
+
+      .toast-badge-tag {
+        font-size: 0.68rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        padding: 2px 6px;
+        border-radius: 4px;
+        background: #f1f5f9;
+        display: inline-block;
+        margin-bottom: 4px;
+      }
+
+      .toast-msg-text {
+        font-size: 0.82rem;
+        color: var(--text-main);
+        margin: 0;
+        line-height: 1.4;
+      }
+
+      .toast-close-x {
+        background: none;
+        border: none;
+        font-size: 1.1rem;
+        color: #94a3b8;
+        cursor: pointer;
+        padding: 0;
+        line-height: 1;
+      }
+
+      /* =====================================================
+         MOBILE FRIENDLY RESPONSIVENESS (BREAKPOINTS)
+      ===================================================== */
+      @media (max-width: 992px) {
+        .sidebar {
+          transform: translateX(-100%);
+          width: 270px;
+          box-shadow: var(--shadow-lg);
+        }
+
+        .sidebar.mobile-open {
+          transform: translateX(0);
+        }
+
+        .sidebar-close-btn {
+          display: inline-flex;
+        }
+
+        .sidebar-overlay.show {
+          display: block;
+          opacity: 1;
+        }
+
+        .topbar {
+          left: 0 !important;
+          padding: 0 14px;
+        }
+
+        .content {
+          margin-left: 0 !important;
+          padding: calc(var(--topbar-height) + 14px) 14px calc(var(--mobile-bottom-height) + 20px);
+        }
+
+        .footer {
+          margin-left: 0 !important;
+          padding: 14px 14px calc(var(--mobile-bottom-height) + 14px);
+          text-align: center;
+          justify-content: center;
+        }
+
+        .mobile-bottom-nav {
+          display: flex;
+        }
+
+        .topbar-search-form {
+          width: 180px;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .topbar {
+          height: 58px;
+        }
+
+        .topbar-search-form {
+          display: none;
+        }
+
+        .profile-username-label {
+          display: none;
+        }
+
+        .profile-pill-toggle {
+          padding: 4px 8px;
+        }
+
+        .btn-topbar-live {
+          display: none;
+        }
+
+        .content {
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- =====================================================
+         1. SIDEBAR (NO ICONS, CLEAN TEXT)
+    ===================================================== -->
+    <aside class="sidebar" id="sidebar">
+      <!-- Header -->
+      <div class="sidebar-header">
+        <a href="{% url 'custom_dashboard' %}" class="brand-title-wrap">
+          <span class="brand-title">ParcelPath</span>
+          <span class="brand-badge">ADMIN</span>
+        </a>
+        <!-- Mobile Close Button -->
+        <button type="button" class="sidebar-close-btn" onclick="closeMobileSidebar(event)" aria-label="Close Menu">
+          <span class="close-x-sym">✕</span>
+          <span class="close-txt">Close</span>
+        </button>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="sidebar-nav">
+        <!-- CORE -->
+        <div class="nav-category-title">Core</div>
+        <a href="{% url 'custom_dashboard' %}" class="nav-item-link {% if request.resolver_match.url_name == 'custom_dashboard' %}active{% endif %}">
+          <span>Dashboard</span>
+        </a>
+
+        <!-- LOGISTICS -->
+        <div class="nav-category-title">Logistics & Fleet</div>
+        <a href="{% url 'cs_parcel' %}" class="nav-item-link {% if request.resolver_match.url_name == 'cs_parcel' or request.resolver_match.url_name == 'parcel_bookings' or request.resolver_match.url_name == 'parcel_detail' %}active{% endif %}">
+          <span>Parcels</span>
+          <span class="menu-tag">All</span>
+        </a>
+
+        <a href="{% url 'cs_shipment' %}" class="nav-item-link {% if request.resolver_match.url_name == 'cs_shipment' %}active{% endif %}">
+          <span>Shipments</span>
+        </a>
+
+        <a href="{% url 'cs_track' %}" class="nav-item-link {% if request.resolver_match.url_name == 'cs_track' %}active{% endif %}">
+          <span>Live Tracking</span>
+        </a>
+
+        <!-- OPERATIONS -->
+        <div class="nav-category-title">Operations</div>
+        <a href="{% url 'cs_customer' %}" class="nav-item-link {% if request.resolver_match.url_name == 'cs_customer' %}active{% endif %}">
+          <span>Customers</span>
+        </a>
+
+        <a href="{% url 'cs_payment' %}" class="nav-item-link {% if request.resolver_match.url_name == 'cs_payment' %}active{% endif %}">
+          <span>Payments</span>
+        </a>
+
+        <!-- COMMUNICATION -->
+        <div class="nav-category-title">Communication</div>
+        <a href="{% url 'cs_contact' %}" class="nav-item-link {% if 'cs_contact' in request.resolver_match.url_name %}active{% endif %}">
+          <span>Contact Inquiries</span>
+        </a>
+
+        <!-- SYSTEM & REPORTS -->
+        <div class="nav-category-title">System & Reports</div>
+        <a href="{% url 'cs_reports' %}" class="nav-item-link {% if request.resolver_match.url_name == 'cs_reports' %}active{% endif %}">
+          <span>Analytics & Reports</span>
+        </a>
+
+        <a href="{% url 'cs_settings' %}" class="nav-item-link {% if request.resolver_match.url_name == 'cs_settings' %}active{% endif %}">
+          <span>Settings</span>
+        </a>
+
+        <!-- ACTIONS -->
+        <div class="nav-category-title">Shortcuts</div>
+        <a href="{% url 'book_parcel' %}" target="_blank" class="nav-item-link">
+          <span>+ Book Parcel</span>
+          <span class="menu-tag">Site</span>
+        </a>
+
+        <a href="{% url 'home' %}" target="_blank" class="nav-item-link">
+          <span>Storefront</span>
+          <span class="menu-tag">Site</span>
+        </a>
+
+        <hr style="border-color: rgba(255, 255, 255, 0.1); margin: 16px 0 10px;" />
+
+        <!-- Logout -->
+        <a href="{% url 'logout' %}" class="nav-item-link logout-btn-link">
+          <span>Logout</span>
+        </a>
+      </nav>
+
+      <!-- Bottom User Snippet -->
+      <div class="sidebar-footer-box">
+        <p class="sidebar-user-name">{{ request.user.username|default:"Admin" }}</p>
+        <span class="sidebar-status-pill">
+          <span class="sidebar-status-dot"></span> Online
+        </span>
+      </div>
+    </aside>
+
+    <!-- Mobile Overlay Backdrop -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeMobileSidebar()"></div>
+
+    <!-- =====================================================
+         2. TOPBAR (NO ICONS, CLEAN TEXT)
+    ===================================================== -->
+    <header class="topbar">
+      <div class="left-topbar">
+        <!-- Clean Text/CSS Hamburger Menu Toggle -->
+        <button class="btn-menu-toggle" type="button" onclick="toggleSidebar()" title="Toggle Menu">
+          <span class="css-hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+          <span class="d-none d-sm-inline">Menu</span>
+        </button>
+
+        <!-- Working Topbar Search Form -->
+        <form class="topbar-search-form" id="topbarSearchForm" onsubmit="handleSearch(event)">
+          <input
+            type="text"
+            class="topbar-search-input"
+            id="topbarSearchInput"
+            placeholder="Search tracking ID, user..."
+            autocomplete="off"
+          />
+          <button type="submit" class="search-submit-text-btn">Search</button>
+        </form>
+      </div>
+
+      <div class="right-topbar">
+        <!-- Storefront Quick Link -->
+        <a href="{% url 'home' %}" target="_blank" class="btn-topbar-link btn-topbar-live" title="View Public Website">
+          Storefront
+        </a>
+
+        <!-- Quick Jump Button -->
+        <button type="button" class="btn-topbar-link" onclick="toggleSidebar()" title="Navigation Menu">
+          Pages
+        </button>
+
+        <!-- Profile Dropdown -->
+        <div class="dropdown">
+          <div class="profile-pill-toggle" id="userMenuDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="profile-avatar-char">
+              {{ request.user.username|make_list|first|upper|default:"A" }}
+            </span>
+            <span class="profile-username-label">{{ request.user.username|default:"Admin" }}</span>
+            <span class="profile-caret">▾</span>
+          </div>
+
+          <ul class="dropdown-menu dropdown-menu-end text-dropdown-menu" aria-labelledby="userMenuDropdown">
+            <li class="px-3 py-1 border-bottom mb-1">
+              <strong class="d-block text-dark small">{{ request.user.username|default:"Administrator" }}</strong>
+              <span class="text-muted" style="font-size: 0.72rem;">Superadmin</span>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'cs_settings' %}">Settings</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'cs_reports' %}">Reports</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'home' %}" target="_blank">Storefront</a>
+            </li>
+            <li><hr class="dropdown-divider my-1" /></li>
+            <li>
+              <a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <!-- =====================================================
+         3. DJANGO FLASH MESSAGES (CLEAN TEXT TOASTS)
+    ===================================================== -->
+    {% if messages %}
+      <div class="admin-toast-container">
+        {% for message in messages %}
+          <div class="admin-toast {% if message.tags == 'success' %}toast-success{% elif message.tags == 'error' %}toast-error{% elif message.tags == 'warning' %}toast-warning{% endif %}" id="admin-toast-{{ forloop.counter }}">
+            <div>
+              <span class="toast-badge-tag">
+                {% if message.tags == 'success' %}Success{% elif message.tags == 'error' %}Error{% elif message.tags == 'warning' %}Alert{% else %}Notice{% endif %}
+              </span>
+              <p class="toast-msg-text">{{ message }}</p>
+            </div>
+            <button type="button" class="toast-close-x" onclick="dismissToast('admin-toast-{{ forloop.counter }}')">&times;</button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <!-- =====================================================
+         4. MAIN CONTENT
+    ===================================================== -->
+    <main class="content" id="mainContent">
+      {% block content %}
+      {% endblock %}
+    </main>
+
+    <!-- =====================================================
+         5. MOBILE BOTTOM QUICK NAVIGATION BAR
+    ===================================================== -->
+    <nav class="mobile-bottom-nav">
+      <a href="{% url 'custom_dashboard' %}" class="mobile-bottom-link {% if request.resolver_match.url_name == 'custom_dashboard' %}active{% endif %}">
+        <span>Dashboard</span>
+      </a>
+      <a href="{% url 'cs_parcel' %}" class="mobile-bottom-link {% if request.resolver_match.url_name == 'cs_parcel' %}active{% endif %}">
+        <span>Parcels</span>
+      </a>
+      <a href="{% url 'cs_track' %}" class="mobile-bottom-link {% if request.resolver_match.url_name == 'cs_track' %}active{% endif %}">
+        <span>Tracking</span>
+      </a>
+      <a href="{% url 'cs_customer' %}" class="mobile-bottom-link {% if request.resolver_match.url_name == 'cs_customer' %}active{% endif %}">
+        <span>Customers</span>
+      </a>
+      <a href="javascript:void(0)" onclick="toggleSidebar()" class="mobile-bottom-link">
+        <span>Menu ☰</span>
+      </a>
+    </nav>
+
+    <!-- =====================================================
+         6. FOOTER
+    ===================================================== -->
+    <footer class="footer">
+      <div>
+        <span>© 2026 <strong>ParcelPath</strong> Admin Panel</span>
+      </div>
+      <div>
+        <span class="system-status-badge">All Systems Operational</span>
+      </div>
+    </footer>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- =====================================================
+         7. SCRIPTS (SIDEBAR & SEARCH LOGIC)
+    ===================================================== -->
+    <script>
+      function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        sidebar.classList.toggle('mobile-open');
+        overlay.classList.toggle('show');
+      }
+
+      function closeMobileSidebar(e) {
+        if (e && typeof e.stopPropagation === 'function') {
+          e.stopPropagation();
+        }
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        if (sidebar) sidebar.classList.remove('mobile-open');
+        if (overlay) overlay.classList.remove('show');
+      }
+
+      // Auto close mobile drawer on link click
+      document.querySelectorAll('.sidebar a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          if (window.innerWidth <= 992) {
+            closeMobileSidebar();
+          }
+        });
+      });
+
+      // Window resize guard
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 992) {
+          closeMobileSidebar();
+        }
+      });
+
+      // Active Route Auto-Detection (fallback)
+      document.addEventListener('DOMContentLoaded', function() {
+        const currentPath = window.location.pathname;
+        const navLinks = document.querySelectorAll('.sidebar a.nav-item-link');
+        navLinks.forEach(function(link) {
+          const href = link.getAttribute('href');
+          if (href && href !== '#' && href !== '/' && currentPath.includes(href)) {
+            link.classList.add('active');
+          }
+        });
+      });
+
+      // Working Topbar Search Handler
+      function handleSearch(e) {
+        if (e) e.preventDefault();
+        const searchInput = document.getElementById('topbarSearchInput');
+        const query = searchInput ? searchInput.value.trim() : '';
+
+        if (!query) return;
+
+        // If query looks like tracking ID (PP or 8+ digits)
+        if (/^PP/i.test(query) || /^\d{8,}$/.test(query)) {
+          window.location.href = "{% url 'cs_track' %}?tracking_id=" + encodeURIComponent(query);
+        } else {
+          window.location.href = "{% url 'parcel_bookings' %}?search=" + encodeURIComponent(query);
+        }
+      }
+
+      // Toast Dismiss
+      function dismissToast(id) {
+        const toast = document.getElementById(id);
+        if (toast) {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateY(-10px)';
+          setTimeout(() => toast.remove(), 250);
+        }
+      }
+
+      // Auto dismiss toasts after 4s
+      document.addEventListener('DOMContentLoaded', function() {
+        const toasts = document.querySelectorAll('.admin-toast');
+        toasts.forEach(function(toast) {
+          setTimeout(function() {
+            dismissToast(toast.id);
+          }, 4000);
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,2051 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Logistics Services & Solutions - ParcelPath India
+{% endblock %}
+
+{% block content %}
+<style>
+  /* =====================================================
+     ROOT & DESIGN SYSTEM VARIABLES
+  ===================================================== */
+  :root {
+    --primary: #0d6efd;
+    --primary-dark: #0a58ca;
+    --primary-light: #eff6ff;
+    --primary-glow: rgba(13, 110, 253, 0.25);
+    --dark: #0f172a;
+    --dark-card: #1e293b;
+    --card-bg: #ffffff;
+    --text-heading: #0f172a;
+    --text-body: #334155;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+    --border-hover: #cbd5e1;
+    --surface-light: #f8fafc;
+    --accent-emerald: #10b981;
+    --accent-amber: #f59e0b;
+    --accent-violet: #8b5cf6;
+    --accent-cyan: #06b6d4;
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-pill: 50px;
+    --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
+    --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+    --shadow-lg: 0 20px 40px -10px rgba(15, 23, 42, 0.10);
+    --shadow-primary: 0 12px 30px rgba(13, 110, 253, 0.28);
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--surface-light);
+    color: var(--text-body);
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Smooth Scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* =====================================================
+     HERO SECTION
+  ===================================================== */
+  .services-hero {
+    position: relative;
+    padding: clamp(70px, 12vh, 130px) 0 clamp(60px, 10vh, 100px);
+    background: radial-gradient(circle at 80% 20%, rgba(37, 99, 235, 0.25) 0%, transparent 50%),
+                radial-gradient(circle at 10% 80%, rgba(16, 185, 129, 0.15) 0%, transparent 45%),
+                linear-gradient(135deg, #0b1120 0%, #0f172a 60%, #1e3a8a 100%);
+    color: #ffffff;
+    overflow: hidden;
+  }
+
+  /* Subtle geometric grid background overlay */
+  .services-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+    background-size: 32px 32px;
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  .hero-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 18px;
+    border-radius: var(--radius-pill);
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.20);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #93c5fd;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .hero-badge-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #38bdf8;
+    box-shadow: 0 0 10px #38bdf8;
+    animation: pulseDot 2s infinite;
+  }
+
+  @keyframes pulseDot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.3); }
+  }
+
+  .services-hero h1 {
+    font-size: clamp(2.3rem, 5.5vw, 4rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -1.2px;
+    margin-bottom: 20px;
+    color: #ffffff;
+  }
+
+  .services-hero h1 .text-gradient {
+    background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #38bdf8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .services-hero .hero-subtext {
+    font-size: clamp(1rem, 2.2vw, 1.25rem);
+    line-height: 1.7;
+    color: #cbd5e1;
+    max-width: 720px;
+    margin: 0 auto 32px auto;
+  }
+
+  .hero-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 48px;
+  }
+
+  .btn-hero-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 14px 28px;
+    border-radius: var(--radius-md);
+    border: none;
+    box-shadow: var(--shadow-primary);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    min-height: 52px;
+  }
+
+  .btn-hero-primary:hover {
+    background: linear-gradient(135deg, #1d4ed8, #1e40af);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 16px 35px rgba(13, 110, 253, 0.4);
+  }
+
+  .btn-hero-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 14px 26px;
+    border-radius: var(--radius-md);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    min-height: 52px;
+  }
+
+  .btn-hero-secondary:hover {
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.45);
+    color: #ffffff;
+    transform: translateY(-2px);
+  }
+
+  /* Highlights Bar Below Hero */
+  .hero-trust-bar {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(16px);
+    padding: 20px 28px;
+    max-width: 980px;
+    margin: 0 auto;
+  }
+
+  .trust-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 6px 12px;
+  }
+
+  .trust-item i {
+    font-size: 1.4rem;
+    color: #60a5fa;
+  }
+
+  .trust-item span {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #f1f5f9;
+  }
+
+  /* =====================================================
+     RATE ESTIMATOR CALCULATOR WIDGET
+  ===================================================== */
+  .estimator-section {
+    margin-top: -45px;
+    position: relative;
+    z-index: 10;
+    padding-bottom: 50px;
+  }
+
+  .estimator-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 20px 45px -12px rgba(15, 23, 42, 0.12);
+    padding: clamp(24px, 4vw, 36px);
+    transition: all 0.3s ease;
+  }
+
+  .estimator-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .estimator-header h3 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--text-heading);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .estimator-header h3 i {
+    color: var(--primary);
+  }
+
+  .estimator-badge {
+    background: #ecfdf5;
+    color: #059669;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: var(--radius-pill);
+    border: 1px solid #a7f3d0;
+  }
+
+  .calc-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .calc-input, .calc-select {
+    width: 100%;
+    height: 48px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border-color);
+    padding: 10px 14px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-heading);
+    background-color: #f8fafc;
+    transition: all 0.2s ease;
+  }
+
+  .calc-input:focus, .calc-select:focus {
+    outline: none;
+    border-color: var(--primary);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+  }
+
+  .calc-result-box {
+    background: linear-gradient(135deg, #0f172a, #1e3a8a);
+    color: #ffffff;
+    border-radius: var(--radius-md);
+    padding: 24px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.2);
+  }
+
+  .calc-price-wrap {
+    text-align: center;
+    padding: 8px 0;
+  }
+
+  .calc-price-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #94a3b8;
+    font-weight: 600;
+  }
+
+  .calc-price-value {
+    font-size: 2.3rem;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.1;
+    margin: 6px 0;
+  }
+
+  .calc-eta-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-pill);
+    padding: 4px 14px;
+    font-size: 0.85rem;
+    color: #60a5fa;
+    font-weight: 600;
+  }
+
+  /* =====================================================
+     SERVICES CATALOG & FILTER TABS
+  ===================================================== */
+  .services-catalog {
+    padding: 70px 0 90px;
+  }
+
+  .section-intro {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 48px;
+    padding: 0 15px;
+  }
+
+  .section-badge {
+    display: inline-block;
+    color: var(--primary);
+    background: var(--primary-light);
+    border: 1px solid #bfdbfe;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    margin-bottom: 14px;
+  }
+
+  .section-title-large {
+    font-size: clamp(2rem, 4.2vw, 2.85rem);
+    font-weight: 800;
+    color: var(--text-heading);
+    letter-spacing: -0.8px;
+    line-height: 1.2;
+    margin-bottom: 14px;
+  }
+
+  .section-subtitle-text {
+    font-size: clamp(0.95rem, 2vw, 1.12rem);
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+
+  /* Filter Navigation Buttons */
+  .service-filter-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+
+  .filter-btn {
+    background: #ffffff;
+    border: 1.5px solid var(--border-color);
+    color: var(--text-body);
+    font-size: 0.92rem;
+    font-weight: 700;
+    padding: 9px 20px;
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: #f8fafc;
+  }
+
+  .filter-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #ffffff;
+    box-shadow: 0 6px 18px rgba(13, 110, 253, 0.25);
+  }
+
+  /* Service Card */
+  .service-box {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    padding: 28px 24px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .service-box::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), #38bdf8);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .service-box:hover {
+    transform: translateY(-7px);
+    border-color: #cbd5e1;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .service-box:hover::before {
+    opacity: 1;
+  }
+
+  .service-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .service-icon-box {
+    width: 62px;
+    height: 62px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.65rem;
+    transition: all 0.3s ease;
+  }
+
+  .icon-blue { background: rgba(13, 110, 253, 0.10); color: #0d6efd; }
+  .icon-emerald { background: rgba(16, 185, 129, 0.12); color: #10b981; }
+  .icon-amber { background: rgba(245, 158, 11, 0.12); color: #d97706; }
+  .icon-violet { background: rgba(139, 92, 246, 0.12); color: #8b5cf6; }
+  .icon-cyan { background: rgba(6, 182, 212, 0.12); color: #0891b2; }
+  .icon-rose { background: rgba(244, 63, 94, 0.12); color: #e11d48; }
+
+  .service-box:hover .service-icon-box {
+    transform: scale(1.08);
+  }
+
+  .service-pill-tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    background: #f1f5f9;
+    color: var(--text-muted);
+  }
+
+  .service-pill-tag.badge-highlight {
+    background: #eff6ff;
+    color: var(--primary);
+    border: 1px solid #bfdbfe;
+  }
+
+  .service-box h3 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-heading);
+    margin-bottom: 10px;
+    line-height: 1.35;
+  }
+
+  .service-box p.service-desc {
+    color: var(--text-muted);
+    font-size: 0.925rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  /* Feature Checklist */
+  .service-features-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px 0;
+  }
+
+  .service-features-list li {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-body);
+    margin-bottom: 9px;
+  }
+
+  .service-features-list li i {
+    color: var(--accent-emerald);
+    font-size: 0.95rem;
+    flex-shrink: 0;
+  }
+
+  /* Card Bottom Price & Action */
+  .service-footer-action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 16px;
+    border-top: 1px solid #f1f5f9;
+    margin-top: auto;
+  }
+
+  .price-indicator {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .price-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .price-amount {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--text-heading);
+  }
+
+  .btn-service-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--primary-light);
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 0.88rem;
+    padding: 9px 16px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    transition: all 0.25s ease;
+  }
+
+  .btn-service-action:hover {
+    background: var(--primary);
+    color: #ffffff;
+    transform: translateX(2px);
+  }
+
+  /* =====================================================
+     HOW IT WORKS (4-STEP JOURNEY)
+  ===================================================== */
+  .journey-section {
+    padding: 80px 0;
+    background: #ffffff;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .step-card {
+    position: relative;
+    padding: 30px 20px;
+    border-radius: var(--radius-md);
+    background: var(--surface-light);
+    border: 1px solid var(--border-color);
+    text-align: center;
+    height: 100%;
+    transition: all 0.3s ease;
+  }
+
+  .step-card:hover {
+    background: #ffffff;
+    box-shadow: var(--shadow-md);
+    transform: translateY(-4px);
+    border-color: #cbd5e1;
+  }
+
+  .step-number-bubble {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), #1e3a8a);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 18px;
+    box-shadow: 0 6px 16px rgba(13, 110, 253, 0.3);
+  }
+
+  .step-card h4 {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--text-heading);
+    margin-bottom: 10px;
+  }
+
+  .step-card p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  /* =====================================================
+     SERVICE TIER COMPARISON TABLE
+  ===================================================== */
+  .comparison-section {
+    padding: 85px 0;
+    background: var(--surface-light);
+  }
+
+  .table-responsive-wrapper {
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+  }
+
+  .modern-comparison-table {
+    width: 100%;
+    margin-bottom: 0;
+    border-collapse: collapse;
+  }
+
+  .modern-comparison-table th {
+    padding: 20px 22px;
+    font-size: 0.95rem;
+    font-weight: 800;
+    background: #f8fafc;
+    border-bottom: 2px solid var(--border-color);
+    color: var(--text-heading);
+  }
+
+  .modern-comparison-table td {
+    padding: 18px 22px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--text-body);
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+  }
+
+  .modern-comparison-table tr:hover td {
+    background-color: #f8fafc;
+  }
+
+  .modern-comparison-table .highlight-col {
+    background-color: #f0f7ff;
+  }
+
+  .tier-badge-recommended {
+    background: var(--primary);
+    color: #ffffff;
+    font-size: 0.72rem;
+    padding: 3px 8px;
+    border-radius: var(--radius-pill);
+    margin-left: 6px;
+    font-weight: 700;
+  }
+
+  .table-check {
+    color: var(--accent-emerald);
+    font-size: 1.1rem;
+  }
+
+  .table-cross {
+    color: #94a3b8;
+    font-size: 0.95rem;
+  }
+
+  /* =====================================================
+     STATISTICS & TRUST METRICS
+  ===================================================== */
+  .stats-section {
+    padding: 80px 0;
+    background: linear-gradient(135deg, #0b1120 0%, #0f172a 100%);
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-block {
+    text-align: center;
+    padding: 24px 18px;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.3s ease;
+  }
+
+  .stat-block:hover {
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .stat-number {
+    font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-size: 0.95rem;
+    color: #94a3b8;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  /* Trust Badges Strip */
+  .trust-cert-strip {
+    margin-top: 50px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .cert-pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    color: #cbd5e1;
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+
+  .cert-pill i {
+    font-size: 1.25rem;
+    color: #38bdf8;
+  }
+
+  /* =====================================================
+     FAQ SECTION
+  ===================================================== */
+  .faq-section {
+    padding: 80px 0;
+    background: #ffffff;
+  }
+
+  .faq-accordion .accordion-item {
+    border: 1.5px solid var(--border-color);
+    border-radius: var(--radius-md) !important;
+    margin-bottom: 14px;
+    overflow: hidden;
+    transition: all 0.25s ease;
+  }
+
+  .faq-accordion .accordion-item:hover {
+    border-color: #cbd5e1;
+  }
+
+  .faq-accordion .accordion-button {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    padding: 18px 22px;
+    background: #ffffff;
+    box-shadow: none !important;
+  }
+
+  .faq-accordion .accordion-button:not(.collapsed) {
+    background: #f8fafc;
+    color: var(--primary);
+  }
+
+  .faq-accordion .accordion-body {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+    padding: 16px 22px 22px;
+    background: #ffffff;
+  }
+
+  /* =====================================================
+     HIGH-IMPACT CTA BANNER
+  ===================================================== */
+  .cta-section {
+    padding: 0 0 90px;
+    background: #ffffff;
+  }
+
+  .cta-banner {
+    background: linear-gradient(135deg, #64676e 0%, #606e83 100%);
+    border-radius: var(--radius-lg);
+    padding: clamp(36px, 6vw, 64px);
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 45px rgba(13, 110, 253, 0.25);
+  }
+
+  .cta-banner::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 450px;
+    height: 450px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .cta-banner h2 {
+    font-size: clamp(1.8rem, 4vw, 2.7rem);
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 14px;
+  }
+
+  .cta-banner p {
+    font-size: clamp(0.95rem, 2vw, 1.15rem);
+    color: #dbeafe;
+    max-width: 620px;
+    line-height: 1.65;
+    margin-bottom: 28px;
+  }
+
+  .cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .btn-cta-white {
+    background: #ffffff;
+    color: #0f172a;
+    font-weight: 700;
+    padding: 14px 28px;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.25s ease;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .btn-cta-white:hover {
+    background: #f8fafc;
+    color: var(--primary);
+    transform: translateY(-2px);
+  }
+
+  .btn-cta-outline {
+    background: transparent;
+    color: #ffffff;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    font-weight: 700;
+    padding: 13px 26px;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.25s ease;
+  }
+
+  .btn-cta-outline:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: #ffffff;
+    color: #ffffff;
+  }
+
+  /* =====================================================
+     SERVICES FOOTER
+  ===================================================== */
+  .services-footer {
+    padding: 70px 0 25px;
+    background: #090e17;
+    color: #94a3b8;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .services-footer h4,
+  .services-footer h5 {
+    color: #ffffff;
+    font-weight: 700;
+    margin-bottom: 18px;
+    font-size: 1.1rem;
+  }
+
+  .services-footer ul {
+    padding: 0;
+    list-style: none;
+    margin: 0;
+  }
+
+  .services-footer ul li {
+    margin-bottom: 10px;
+  }
+
+  .services-footer a {
+    color: #94a3b8;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    font-size: 0.92rem;
+  }
+
+  .services-footer a:hover {
+    color: #60a5fa;
+  }
+
+  .footer-contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 0.92rem;
+  }
+
+  .footer-contact-item i {
+    color: #60a5fa;
+    width: 16px;
+  }
+
+  .social-icons {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .social-icons a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    font-size: 1rem;
+    transition: all 0.25s ease;
+  }
+
+  .social-icons a:hover {
+    background: var(--primary);
+    color: #ffffff;
+    transform: translateY(-2px);
+  }
+
+  /* =====================================================
+     MOBILE RESPONSIVENESS
+  ===================================================== */
+  @media (max-width: 991px) {
+    .estimator-section {
+      margin-top: -20px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .services-hero {
+      text-align: center;
+      padding-top: 60px;
+      padding-bottom: 60px;
+    }
+
+    .hero-actions {
+      flex-direction: column;
+    }
+
+    .btn-hero-primary, .btn-hero-secondary {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .hero-trust-bar {
+      padding: 16px;
+    }
+
+    .trust-item {
+      justify-content: flex-start;
+    }
+
+    .estimator-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .service-footer-action {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .btn-service-action {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .cta-buttons {
+      flex-direction: column;
+    }
+
+    .btn-cta-white, .btn-cta-outline {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .services-footer {
+      text-align: center;
+    }
+
+    .footer-contact-item {
+      justify-content: center;
+    }
+
+    .social-icons {
+      justify-content: center;
+    }
+  }
+</style>
+
+<!-- =====================================================
+     1. HERO SECTION
+===================================================== -->
+<section class="services-hero">
+  <div class="container position-relative" style="z-index: 2;">
+    <div class="row justify-content-center text-center">
+      <div class="col-12 col-xl-10">
+        <div class="hero-badge-pill">
+          <span class="hero-badge-dot"></span>
+          <span>Next-Generation Logistics Network build with me</span>
+        </div>
+
+        <h1>
+          Smart Logistics Solutions Engineered for <br class="d-none d-md-block" />
+          <span class="text-gradient">Speed, Scale & Reliability</span>
+        </h1>
+
+        <p class="hero-subtext">
+          Ship personal parcels, e-commerce orders, and enterprise freight across 500+ Indian cities. 
+          Enjoy 2-hour doorstep pickups, live GPS milestone tracking, and guaranteed on-time delivery.
+        </p>
+
+        <div class="hero-actions">
+          <a href="{% url 'book_parcel' %}" class="btn-hero-primary">
+            <i class="fa-solid fa-box-archive"></i>
+            <span>Book a Parcel</span>
+          </a>
+          <a href="#rate-calculator" class="btn-hero-secondary">
+            <i class="fa-solid fa-calculator"></i>
+            <span>Estimate Shipping Cost</span>
+          </a>
+          <a href="{% url 'track_parcel' %}" class="btn-hero-secondary">
+            <i class="fa-solid fa-location-dot"></i>
+            <span>Track Order</span>
+          </a>
+        </div>
+
+        <!-- Trust Highlights Bar -->
+        <div class="hero-trust-bar">
+          <div class="row g-2 g-md-0 text-start">
+            <div class="col-6 col-md-3">
+              <div class="trust-item">
+                <i class="fa-solid fa-truck-ramp-box"></i>
+                <span>2-Hour Doorstep Pickup</span>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="trust-item">
+                <i class="fa-solid fa-satellite-dish"></i>
+                <span>Live GPS Tracking</span>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="trust-item">
+                <i class="fa-solid fa-shield-check"></i>
+                <span>100% Insured Goods</span>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="trust-item">
+                <i class="fa-solid fa-hand-holding-dollar"></i>
+                <span>Fast 48h COD Remittance</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     2. INTERACTIVE SHIPPING RATE ESTIMATOR
+===================================================== -->
+<section class="estimator-section" id="rate-calculator">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-xl-10">
+        <div class="estimator-card">
+          <div class="estimator-header">
+            <h3>
+              <i class="fa-solid fa-calculator"></i>
+              Instant Shipping Rate & Delivery Estimator
+            </h3>
+            <span class="estimator-badge">
+              <i class="fa-solid fa-bolt me-1"></i> Live Rates 2026
+            </span>
+          </div>
+
+          <div class="row g-3 g-lg-4 align-items-stretch">
+            <div class="col-12 col-md-6 col-lg-3">
+              <label class="calc-label" for="calc-origin">Origin City</label>
+              <select class="calc-select" id="calc-origin" onchange="calculateRate()">
+                <option value="Ahmedabad" selected>Ahmedabad (HQ)</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Delhi">Delhi NCR</option>
+                <option value="Bengaluru">Bengaluru</option>
+                <option value="Hyderabad">Hyderabad</option>
+                <option value="Chennai">Chennai</option>
+                <option value="Kolkata">Kolkata</option>
+                <option value="Pune">Pune</option>
+              </select>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+              <label class="calc-label" for="calc-dest">Destination City</label>
+              <select class="calc-select" id="calc-dest" onchange="calculateRate()">
+                <option value="Mumbai" selected>Mumbai</option>
+                <option value="Ahmedabad">Ahmedabad</option>
+                <option value="Delhi">Delhi NCR</option>
+                <option value="Bengaluru">Bengaluru</option>
+                <option value="Hyderabad">Hyderabad</option>
+                <option value="Chennai">Chennai</option>
+                <option value="Kolkata">Kolkata</option>
+                <option value="Pune">Pune</option>
+              </select>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+              <label class="calc-label" for="calc-weight">Weight (KG)</label>
+              <input type="number" class="calc-input" id="calc-weight" value="1.5" min="0.5" max="100" step="0.5" oninput="calculateRate()" />
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+              <label class="calc-label" for="calc-speed">Delivery Mode</label>
+              <select class="calc-select" id="calc-speed" onchange="calculateRate()">
+                <option value="standard" selected>Standard Ground (2-3 Days)</option>
+                <option value="express">Express Air (24-48 Hours)</option>
+                <option value="hyperlocal">Same-Day Priority (Within 12h)</option>
+              </select>
+            </div>
+
+            <!-- Output Box -->
+            <div class="col-12 mt-4">
+              <div class="calc-result-box">
+                <div class="row align-items-center g-3">
+                  <div class="col-12 col-md-4 text-center text-md-start">
+                    <span class="calc-price-label">Estimated Delivery Time</span>
+                    <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 mt-2">
+                      <span class="calc-eta-badge" id="calc-eta">
+                        <i class="fa-solid fa-clock"></i> 24 - 48 Hours
+                      </span>
+                    </div>
+                    <small class="text-white-50 d-block mt-2">Includes Doorstep Pickup & Insurance</small>
+                  </div>
+
+                  <div class="col-12 col-md-4 text-center">
+                    <div class="calc-price-wrap">
+                      <span class="calc-price-label">Estimated Total Freight</span>
+                      <div class="calc-price-value" id="calc-cost">₹120</div>
+                      <small class="text-white-50">Inclusive of GST & Fuel Surcharge</small>
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-md-4 text-center text-md-end">
+                    <a href="{% url 'book_parcel' %}" class="btn btn-light fw-bold px-4 py-3 rounded-3 shadow-sm w-100 w-md-auto">
+                      <i class="fa-solid fa-arrow-right me-2"></i> Book This Rate
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     3. SERVICES CATALOG & FILTERABLE CARDS
+===================================================== -->
+<section class="services-catalog">
+  <div class="container">
+    <div class="section-intro">
+      <span class="section-badge">Comprehensive Logistics</span>
+      <h2 class="section-title-large">End-to-End Delivery Services for India</h2>
+      <p class="section-subtitle-text">
+        Whether you are sending a critical document, fulfilling 10,000 monthly e-commerce orders, or transporting industrial cargo, ParcelPath has the right solution.
+      </p>
+    </div>
+
+    <!-- Category Filter Tabs -->
+    <div class="service-filter-nav">
+      <button type="button" class="filter-btn active" onclick="filterServices('all', this)">
+        <i class="fa-solid fa-border-all"></i> All Services
+      </button>
+      <button type="button" class="filter-btn" onclick="filterServices('express', this)">
+        <i class="fa-solid fa-bolt"></i> Express & Courier
+      </button>
+      <button type="button" class="filter-btn" onclick="filterServices('freight', this)">
+        <i class="fa-solid fa-truck"></i> Freight & Cargo
+      </button>
+      <button type="button" class="filter-btn" onclick="filterServices('ecommerce', this)">
+        <i class="fa-solid fa-shop"></i> E-Commerce & COD
+      </button>
+      <button type="button" class="filter-btn" onclick="filterServices('specialized', this)">
+        <i class="fa-solid fa-shield-halved"></i> Specialized & Cold
+      </button>
+    </div>
+
+    <!-- Service Grid -->
+    <div class="row g-4" id="servicesGrid">
+
+      <!-- CARD 1: Express Doorstep Courier -->
+      <div class="col-12 col-md-6 col-lg-4 service-item" data-category="express">
+        <div class="service-box">
+          <div>
+            <div class="service-top">
+              <div class="service-icon-box icon-blue">
+                <i class="fa-solid fa-truck-fast"></i>
+              </div>
+              <span class="service-pill-tag badge-highlight">Fastest</span>
+            </div>
+            <h3>Express Doorstep Courier</h3>
+            <p class="service-desc">
+              Rapid on-demand parcel pickup directly from your doorstep with next-day or 48-hour delivery across metro cities.
+            </p>
+            <ul class="service-features-list">
+              <li><i class="fa-solid fa-circle-check"></i> Pickup scheduled within 2 hours</li>
+              <li><i class="fa-solid fa-circle-check"></i> Instant digital barcode label generation</li>
+              <li><i class="fa-solid fa-circle-check"></i> Tamper-evident flyer packaging</li>
+            </ul>
+          </div>
+          <div class="service-footer-action">
+            <div class="price-indicator">
+              <span class="price-label">Starting From</span>
+              <span class="price-amount">₹49 <small class="text-muted fw-normal">/ 500g</small></span>
+            </div>
+            <a href="{% url 'book_parcel' %}" class="btn-service-action">
+              Book Now <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 2: Live Real-Time GPS Tracking -->
+      <div class="col-12 col-md-6 col-lg-4 service-item" data-category="express">
+        <div class="service-box">
+          <div>
+            <div class="service-top">
+              <div class="service-icon-box icon-cyan">
+                <i class="fa-solid fa-location-crosshairs"></i>
+              </div>
+              <span class="service-pill-tag">Smart Tech</span>
+            </div>
+            <h3>Real-Time GPS Tracking</h3>
+            <p class="service-desc">
+              State-of-the-art telemetry tracking. Know the exact location of your parcel from pickup, sorting hub, to final delivery.
+            </p>
+            <ul class="service-features-list">
+              <li><i class="fa-solid fa-circle-check"></i> Milestone scan logs with timestamps</li>
+              <li><i class="fa-solid fa-circle-check"></i> Automated WhatsApp and SMS alerts</li>
+              <li><i class="fa-solid fa-circle-check"></i> Interactive live route tracking map</li>
+            </ul>
+          </div>
+          <div class="service-footer-action">
+            <div class="price-indicator">
+              <span class="price-label">Standard Feature</span>
+              <span class="price-amount text-success">Included Free</span>
+            </div>
+            <a href="{% url 'track_parcel' %}" class="btn-service-action">
+              Track Order <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 3: Inter-City Road & Air Freight -->
+      <div class="col-12 col-md-6 col-lg-4 service-item" data-category="freight">
+        <div class="service-box">
+          <div>
+            <div class="service-top">
+              <div class="service-icon-box icon-violet">
+                <i class="fa-solid fa-plane-departure"></i>
+              </div>
+              <span class="service-pill-tag badge-highlight">B2B Heavy</span>
+            </div>
+            <h3>Air & Road Cargo Freight</h3>
+            <p class="service-desc">
+              Engineered for bulk commercial consignments, palletized goods, full-truckload (FTL), and partial-truckload (PTL) transit.
+            </p>
+            <ul class="service-features-list">
+              <li><i class="fa-solid fa-circle-check"></i> Multi-modal road and air transport</li>
+              <li><i class="fa-solid fa-circle-check"></i> Heavy machinery & commercial crates</li>
+              <li><i class="fa-solid fa-circle-check"></i> Complete GST e-Way bill compliance</li>
+            </ul>
+          </div>
+          <div class="service-footer-action">
+            <div class="price-indicator">
+              <span class="price-label">B2B Freight</span>
+              <span class="price-amount">Custom Quote</span>
+            </div>
+            <a href="{% url 'contact' %}" class="btn-service-action">
+              Get Quote <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 4: E-Commerce Fulfillment & COD -->
+      <div class="col-12 col-md-6 col-lg-4 service-item" data-category="ecommerce">
+        <div class="service-box">
+          <div>
+            <div class="service-top">
+              <div class="service-icon-box icon-emerald">
+                <i class="fa-solid fa-store"></i>
+              </div>
+              <span class="service-pill-tag badge-highlight">Top Rated</span>
+            </div>
+            <h3>E-Commerce & COD Remittance</h3>
+            <p class="service-desc">
+              Complete logistics engine for D2C brands and marketplace sellers with guaranteed 48-hour Cash on Delivery remittance.
+            </p>
+            <ul class="service-features-list">
+              <li><i class="fa-solid fa-circle-check"></i> Rapid 2-day COD bank transfer</li>
+              <li><i class="fa-solid fa-circle-check"></i> Non-Delivery Report (NDR) automation</li>
+              <li><i class="fa-solid fa-circle-check"></i> Bulk shipping API & label printing</li>
+            </ul>
+          </div>
+          <div class="service-footer-action">
+            <div class="price-indicator">
+              <span class="price-label">Starting From</span>
+              <span class="price-amount">₹39 <small class="text-muted fw-normal">/ order</small></span>
+            </div>
+            <a href="{% url 'book_parcel' %}" class="btn-service-action">
+              Start Shipping <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 5: Fragile & High-Value Transit -->
+      <div class="col-12 col-md-6 col-lg-4 service-item" data-category="specialized">
+        <div class="service-box">
+          <div>
+            <div class="service-top">
+              <div class="service-icon-box icon-amber">
+                <i class="fa-solid fa-shield-halved"></i>
+              </div>
+              <span class="service-pill-tag">100% Insured</span>
+            </div>
+            <h3>Fragile & High-Value Transit</h3>
+            <p class="service-desc">
+              White-glove priority handling for luxury items, consumer electronics, glassware, and precision industrial instruments.
+            </p>
+            <ul class="service-features-list">
+              <li><i class="fa-solid fa-circle-check"></i> Multi-layer reinforced packaging</li>
+              <li><i class="fa-solid fa-circle-check"></i> Transit insurance covering up to ₹5,00,000</li>
+              <li><i class="fa-solid fa-circle-check"></i> Dedicated handling supervisors</li>
+            </ul>
+          </div>
+          <div class="service-footer-action">
+            <div class="price-indicator">
+              <span class="price-label">Security Tier</span>
+              <span class="price-amount">Zero-Risk</span>
+            </div>
+            <a href="{% url 'book_parcel' %}" class="btn-service-action">
+              Ship Secure <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 6: Warehousing & Micro-Fulfillment -->
+      <div class="col-12 col-md-6 col-lg-4 service-item" data-category="ecommerce">
+        <div class="service-box">
+          <div>
+            <div class="service-top">
+              <div class="service-icon-box icon-blue">
+                <i class="fa-solid fa-warehouse"></i>
+              </div>
+              <span class="service-pill-tag">Scalable</span>
+            </div>
+            <h3>Warehousing & Micro-Hubs</h3>
+            <p class="service-desc">
+              Distribute your inventory across strategic regional fulfillment centers to offer same-day dispatch and reduce shipping zones.
+            </p>
+            <ul class="service-features-list">
+              <li><i class="fa-solid fa-circle-check"></i> Barcode-scanned SKU inventory system</li>
+              <li><i class="fa-solid fa-circle-check"></i> Automated pick, pack & label dispatch</li>
+              <li><i class="fa-solid fa-circle-check"></i> Zero fixed capital warehouse leases</li>
+            </ul>
+          </div>
+          <div class="service-footer-action">
+            <div class="price-indicator">
+              <span class="price-label">Storage Plans</span>
+              <span class="price-amount">Flexible</span>
+            </div>
+            <a href="{% url 'contact' %}" class="btn-service-action">
+              Inquire Hubs <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 7: Reverse Logistics & Returns -->
+      <div class="col-12 col-md-6 col-lg-4 service-item" data-category="ecommerce">
+        <div class="service-box">
+          <div>
+            <div class="service-top">
+              <div class="service-icon-box icon-rose">
+                <i class="fa-solid fa-arrow-rotate-left"></i>
+              </div>
+              <span class="service-pill-tag">Hassle-Free</span>
+            </div>
+            <h3>Reverse Logistics & Returns</h3>
+            <p class="service-desc">
+              Minimize return-to-origin (RTO) friction with doorstep verification, immediate customer replacements, and fast transit back to hub.
+            </p>
+            <ul class="service-features-list">
+              <li><i class="fa-solid fa-circle-check"></i> Physical quality check at doorstep</li>
+              <li><i class="fa-solid fa-circle-check"></i> Real-time return barcode syncing</li>
+              <li><i class="fa-solid fa-circle-check"></i> Instant exchange shipment dispatch</li>
+            </ul>
+          </div>
+          <div class="service-footer-action">
+            <div class="price-indicator">
+              <span class="price-label">RTO Reduction</span>
+              <span class="price-amount">Up to 40%</span>
+            </div>
+            <a href="{% url 'contact' %}" class="btn-service-action">
+              Learn More <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 8: Cold Chain & Pharma Transit -->
+      <div class="col-12 col-md-6 col-lg-4 service-item" data-category="specialized">
+        <div class="service-box">
+          <div>
+            <div class="service-top">
+              <div class="service-icon-box icon-cyan">
+                <i class="fa-solid fa-snowflake"></i>
+              </div>
+              <span class="service-pill-tag">2°C - 8°C Monitored</span>
+            </div>
+            <h3>Cold Chain & Healthcare Transit</h3>
+            <p class="service-desc">
+              Compliant temperature-controlled shipping for pharmaceuticals, biological specimens, diagnostic kits, and perishables.
+            </p>
+            <ul class="service-features-list">
+              <li><i class="fa-solid fa-circle-check"></i> Continuous IoT temperature data logging</li>
+              <li><i class="fa-solid fa-circle-check"></i> Insulated shippers & eutectic gel packs</li>
+              <li><i class="fa-solid fa-circle-check"></i> Priority route dispatch with zero tarmac delay</li>
+            </ul>
+          </div>
+          <div class="service-footer-action">
+            <div class="price-indicator">
+              <span class="price-label">Compliance</span>
+              <span class="price-amount">Medical Grade</span>
+            </div>
+            <a href="{% url 'contact' %}" class="btn-service-action">
+              Contact Team <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 9: Hyperlocal Same-Day City Drop -->
+      <div class="col-12 col-md-6 col-lg-4 service-item" data-category="express">
+        <div class="service-box">
+          <div>
+            <div class="service-top">
+              <div class="service-icon-box icon-emerald">
+                <i class="fa-solid fa-motorcycle"></i>
+              </div>
+              <span class="service-pill-tag badge-highlight">Under 4 Hours</span>
+            </div>
+            <h3>Hyperlocal Same-Day Delivery</h3>
+            <p class="service-desc">
+              Intra-city express courier service powered by our dedicated two-wheeler fleet for urgent parcels, food, and documents.
+            </p>
+            <ul class="service-features-list">
+              <li><i class="fa-solid fa-circle-check"></i> Direct point-to-point transit</li>
+              <li><i class="fa-solid fa-circle-check"></i> Live rider geolocation on map</li>
+              <li><i class="fa-solid fa-circle-check"></i> Contactless OTP verification</li>
+            </ul>
+          </div>
+          <div class="service-footer-action">
+            <div class="price-indicator">
+              <span class="price-label">Intra-City Rate</span>
+              <span class="price-amount">₹65 <small class="text-muted fw-normal">base</small></span>
+            </div>
+            <a href="{% url 'book_parcel' %}" class="btn-service-action">
+              Book Rider <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     4. HOW IT WORKS (THE 4-STEP DELIVERY JOURNEY)
+===================================================== -->
+<section class="journey-section">
+  <div class="container">
+    <div class="section-intro">
+      <span class="section-badge">Seamless Workflow</span>
+      <h2 class="section-title-large">How Your Parcel Moves with ParcelPath</h2>
+      <p class="section-subtitle-text">
+        From the moment you create a shipment to verified handover at the recipient's doorstep, every step is powered by smart automation.
+      </p>
+    </div>
+
+    <div class="row g-4">
+      <!-- Step 1 -->
+      <div class="col-12 col-md-6 col-lg-3">
+        <div class="step-card">
+          <div class="step-number-bubble">01</div>
+          <h4>Book & Label</h4>
+          <p>Fill sender and receiver details online. Generate instant shipping labels with unique tracking QR codes.</p>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="col-12 col-md-6 col-lg-3">
+        <div class="step-card">
+          <div class="step-number-bubble">02</div>
+          <h4>Doorstep Pickup</h4>
+          <p>Our verified field executive arrives, weighs your package, scans the barcode, and secures it in tamper-proof bags.</p>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="col-12 col-md-6 col-lg-3">
+        <div class="step-card">
+          <div class="step-number-bubble">03</div>
+          <h4>High-Speed Transit</h4>
+          <p>Packages are routed through automated sortation hubs and line-haul routes with live GPS telemetry.</p>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="col-12 col-md-6 col-lg-3">
+        <div class="step-card">
+          <div class="step-number-bubble">04</div>
+          <h4>OTP Delivery</h4>
+          <p>Recipient receives a secure one-time passcode. Safe contactless handover with digital proof of delivery.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     5. SERVICE TIER COMPARISON MATRIX
+===================================================== -->
+<section class="comparison-section">
+  <div class="container">
+    <div class="section-intro">
+      <span class="section-badge">Plan Matrix</span>
+      <h2 class="section-title-large">Compare Our Delivery Tiers</h2>
+      <p class="section-subtitle-text">
+        Find the perfect match between budget, transit speed, and capacity for your shipping needs.
+      </p>
+    </div>
+
+    <div class="table-responsive-wrapper">
+      <div class="table-responsive">
+        <table class="modern-comparison-table">
+          <thead>
+            <tr>
+              <th style="width: 28%;">Features & Capabilities</th>
+              <th style="width: 24%;">Standard Ground</th>
+              <th style="width: 24%;" class="highlight-col">
+                Express Air <span class="tier-badge-recommended">Recommended</span>
+              </th>
+              <th style="width: 24%;">B2B Cargo Freight</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Typical Transit Speed</strong></td>
+              <td>2 - 4 Business Days</td>
+              <td class="highlight-col"><strong class="text-primary">24 - 48 Hours</strong></td>
+              <td>3 - 5 Business Days</td>
+            </tr>
+            <tr>
+              <td><strong>Doorstep Pickup Included</strong></td>
+              <td><i class="fa-solid fa-circle-check table-check"></i> Yes (Same Day)</td>
+              <td class="highlight-col"><i class="fa-solid fa-circle-check table-check"></i> Yes (Within 2h)</td>
+              <td><i class="fa-solid fa-circle-check table-check"></i> Yes (Scheduled Fleet)</td>
+            </tr>
+            <tr>
+              <td><strong>Real-Time GPS Tracking</strong></td>
+              <td><i class="fa-solid fa-circle-check table-check"></i> Milestone Updates</td>
+              <td class="highlight-col"><i class="fa-solid fa-circle-check table-check"></i> Live Telemetry</td>
+              <td><i class="fa-solid fa-circle-check table-check"></i> Line-haul Truck Telemetry</td>
+            </tr>
+            <tr>
+              <td><strong>Weight Range</strong></td>
+              <td>0.5 kg – 25 kg</td>
+              <td class="highlight-col">0.5 kg – 15 kg</td>
+              <td>50 kg – 10,000+ kg</td>
+            </tr>
+            <tr>
+              <td><strong>Transit Insurance Coverage</strong></td>
+              <td>Up to ₹5,000</td>
+              <td class="highlight-col">Up to ₹50,000</td>
+              <td>Up to ₹10,00,000</td>
+            </tr>
+            <tr>
+              <td><strong>Cash on Delivery (COD)</strong></td>
+              <td><i class="fa-solid fa-circle-check table-check"></i> 5-Day Remittance</td>
+              <td class="highlight-col"><i class="fa-solid fa-circle-check table-check"></i> 48-Hour Remittance</td>
+              <td><i class="fa-solid fa-circle-xmark table-cross"></i> Credit / Invoicing</td>
+            </tr>
+            <tr>
+              <td><strong>Dedicated Account Manager</strong></td>
+              <td><i class="fa-solid fa-circle-xmark table-cross"></i> Email / Chat Support</td>
+              <td class="highlight-col"><i class="fa-solid fa-circle-check table-check"></i> Priority Desk</td>
+              <td><i class="fa-solid fa-circle-check table-check"></i> 24/7 Key Account Mgr</td>
+            </tr>
+            <tr>
+              <td><strong>Action</strong></td>
+              <td>
+                <a href="{% url 'book_parcel' %}" class="btn btn-outline-primary btn-sm fw-bold">Select Ground</a>
+              </td>
+              <td class="highlight-col">
+                <a href="{% url 'book_parcel' %}" class="btn btn-primary btn-sm fw-bold">Select Express</a>
+              </td>
+              <td>
+                <a href="{% url 'contact' %}" class="btn btn-outline-dark btn-sm fw-bold">Contact Sales</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     6. PERFORMANCE METRICS & TRUST BADGES
+===================================================== -->
+<section class="stats-section">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-6 col-lg-3">
+        <div class="stat-block">
+          <div class="stat-number text-primary">150K+</div>
+          <p class="stat-label">Parcels Safely Delivered</p>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="stat-block">
+          <div class="stat-number text-success">500+</div>
+          <p class="stat-label">Cities Connected Across India</p>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="stat-block">
+          <div class="stat-number text-warning">99.4%</div>
+          <p class="stat-label">On-Time SLA Delivery</p>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="stat-block">
+          <div class="stat-number text-info">4.9 ★</div>
+          <p class="stat-label">Customer Satisfaction Rating</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trust Certifications -->
+    <div class="trust-cert-strip">
+      <div class="row g-3 justify-content-center text-center">
+        <div class="col-12 col-md-3">
+          <div class="cert-pill">
+            <i class="fa-solid fa-certificate"></i>
+            <span>ISO 9001:2015 Certified Logistics</span>
+          </div>
+        </div>
+        <div class="col-12 col-md-3">
+          <div class="cert-pill">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>256-Bit SSL Encrypted Booking</span>
+          </div>
+        </div>
+        <div class="col-12 col-md-3">
+          <div class="cert-pill">
+            <i class="fa-solid fa-file-invoice-dollar"></i>
+            <span>GST & e-Way Bill Compliant</span>
+          </div>
+        </div>
+        <div class="col-12 col-md-3">
+          <div class="cert-pill">
+            <i class="fa-solid fa-headset"></i>
+            <span>24/7 Priority Logistics Helpline</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     7. FREQUENTLY ASKED QUESTIONS (FAQ)
+===================================================== -->
+<section class="faq-section">
+  <div class="container">
+    <div class="section-intro">
+      <span class="section-badge">Got Questions?</span>
+      <h2 class="section-title-large">Frequently Asked Questions</h2>
+      <p class="section-subtitle-text">
+        Here are common answers about booking pickups, delivery timeframes, tracking, and enterprise freight.
+      </p>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-9">
+        <div class="accordion faq-accordion" id="servicesFaqAccordion">
+
+          <!-- FAQ 1 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                How does doorstep parcel pickup work?
+              </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#servicesFaqAccordion">
+              <div class="accordion-body">
+                Once you submit a booking through our <a href="{% url 'book_parcel' %}">Book Parcel</a> form, our system automatically assigns a pickup executive closest to your location. The executive arrives within your chosen 2-hour window, scans the digital label, seals the package, and immediately generates a live tracking ID.
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ 2 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                How are shipping rates calculated?
+              </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#servicesFaqAccordion">
+              <div class="accordion-body">
+                Rates depend on the actual weight or volumetric weight (whichever is higher), distance between origin and destination pincodes, and the selected delivery speed (Standard, Express Air, or Same-Day). You can use our <a href="#rate-calculator">interactive rate estimator above</a> to preview costs instantly before booking.
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ 3 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingThree">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                Are shipments insured against loss or transit damage?
+              </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#servicesFaqAccordion">
+              <div class="accordion-body">
+                Yes! Every standard parcel includes complimentary basic coverage up to ₹5,000. For high-value electronics, luxury items, or delicate freight, we offer comprehensive transit insurance covering full invoice value up to ₹5,00,000 with hassle-free claim settlement.
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ 4 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingFour">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                How does Cash on Delivery (COD) remittance work for e-commerce?
+              </button>
+            </h2>
+            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#servicesFaqAccordion">
+              <div class="accordion-body">
+                When our delivery rider collects cash from the recipient, the amount is reconciled immediately via digital handheld terminals. The funds are remitted directly to your verified bank account within 48 hours via automated NEFT/IMPS with full transaction statements.
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ 5 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingFive">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                What items are prohibited from shipping?
+              </button>
+            </h2>
+            <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#servicesFaqAccordion">
+              <div class="accordion-body">
+                Prohibited goods include hazardous chemicals, flammable liquids, explosives, narcotics, live animals, firearms, and currency cash notes. If you are unsure about a specific consignment, please contact our logistics compliance team before booking.
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     8. HIGH-IMPACT CALL-TO-ACTION (CTA) BANNER
+===================================================== -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-banner">
+      <div class="row align-items-center">
+        <div class="col-12 col-lg-8">
+          <h2>Ready to Ship with India's Smartest Courier Network?</h2>
+          <p>
+            Experience lightning-fast booking, guaranteed transit times, and live telemetry tracking. Join thousands of satisfied individuals and businesses shipping with ParcelPath today.
+          </p>
+          <div class="cta-buttons">
+            <a href="{% url 'book_parcel' %}" class="btn-cta-white">
+              <i class="fa-solid fa-box"></i> Book Your First Parcel
+            </a>
+            <a href="{% url 'contact' %}" class="btn-cta-outline">
+              <i class="fa-solid fa-envelope"></i> Talk to Enterprise Sales
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     9. MODERN REDESIGNED FOOTER
+===================================================== -->
+<footer class="services-footer">
+  <div class="container">
+    <div class="row g-4 mb-4">
+      <div class="col-12 col-md-6 col-lg-4">
+        <h4><i class="fa-solid fa-truck-fast text-primary me-2"></i>ParcelPath</h4>
+        <p class="pe-lg-4">
+          India's leading tech-driven logistics platform. Delivering packages, heavy cargo, and e-commerce shipments safely across 500+ Indian cities with real-time GPS tracking.
+        </p>
+        <div class="social-icons">
+          <a href="https://www.facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://x.com" target="_blank" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+          <a href="https://www.linkedin.com" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+
+      <div class="col-6 col-lg-2">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="{% url 'home' %}"><i class="fa-solid fa-angle-right me-1 text-primary"></i> Home</a></li>
+          <li><a href="{% url 'book_parcel' %}"><i class="fa-solid fa-angle-right me-1 text-primary"></i> Book Parcel</a></li>
+          <li><a href="{% url 'track_parcel' %}"><i class="fa-solid fa-angle-right me-1 text-primary"></i> Track Parcel</a></li>
+          <li><a href="{% url 'services' %}"><i class="fa-solid fa-angle-right me-1 text-primary"></i> Services</a></li>
+          <li><a href="{% url 'contact' %}"><i class="fa-solid fa-angle-right me-1 text-primary"></i> Contact Us</a></li>
+        </ul>
+      </div>
+
+      <div class="col-6 col-lg-3">
+        <h5>Key Services</h5>
+        <ul>
+          <li><a href="{% url 'book_parcel' %}">Express Doorstep Courier</a></li>
+          <li><a href="{% url 'track_parcel' %}">Real-Time Telemetry Tracking</a></li>
+          <li><a href="{% url 'contact' %}">Inter-City Air & Road Freight</a></li>
+          <li><a href="{% url 'book_parcel' %}">E-Commerce & 48h COD</a></li>
+          <li><a href="{% url 'contact' %}">Warehousing & Micro-Fulfillment</a></li>
+          <li><a href="{% url 'contact' %}">Cold Chain Pharma Delivery</a></li>
+        </ul>
+      </div>
+
+      <div class="col-12 col-md-6 col-lg-3">
+        <h5>Headquarters</h5>
+        <div class="footer-contact-item">
+          <i class="fa-solid fa-location-dot"></i>
+          <span>Ahmedabad Hub, Gujarat, India</span>
+        </div>
+        <div class="footer-contact-item">
+          <i class="fa-solid fa-phone"></i>
+          <span>+91 72039 28160</span>
+        </div>
+        <div class="footer-contact-item">
+          <i class="fa-solid fa-envelope"></i>
+          <span>rajeshlagdhir07@gmail.com</span>
+        </div>
+        <div class="footer-contact-item">
+          <i class="fa-solid fa-clock"></i>
+          <span>Support: Mon - Sun (24/7 SLA)</span>
+        </div>
+      </div>
+    </div>
+
+    <hr style="border-color: rgba(255, 255, 255, 0.1);" />
+
+    <div class="row align-items-center pt-2">
+      <div class="col-12 col-md-6 text-center text-md-start">
+        <p class="m-0 small">© 2026 ParcelPath Logistics India Pvt Ltd. All Rights Reserved.</p>
+      </div>
+      <div class="col-12 col-md-6 text-center text-md-end mt-2 mt-md-0">
+        <small class="text-muted">Fast • Reliable • Fully Insured Logistics</small>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- =====================================================
+     INTERACTIVE SCRIPT (CALCULATOR & CATEGORY FILTER)
+===================================================== -->
+<script>
+  // Dynamic Rate & Delivery Estimator
+  function calculateRate() {
+    const origin = document.getElementById('calc-origin').value;
+    const dest = document.getElementById('calc-dest').value;
+    const weight = parseFloat(document.getElementById('calc-weight').value) || 1;
+    const speed = document.getElementById('calc-speed').value;
+
+    const isIntraCity = (origin === dest);
+
+    let baseRate = 50;
+    let ratePerKg = 40;
+    let etaText = "2 - 3 Days";
+
+    if (isIntraCity) {
+      baseRate = 40;
+      ratePerKg = 25;
+      etaText = "Same Day (Within 6h)";
+      if (speed === 'hyperlocal') {
+        baseRate = 65;
+        etaText = "Under 3 Hours";
+      } else if (speed === 'express') {
+        baseRate = 55;
+        etaText = "Within 12 Hours";
+      }
+    } else {
+      if (speed === 'express') {
+        baseRate = 90;
+        ratePerKg = 60;
+        etaText = "24 - 48 Hours";
+      } else if (speed === 'hyperlocal') {
+        baseRate = 180;
+        ratePerKg = 80;
+        etaText = "Next-Day Priority Air";
+      } else {
+        baseRate = 60;
+        ratePerKg = 40;
+        etaText = "2 - 4 Business Days";
+      }
+    }
+
+    const totalCost = Math.round(baseRate + (weight * ratePerKg));
+
+    document.getElementById('calc-cost').textContent = "₹" + totalCost;
+    document.getElementById('calc-eta').innerHTML = `<i class="fa-solid fa-clock"></i> ${etaText}`;
+  }
+
+  // Category Filtering for Service Cards
+  function filterServices(category, buttonElement) {
+    const buttons = document.querySelectorAll('.filter-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    if (buttonElement) {
+      buttonElement.classList.add('active');
+    }
+
+    const cards = document.querySelectorAll('.service-item');
+    cards.forEach(card => {
+      if (category === 'all' || card.getAttribute('data-category') === category) {
+        card.style.display = 'block';
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(15px)';
+        setTimeout(() => {
+          card.style.transition = 'all 0.35s ease';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, 30);
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    calculateRate();
+  });
+</script>
+{% endblock %}

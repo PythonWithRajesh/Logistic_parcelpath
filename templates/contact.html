@@ -1,0 +1,1053 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Bootstrap -->
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Font Awesome -->
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+.contact-page {
+    width: 100%;
+    min-height: calc(100vh - 70px);
+
+    position: relative;
+
+    background-image:
+        linear-gradient(
+            rgba(4, 18, 42, 0.72),
+            rgba(4, 18, 42, 0.72)
+        ),
+        url("{% static 'images/contact.jpg' %}");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 70px 20px;
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   MAIN CONTAINER
+========================================================= */
+
+.contact-container {
+    width: 100%;
+    max-width: 1150px;
+    margin: auto;
+}
+
+
+/* =========================================================
+   LEFT SIDE
+========================================================= */
+
+.contact-info {
+    color: #ffffff;
+    padding: 25px 30px;
+}
+
+.contact-info h1 {
+    font-size: clamp(38px, 5vw, 58px);
+    font-weight: 800;
+    line-height: 1.1;
+
+    margin-bottom: 20px;
+}
+
+.contact-info h1 span {
+    color: #4dabff;
+}
+
+.contact-info > p {
+    font-size: 17px;
+    line-height: 1.7;
+
+    color: #e5efff;
+
+    max-width: 520px;
+
+    margin-bottom: 30px;
+}
+
+
+/* =========================================================
+   INFORMATION ITEMS
+========================================================= */
+
+.info-item {
+    display: flex;
+    align-items: center;
+
+    margin-top: 22px;
+
+    width: 100%;
+}
+
+.info-icon {
+    flex: 0 0 52px;
+
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: rgba(255,255,255,0.13);
+
+    border: 1px solid rgba(255,255,255,0.25);
+
+    color: #4dabff;
+
+    font-size: 20px;
+
+    margin-right: 15px;
+
+    transition: 0.3s ease;
+}
+
+.info-item:hover .info-icon {
+    background: #0d6efd;
+    color: #ffffff;
+
+    transform: translateY(-3px);
+}
+
+.info-item h6 {
+    margin: 0 0 3px;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    color: #ffffff;
+}
+
+.info-item small {
+    display: block;
+
+    color: #d7e5f7;
+
+    font-size: 14px;
+
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   SOCIAL ICONS
+========================================================= */
+
+.social-icons {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-top: 32px;
+}
+
+.social-icons a {
+    width: 43px;
+    height: 43px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: rgba(255,255,255,0.12);
+
+    border: 1px solid rgba(255,255,255,0.15);
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 17px;
+
+    transition: all 0.3s ease;
+}
+
+.social-icons a:hover {
+    background: #0d6efd;
+
+    transform: translateY(-4px);
+
+    box-shadow: 0 8px 20px rgba(13,110,253,0.35);
+}
+
+
+/* =========================================================
+   CONTACT CARD
+========================================================= */
+
+.contact-card {
+    width: 100%;
+
+    background: rgba(255,255,255,0.97);
+
+    padding: 38px;
+
+    border-radius: 25px;
+
+    box-shadow:
+        0 25px 60px rgba(0,0,0,0.35);
+
+    backdrop-filter: blur(12px);
+
+    animation: cardAnimation 0.8s ease;
+
+    overflow: hidden;
+}
+
+@keyframes cardAnimation {
+
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+/* =========================================================
+   CONTACT TITLE
+========================================================= */
+
+.contact-title {
+    display: flex;
+    align-items: center;
+
+    font-size: 28px;
+
+    font-weight: 800;
+
+    color: #172b4d;
+
+    margin-bottom: 25px;
+}
+
+.contact-title i {
+    color: #0d6efd;
+
+    margin-right: 10px;
+
+    font-size: 25px;
+}
+
+
+/* =========================================================
+   ALERT MESSAGE
+========================================================= */
+
+.contact-card .alert {
+    font-size: 14px;
+
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   FORM LABEL
+========================================================= */
+
+.form-label {
+    color: #26364d;
+
+    margin-bottom: 7px;
+}
+
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+.custom-input {
+    width: 100%;
+
+    min-height: 50px;
+
+    border-radius: 12px;
+
+    padding: 12px 15px;
+
+    border: 1px solid #d6dce5;
+
+    background: #ffffff;
+
+    color: #172b4d;
+
+    font-size: 15px;
+
+    transition: all 0.3s ease;
+}
+
+.custom-input:focus {
+    border-color: #0d6efd;
+
+    box-shadow:
+        0 0 0 0.2rem rgba(13,110,253,0.12);
+
+    outline: none;
+}
+
+textarea.custom-input {
+    min-height: 120px;
+
+    resize: vertical;
+}
+
+
+/* =========================================================
+   DATE INPUT
+========================================================= */
+
+input[type="date"] {
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   SEND BUTTON
+========================================================= */
+
+.send-btn {
+    width: 100%;
+
+    min-height: 52px;
+
+    padding: 13px 20px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: linear-gradient(
+        135deg,
+        #0d6efd,
+        #0052cc
+    );
+
+    color: #ffffff;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+.send-btn:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 10px 25px rgba(13,110,253,0.35);
+}
+
+.send-btn:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 991px) {
+
+    .contact-page {
+        padding: 60px 20px;
+    }
+
+    .contact-info {
+        text-align: center;
+
+        padding: 10px 15px 25px;
+    }
+
+    .contact-info > p {
+        margin-left: auto;
+        margin-right: auto;
+
+        max-width: 650px;
+    }
+
+    .info-item {
+        justify-content: center;
+
+        text-align: left;
+    }
+
+    .social-icons {
+        justify-content: center;
+    }
+
+    .contact-card {
+        max-width: 700px;
+
+        margin: auto;
+
+        padding: 35px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 767px) {
+
+    .contact-page {
+        min-height: auto;
+
+        padding: 45px 15px;
+    }
+
+    .contact-container {
+        width: 100%;
+    }
+
+    .contact-info {
+        padding: 0 5px 25px;
+    }
+
+    .contact-info h1 {
+        font-size: 38px;
+
+        margin-bottom: 15px;
+    }
+
+    .contact-info > p {
+        font-size: 15px;
+
+        line-height: 1.65;
+
+        margin-bottom: 25px;
+    }
+
+    .info-item {
+        justify-content: flex-start;
+
+        margin-top: 18px;
+    }
+
+    .info-icon {
+        flex: 0 0 46px;
+
+        width: 46px;
+        height: 46px;
+
+        font-size: 17px;
+
+        margin-right: 12px;
+    }
+
+    .info-item h6 {
+        font-size: 15px;
+    }
+
+    .info-item small {
+        font-size: 13px;
+    }
+
+    .social-icons {
+        justify-content: flex-start;
+
+        margin-top: 28px;
+    }
+
+    .contact-card {
+        padding: 25px 20px;
+
+        border-radius: 20px;
+    }
+
+    .contact-title {
+        font-size: 24px;
+
+        margin-bottom: 20px;
+    }
+
+    .contact-title i {
+        font-size: 21px;
+
+        margin-right: 8px;
+    }
+
+    .custom-input {
+        min-height: 48px;
+
+        font-size: 14px;
+
+        padding: 11px 13px;
+    }
+
+    textarea.custom-input {
+        min-height: 110px;
+    }
+
+    .send-btn {
+        min-height: 50px;
+
+        font-size: 15px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .contact-page {
+        padding: 35px 12px;
+    }
+
+    .contact-info h1 {
+        font-size: 32px;
+    }
+
+    .contact-info > p {
+        font-size: 14px;
+    }
+
+    .contact-card {
+        padding: 22px 16px;
+
+        border-radius: 18px;
+    }
+
+    .contact-title {
+        font-size: 21px;
+    }
+
+    .contact-title i {
+        font-size: 19px;
+    }
+
+    .form-label {
+        font-size: 14px;
+    }
+
+    .info-icon {
+        flex-basis: 43px;
+
+        width: 43px;
+        height: 43px;
+    }
+
+    .info-item small {
+        max-width: 220px;
+    }
+
+    .social-icons a {
+        width: 40px;
+        height: 40px;
+    }
+
+}
+
+
+/* =========================================================
+   EXTRA SMALL DEVICES
+========================================================= */
+
+@media (max-width: 360px) {
+
+    .contact-page {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .contact-info h1 {
+        font-size: 29px;
+    }
+
+    .contact-card {
+        padding: 20px 13px;
+    }
+
+    .contact-title {
+        font-size: 20px;
+    }
+
+    .info-item {
+        align-items: flex-start;
+    }
+
+    .info-icon {
+        margin-top: 2px;
+    }
+
+}
+
+
+/* =========================================================
+   REDUCE ANIMATION FOR ACCESSIBILITY
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .contact-card {
+        animation: none;
+    }
+
+    .social-icons a,
+    .send-btn,
+    .info-icon {
+        transition: none;
+    }
+
+}
+
+</style>
+
+<!-- =========================================================
+                    CONTACT PAGE
+========================================================= -->
+
+<section class="contact-page">
+
+```
+<div class="contact-container">
+
+    <div class="row align-items-center g-4 g-lg-5">
+
+
+        <!-- =================================================
+                     LEFT SIDE
+        ================================================== -->
+
+        <div class="col-12 col-lg-6">
+
+            <div class="contact-info">
+
+                <h1>
+                    Let's <span>Connect.</span>
+                </h1>
+
+                <p>
+                    Have a question about your parcel, delivery,
+                    tracking or our services? We're here to help.
+                    Send us a message and our team will get back
+                    to you as soon as possible.
+                </p>
+
+
+                <!-- EMAIL -->
+
+                <div class="info-item">
+
+                    <div class="info-icon">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+
+                    <div>
+                        <h6>Email</h6>
+
+                        <small>
+                            rajeshlagdhir07@gmail.com
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <!-- PHONE -->
+
+                <div class="info-item">
+
+                    <div class="info-icon">
+                        <i class="fa-solid fa-phone"></i>
+                    </div>
+
+                    <div>
+                        <h6>Phone</h6>
+
+                        <small>
+                            +91 72039 28160
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <!-- LOCATION -->
+
+                <div class="info-item">
+
+                    <div class="info-icon">
+                        <i class="fa-solid fa-location-dot"></i>
+                    </div>
+
+                    <div>
+                        <h6>Location</h6>
+
+                        <small>
+                            Ahmedabad, Gujarat, India
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <!-- SOCIAL MEDIA -->
+
+                <div class="social-icons">
+
+                    <a
+                        href="https://www.facebook.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Facebook">
+
+                        <i class="fa-brands fa-facebook-f"></i>
+
+                    </a>
+
+
+                    <a
+                        href="https://www.instagram.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Instagram">
+
+                        <i class="fa-brands fa-instagram"></i>
+
+                    </a>
+
+
+                    <a
+                        href="https://www.linkedin.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="LinkedIn">
+
+                        <i class="fa-brands fa-linkedin-in"></i>
+
+                    </a>
+
+
+                    <a
+                        href="https://x.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="X">
+
+                        <i class="fa-brands fa-x-twitter"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+                     RIGHT SIDE FORM
+        ================================================== -->
+
+        <div class="col-12 col-lg-6">
+
+            <div class="contact-card">
+
+
+                <!-- TITLE -->
+
+                <h2 class="contact-title">
+
+                    <i class="fa-solid fa-paper-plane"></i>
+
+                    Contact Us
+
+                </h2>
+
+
+                <!-- =================================================
+                        DJANGO MESSAGES
+                ================================================== -->
+
+                {% if messages %}
+
+                    {% for message in messages %}
+
+                        <div
+                            class="alert
+                            {% if message.tags == 'error' %}
+                                alert-danger
+                            {% else %}
+                                alert-{{ message.tags }}
+                            {% endif %}
+                            alert-dismissible fade show rounded-3"
+                            role="alert">
+
+                            {{ message }}
+
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="alert"
+                                aria-label="Close">
+                            </button>
+
+                        </div>
+
+                    {% endfor %}
+
+                {% endif %}
+
+
+                <!-- =================================================
+                          CONTACT FORM
+                ================================================== -->
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+
+                    <!-- NAME -->
+
+                    <div class="mb-3">
+
+                        <label
+                            for="name"
+                            class="form-label fw-semibold">
+
+                            Name
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="name"
+                            id="name"
+                            class="form-control custom-input"
+                            placeholder="Enter your name"
+                            autocomplete="name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="mb-3">
+
+                        <label
+                            for="email"
+                            class="form-label fw-semibold">
+
+                            Email
+
+                        </label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            id="email"
+                            class="form-control custom-input"
+                            placeholder="Enter your email"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- MOBILE -->
+
+                    <div class="mb-3">
+
+                        <label
+                            for="mobile"
+                            class="form-label fw-semibold">
+
+                            Mobile
+
+                        </label>
+
+                        <input
+                            type="tel"
+                            name="mobile"
+                            id="mobile"
+                            class="form-control custom-input"
+                            placeholder="Enter 10 digit mobile number"
+                            maxlength="10"
+                            minlength="10"
+                            pattern="[0-9]{10}"
+                            inputmode="numeric"
+                            autocomplete="tel"
+                        >
+
+                    </div>
+
+
+                    <!-- DATE -->
+
+                    <div class="mb-3">
+
+                        <label
+                            for="date"
+                            class="form-label fw-semibold">
+
+                            Date
+
+                        </label>
+
+                        <input
+                            type="date"
+                            name="date"
+                            id="date"
+                            class="form-control custom-input"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- MESSAGE -->
+
+                    <div class="mb-4">
+
+                        <label
+                            for="message"
+                            class="form-label fw-semibold">
+
+                            Message
+
+                        </label>
+
+                        <textarea
+                            name="message"
+                            id="message"
+                            rows="4"
+                            class="form-control custom-input"
+                            placeholder="How may we help you?"
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+                    <!-- SUBMIT BUTTON -->
+
+                    <button
+                        type="submit"
+                        class="send-btn">
+
+                        <i class="fa-solid fa-paper-plane me-2"></i>
+
+                        Send Message
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</section>
+
+<!-- Bootstrap JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- =========================================================
+                 MOBILE PHONE VALIDATION
+========================================================= -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const mobileInput = document.getElementById("mobile");
+
+    if (mobileInput) {
+
+        mobileInput.addEventListener("input", function () {
+
+            this.value = this.value
+                .replace(/\D/g, "")
+                .slice(0, 10);
+
+        });
+
+    }
+
+});
+
+
+/* =========================================================
+                  DATE DEFAULT
+   Automatically selects today's date
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const dateInput = document.getElementById("date");
+
+    if (dateInput && !dateInput.value) {
+
+        const today = new Date();
+
+        const year = today.getFullYear();
+
+        const month = String(today.getMonth() + 1).padStart(2, "0");
+
+        const day = String(today.getDate()).padStart(2, "0");
+
+        dateInput.value = `${year}-${month}-${day}`;
+
+    }
+
+});
+
+</script>
+
+{% endblock %}
