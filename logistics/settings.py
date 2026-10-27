@@ -202,3 +202,9 @@ RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET", "")
 # --------------------------------------------------
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# Temporary environment check
+print("SECRET_KEY configured:", bool(SECRET_KEY))
+print("DEBUG:", DEBUG)
+print("ALLOWED_HOSTS:", ALLOWED_HOSTS)
